@@ -19,7 +19,7 @@ export function TopNavbar() {
       <div className="relative z-10">
         <GradientProgress value={percentage} height="h-[3px]" />
       </div>
-      <header className="flex h-14 shrink-0 items-center gap-3 border-b border-white/5 px-4 bg-white/[0.02] backdrop-blur-lg sticky top-0 z-50">
+      <header className="flex h-14 shrink-0 items-center gap-2 sm:gap-3 border-b border-white/5 px-3 sm:px-4 bg-white/[0.02] backdrop-blur-lg sticky top-0 z-50">
         <SidebarTrigger
           className="text-muted-foreground hover:text-foreground"
           aria-label="Toggle sidebar navigation"
@@ -40,7 +40,7 @@ export function TopNavbar() {
             </div>
             <span className="hidden sm:inline">Progress</span>
           </div>
-          <div className="flex items-center gap-2 flex-1 max-w-md">
+          <div className="flex items-center gap-2 flex-1 max-w-xs sm:max-w-md">
             <GradientProgress value={percentage} height="h-1.5" className="flex-1" />
             <motion.span
               className="text-sm font-mono tabular-nums text-muted-foreground min-w-[3ch]"

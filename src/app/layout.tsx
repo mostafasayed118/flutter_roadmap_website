@@ -29,14 +29,18 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`dark ${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
-      <body className="min-h-full">
+      <body className="min-h-full overflow-x-hidden">
         <ConvexClientProvider>
           <TooltipProvider>
             <SidebarProvider>
               <AppSidebar />
-              <SidebarInset className="flex flex-col">
+              <SidebarInset className="flex flex-col min-w-0">
                 <TopNavbar />
-                <main className="flex-1 overflow-auto p-4 md:p-6">{children}</main>
+                <main className="flex-1 overflow-auto p-3 sm:p-4 md:p-6 lg:p-8">
+                  <div className="mx-auto max-w-7xl w-full">
+                    {children}
+                  </div>
+                </main>
               </SidebarInset>
             </SidebarProvider>
           </TooltipProvider>
