@@ -36,8 +36,8 @@ export function ScheduleTable() {
         <Table>
           <TableHeader>
             <TableRow className="border-white/5 hover:bg-transparent">
-              <TableHead className="w-[140px] text-muted-foreground/60">Time</TableHead>
-              <TableHead className="text-muted-foreground/60">Activity</TableHead>
+              <TableHead className="w-[140px] text-muted-foreground/80">Time</TableHead>
+              <TableHead className="text-muted-foreground/80">Activity</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -60,8 +60,8 @@ export function ScheduleTable() {
         <Table>
           <TableHeader>
             <TableRow className="border-white/5 hover:bg-transparent">
-              <TableHead className="w-[140px] text-muted-foreground/60">Time</TableHead>
-              <TableHead className="text-muted-foreground/60">Activity</TableHead>
+              <TableHead className="w-[140px] text-muted-foreground/80">Time</TableHead>
+              <TableHead className="text-muted-foreground/80">Activity</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>

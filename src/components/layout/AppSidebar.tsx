@@ -54,7 +54,7 @@ export function AppSidebar() {
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel className="text-muted-foreground/60">
+          <SidebarGroupLabel className="text-muted-foreground/80">
             Navigation
           </SidebarGroupLabel>
           <SidebarMenu>
@@ -79,7 +79,7 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
-        <div className="px-3 py-2 text-xs text-muted-foreground/60">
+        <div className="px-3 py-2 text-xs text-muted-foreground/80">
           34-Week Flutter Roadmap
         </div>
       </SidebarFooter>

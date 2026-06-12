@@ -20,7 +20,10 @@ export function TopNavbar() {
         <GradientProgress value={percentage} height="h-[3px]" />
       </div>
       <header className="flex h-14 shrink-0 items-center gap-3 border-b border-white/5 px-4 bg-white/[0.02] backdrop-blur-lg sticky top-0 z-50">
-        <SidebarTrigger className="text-muted-foreground hover:text-foreground" />
+        <SidebarTrigger
+          className="text-muted-foreground hover:text-foreground"
+          aria-label="Toggle sidebar navigation"
+        />
         <div className="flex flex-1 items-center gap-4">
           <div className="flex items-center gap-2 text-sm font-medium">
             <div className="relative">

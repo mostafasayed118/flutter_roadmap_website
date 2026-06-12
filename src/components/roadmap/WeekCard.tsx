@@ -81,7 +81,7 @@ export function WeekCard({
         <div className="space-y-3">
           {topics.length > 0 && (
             <section>
-              <h5 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground/60 mb-1.5 flex items-center gap-1.5">
+              <h5 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground/80 mb-1.5 flex items-center gap-1.5">
                 <BookOpen className="size-3 text-blue-400" />
                 Topics
               </h5>
@@ -104,7 +104,7 @@ export function WeekCard({
             <>
               <Separator className="bg-white/5" />
               <section>
-                <h5 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground/60 mb-1.5">
+                <h5 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground/80 mb-1.5">
                   Practice Projects
                 </h5>
                 <div className="space-y-0.5">
@@ -127,7 +127,7 @@ export function WeekCard({
             <>
               <Separator className="bg-white/5" />
               <section>
-                <h5 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground/60 mb-1.5 flex items-center gap-1.5">
+                <h5 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground/80 mb-1.5 flex items-center gap-1.5">
                   <PlayCircle className="size-3 text-violet-400" />
                   Integrated Courses
                 </h5>
