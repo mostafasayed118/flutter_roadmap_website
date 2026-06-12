@@ -40,7 +40,7 @@ export function SkillCategoryCard({ category, items, onToggle }: SkillCategoryCa
             {isComplete ? (
               <CheckCircle2 className="size-4 text-emerald-400" />
             ) : null}
-            <h3 className="font-semibold text-sm">{category}</h3>
+            <h2 className="font-semibold text-sm">{category}</h2>
           </div>
           <span className="text-xs text-muted-foreground whitespace-nowrap tabular-nums">
             {completedCount}/{totalCount}

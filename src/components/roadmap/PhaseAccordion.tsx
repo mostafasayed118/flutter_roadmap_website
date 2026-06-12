@@ -74,9 +74,9 @@ export function PhaseAccordion({
               </div>
             )}
             <div>
-              <h3 className="text-sm font-semibold">
+              <h2 className="text-sm font-semibold">
                 Phase {phaseOrder}: {title}
-              </h3>
+              </h2>
               <p className="text-xs text-muted-foreground">
                 {period} · {duration}
               </p>

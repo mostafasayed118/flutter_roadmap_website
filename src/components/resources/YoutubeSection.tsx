@@ -21,7 +21,7 @@ const searchUrl = (name: string) => {
 export function YoutubeSection() {
   return (
     <GlassCard className="p-5">
-      <h3 className="text-lg font-semibold mb-4">YouTube Channels</h3>
+      <h2 className="text-lg font-semibold mb-4">YouTube Channels</h2>
       <div className="divide-y divide-white/5">
         {channels.map((ch) => (
           <a

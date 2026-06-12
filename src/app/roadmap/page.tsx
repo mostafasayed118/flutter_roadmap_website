@@ -62,7 +62,7 @@ export default function RoadmapPage() {
           <GlassCard className="p-12 flex flex-col items-center justify-center text-center gap-4">
             <Database className="size-12 text-violet-400/50" />
             <div>
-              <h3 className="text-lg font-semibold mb-1">No roadmap data yet</h3>
+              <h2 className="text-lg font-semibold mb-1">No roadmap data yet</h2>
               <p className="text-sm text-muted-foreground max-w-md">
                 The roadmap database is empty. Click the button below to load all 34 weeks
                 of Flutter learning content.

@@ -15,7 +15,7 @@ export function OverallProgressCard({ percentage }: OverallProgressCardProps) {
   return (
     <GlassCard hover glow glowColor="violet" className="p-6">
       <div className="flex flex-col items-center gap-4">
-        <h3 className="text-sm font-medium text-muted-foreground">Overall Progress</h3>
+        <h2 className="text-sm font-medium text-muted-foreground">Overall Progress</h2>
         <div className="relative size-40">
           <svg viewBox="0 0 160 160" className="size-full -rotate-90">
             <circle

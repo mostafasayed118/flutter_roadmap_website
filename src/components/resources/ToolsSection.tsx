@@ -22,7 +22,7 @@ const tools = [
 export function ToolsSection() {
   return (
     <GlassCard className="p-5">
-      <h3 className="text-lg font-semibold mb-4">Essential Tools</h3>
+      <h2 className="text-lg font-semibold mb-4">Essential Tools</h2>
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
         {tools.map((tool) => {
           const Icon = tool.icon;

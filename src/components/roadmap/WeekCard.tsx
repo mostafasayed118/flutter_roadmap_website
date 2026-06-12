@@ -63,9 +63,9 @@ export function WeekCard({
     >
       <div className="p-4">
         <div className="flex items-start justify-between gap-2 mb-3">
-          <h4 className="text-sm font-semibold">
+          <h3 className="text-sm font-semibold">
             <span className="text-muted-foreground">Week {order}:</span> {title}
-          </h4>
+          </h3>
           <Badge
             variant="outline"
             className={`shrink-0 text-xs font-normal ${
@@ -81,10 +81,10 @@ export function WeekCard({
         <div className="space-y-3">
           {topics.length > 0 && (
             <section>
-              <h5 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground/80 mb-1.5 flex items-center gap-1.5">
+              <h4 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-1.5 flex items-center gap-1.5">
                 <BookOpen className="size-3 text-blue-400" />
                 Topics
-              </h5>
+              </h4>
               <div className="space-y-0.5">
                 {topics.map((topic, idx) => (
                   <TopicCheckbox
@@ -104,9 +104,9 @@ export function WeekCard({
             <>
               <Separator className="bg-white/5" />
               <section>
-                <h5 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground/80 mb-1.5">
+                <h4 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-1.5">
                   Practice Projects
-                </h5>
+                </h4>
                 <div className="space-y-0.5">
                   {projects.map((project, idx) => (
                     <ProjectCheckbox
@@ -127,10 +127,10 @@ export function WeekCard({
             <>
               <Separator className="bg-white/5" />
               <section>
-                <h5 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground/80 mb-1.5 flex items-center gap-1.5">
+              <h4 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-1.5 flex items-center gap-1.5">
                   <PlayCircle className="size-3 text-violet-400" />
                   Integrated Courses
-                </h5>
+                </h4>
                 <div className="space-y-1.5">
                   {integratedCourses.map((course, idx) => (
                     <a

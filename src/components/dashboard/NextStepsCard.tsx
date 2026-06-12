@@ -14,7 +14,7 @@ export function NextStepsCard({ items, isLoading }: NextStepsCardProps) {
   if (isLoading) {
     return (
       <GlassCard className="p-6">
-        <h3 className="text-lg font-semibold mb-4">Next Steps</h3>
+        <h2 className="text-lg font-semibold mb-4">Next Steps</h2>
         <div className="space-y-3">
           {[1, 2, 3].map((i) => (
             <div key={i} className="h-16 animate-pulse rounded-lg bg-white/5" />
@@ -26,7 +26,7 @@ export function NextStepsCard({ items, isLoading }: NextStepsCardProps) {
 
   return (
     <GlassCard glow glowColor="violet" className="p-6">
-      <h3 className="text-lg font-semibold mb-4">Next Steps</h3>
+      <h2 className="text-lg font-semibold mb-4">Next Steps</h2>
       {items.length === 0 ? (
         <p className="text-sm text-muted-foreground">All items completed!</p>
       ) : (

@@ -18,7 +18,7 @@ const tips = [
 export function FinalTips() {
   return (
     <GlassCard className="p-5">
-      <h3 className="text-lg font-semibold mb-4">Final Tips</h3>
+      <h2 className="text-lg font-semibold mb-4">Final Tips</h2>
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {tips.map((tip) => (
           <div

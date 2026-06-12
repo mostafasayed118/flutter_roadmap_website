@@ -18,7 +18,7 @@ const courses = [
 export function CoursesSection() {
   return (
     <GlassCard className="p-5">
-      <h3 className="text-lg font-semibold mb-4">Recommended Courses</h3>
+      <h2 className="text-lg font-semibold mb-4">Recommended Courses</h2>
       <div className="space-y-2">
         {courses.map((course) => (
           <a key={course.title} href={course.url} target="_blank" rel="noopener noreferrer">

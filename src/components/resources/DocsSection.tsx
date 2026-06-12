@@ -15,7 +15,7 @@ const docs = [
 export function DocsSection() {
   return (
     <GlassCard className="p-5">
-      <h3 className="text-lg font-semibold mb-4">Official Documentation</h3>
+      <h2 className="text-lg font-semibold mb-4">Official Documentation</h2>
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
         {docs.map((doc) => (
           <a key={doc.name} href={doc.url} target="_blank" rel="noopener noreferrer">
