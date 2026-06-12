@@ -1,7 +1,8 @@
 "use client";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { GlassCard } from "@/components/ui/glass-card";
 import { BookOpen, Code, MapPin } from "lucide-react";
+import { motion } from "framer-motion";
 
 interface QuickStatsGridProps {
   completedTopics: number;
@@ -23,41 +24,53 @@ export function QuickStatsGrid({
       title: "Topics Completed",
       value: `${completedTopics} / ${totalTopics}`,
       icon: BookOpen,
-      color: "text-blue-600",
-      bg: "bg-blue-100 dark:bg-blue-950",
+      color: "text-blue-400",
+      bg: "bg-blue-500/10",
+      border: "border-blue-500/20",
     },
     {
       title: "Projects Built",
       value: `${completedProjects} / ${totalProjects}`,
       icon: Code,
-      color: "text-emerald-600",
-      bg: "bg-emerald-100 dark:bg-emerald-950",
+      color: "text-emerald-400",
+      bg: "bg-emerald-500/10",
+      border: "border-emerald-500/20",
     },
     {
       title: "Current Focus",
       value: currentPhaseLabel ?? "Not started",
       icon: MapPin,
-      color: "text-purple-600",
-      bg: "bg-purple-100 dark:bg-purple-950",
+      color: "text-violet-400",
+      bg: "bg-violet-500/10",
+      border: "border-violet-500/20",
     },
   ];
 
   return (
     <div className="grid gap-4 sm:grid-cols-3">
-      {stats.map((stat) => {
+      {stats.map((stat, idx) => {
         const Icon = stat.icon;
         return (
-          <Card key={stat.title}>
-            <CardHeader className="flex flex-row items-center gap-3 pb-2">
-              <div className={`rounded-lg p-2 ${stat.bg}`}>
-                <Icon className={`size-5 ${stat.color}`} />
+          <motion.div
+            key={stat.title}
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0.1 + idx * 0.08 }}
+          >
+            <GlassCard hover className="p-4">
+              <div className="flex items-start gap-3">
+                <div className={`rounded-lg p-2 ${stat.bg} border ${stat.border}`}>
+                  <Icon className={`size-5 ${stat.color}`} />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="text-xs font-medium text-muted-foreground mb-1">
+                    {stat.title}
+                  </p>
+                  <p className="text-lg font-bold tabular-nums truncate">{stat.value}</p>
+                </div>
               </div>
-              <CardTitle className="text-sm font-medium">{stat.title}</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-2xl font-bold tabular-nums">{stat.value}</p>
-            </CardContent>
-          </Card>
+            </GlassCard>
+          </motion.div>
         );
       })}
     </div>

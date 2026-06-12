@@ -32,17 +32,21 @@ export function AppSidebar() {
   const pathname = usePathname();
 
   return (
-    <Sidebar collapsible="icon">
+    <Sidebar collapsible="icon" className="border-r border-white/5 bg-white/[0.02] backdrop-blur-xl">
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" render={<Link href="/dashboard" />}>
-              <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+              <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-gradient-to-br from-violet-600 to-indigo-600 text-white shadow-lg shadow-violet-500/20">
                 <Flame className="size-4" />
               </div>
               <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-semibold">Flutter Roadmap</span>
-                <span className="truncate text-xs">Progress Tracker</span>
+                <span className="truncate font-semibold bg-gradient-to-r from-violet-400 to-indigo-400 bg-clip-text text-transparent">
+                  Flutter Roadmap
+                </span>
+                <span className="truncate text-xs text-muted-foreground">
+                  Progress Tracker
+                </span>
               </div>
             </SidebarMenuButton>
           </SidebarMenuItem>
@@ -50,7 +54,9 @@ export function AppSidebar() {
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Navigation</SidebarGroupLabel>
+          <SidebarGroupLabel className="text-muted-foreground/60">
+            Navigation
+          </SidebarGroupLabel>
           <SidebarMenu>
             {navItems.map((item) => {
               const isActive = pathname === item.href;
@@ -61,6 +67,7 @@ export function AppSidebar() {
                     isActive={isActive}
                     tooltip={item.label}
                     render={<Link href={item.href} />}
+                    className={isActive ? "bg-violet-500/10 text-violet-400 border border-violet-500/20" : ""}
                   >
                     <Icon className="size-4" />
                     <span>{item.label}</span>
@@ -72,7 +79,7 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
-        <div className="px-3 py-2 text-xs text-muted-foreground">
+        <div className="px-3 py-2 text-xs text-muted-foreground/60">
           34-Week Flutter Roadmap
         </div>
       </SidebarFooter>

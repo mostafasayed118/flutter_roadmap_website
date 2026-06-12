@@ -1,6 +1,6 @@
 "use client";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { GlassCard } from "@/components/ui/glass-card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ExternalLink } from "lucide-react";
@@ -17,34 +17,29 @@ const courses = [
 
 export function CoursesSection() {
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="text-lg">Recommended Courses</CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-3">
+    <GlassCard className="p-5">
+      <h3 className="text-lg font-semibold mb-4">Recommended Courses</h3>
+      <div className="space-y-2">
         {courses.map((course) => (
-          <a
-            key={course.title}
-            href={course.url}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+          <a key={course.title} href={course.url} target="_blank" rel="noopener noreferrer">
             <Button
               variant="outline"
-              className="w-full justify-between gap-2 h-auto py-3 text-left"
+              className="w-full justify-between gap-2 h-auto py-3 text-left border-white/5 bg-white/[0.02] hover:bg-white/[0.05] hover:border-white/10"
             >
               <div className="min-w-0">
                 <p className="text-sm font-medium truncate">{course.title}</p>
                 <p className="text-xs text-muted-foreground">{course.phase}</p>
               </div>
               <div className="flex items-center gap-2 shrink-0">
-                <Badge variant="secondary" className="text-[10px]">Udemy</Badge>
+                <Badge variant="outline" className="text-[10px] border-violet-500/30 text-violet-400">
+                  Udemy
+                </Badge>
                 <ExternalLink className="size-4 shrink-0 text-muted-foreground" />
               </div>
             </Button>
           </a>
         ))}
-      </CardContent>
-    </Card>
+      </div>
+    </GlassCard>
   );
 }

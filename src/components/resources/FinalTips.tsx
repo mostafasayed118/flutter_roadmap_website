@@ -1,6 +1,6 @@
 "use client";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { GlassCard } from "@/components/ui/glass-card";
 
 const tips = [
   { icon: "🔥", title: "Code EVERY DAY", desc: "consistency beats intensity" },
@@ -17,26 +17,22 @@ const tips = [
 
 export function FinalTips() {
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="text-lg">Final Tips</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {tips.map((tip) => (
-            <div
-              key={tip.title}
-              className="flex items-start gap-3 rounded-lg border p-3"
-            >
-              <span className="text-lg shrink-0">{tip.icon}</span>
-              <div>
-                <p className="text-sm font-medium">{tip.title}</p>
-                <p className="text-xs text-muted-foreground">{tip.desc}</p>
-              </div>
+    <GlassCard className="p-5">
+      <h3 className="text-lg font-semibold mb-4">Final Tips</h3>
+      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        {tips.map((tip) => (
+          <div
+            key={tip.title}
+            className="flex items-start gap-3 rounded-lg border border-white/5 bg-white/[0.02] p-3 hover:bg-white/[0.05] hover:border-white/10 transition-all"
+          >
+            <span className="text-lg shrink-0">{tip.icon}</span>
+            <div>
+              <p className="text-sm font-medium">{tip.title}</p>
+              <p className="text-xs text-muted-foreground">{tip.desc}</p>
             </div>
-          ))}
-        </div>
-      </CardContent>
-    </Card>
+          </div>
+        ))}
+      </div>
+    </GlassCard>
   );
 }

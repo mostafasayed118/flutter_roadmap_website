@@ -1,15 +1,17 @@
 "use client";
 
+import { useMemo, useEffect, useRef } from "react";
 import { useMutation } from "convex/react";
 import { api } from "@convex/_generated/api";
 import { useUserId } from "@/hooks/use-user-id";
 import { TopicCheckbox } from "./TopicCheckbox";
 import { ProjectCheckbox } from "./ProjectCheckbox";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { GlassCard } from "@/components/ui/glass-card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
-import { ExternalLink, BookOpen } from "lucide-react";
+import { ExternalLink, BookOpen, PlayCircle } from "lucide-react";
+import { fireWeekComplete } from "@/lib/confetti";
 
 interface WeekCardProps {
   weekId: string;
@@ -43,99 +45,121 @@ export function WeekCard({
 
   const allTopicsDone = topics.length > 0 && topics.every((_, i) => completedTopicsSet.has(i));
   const allProjectsDone = projects.length > 0 && projects.every((_, i) => completedProjectsSet.has(i));
+  const isWeekComplete = allTopicsDone && allProjectsDone;
+  const wasCompleteRef = useRef(isWeekComplete);
+
+  useEffect(() => {
+    if (isWeekComplete && !wasCompleteRef.current) {
+      fireWeekComplete();
+    }
+    wasCompleteRef.current = isWeekComplete;
+  }, [isWeekComplete]);
 
   return (
-    <Card className={allTopicsDone && allProjectsDone ? "border-green-200 dark:border-green-800" : undefined}>
-      <CardHeader className="pb-3">
-        <div className="flex items-start justify-between gap-2">
-          <CardTitle className="text-base">
-            Week {order}: {title}
-          </CardTitle>
-          <Badge variant="outline" className="shrink-0 text-xs font-normal">
+    <GlassCard
+      glow={isWeekComplete}
+      glowColor="emerald"
+      className={isWeekComplete ? "border-emerald-500/30" : ""}
+    >
+      <div className="p-4">
+        <div className="flex items-start justify-between gap-2 mb-3">
+          <h4 className="text-sm font-semibold">
+            <span className="text-muted-foreground">Week {order}:</span> {title}
+          </h4>
+          <Badge
+            variant="outline"
+            className={`shrink-0 text-xs font-normal ${
+              isWeekComplete
+                ? "border-emerald-500/30 text-emerald-400 bg-emerald-500/10"
+                : "border-white/10 text-muted-foreground"
+            }`}
+          >
             {estimatedHours}
           </Badge>
         </div>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        {topics.length > 0 && (
-          <section>
-            <h4 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2 flex items-center gap-1.5">
-              <BookOpen className="size-3" />
-              Topics
-            </h4>
-            <div className="space-y-0.5">
-              {topics.map((topic, idx) => (
-                <TopicCheckbox
-                  key={idx}
-                  title={topic}
-                  isChecked={completedTopicsSet.has(idx)}
-                  onToggle={() =>
-                    toggleTopic({ userId, weekId: weekId as any, topicIndex: idx })
-                  }
-                />
-              ))}
-            </div>
-          </section>
-        )}
 
-        {projects.length > 0 && (
-          <>
-            <Separator />
+        <div className="space-y-3">
+          {topics.length > 0 && (
             <section>
-              <h4 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">
-                Practice Projects
-              </h4>
+              <h5 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground/60 mb-1.5 flex items-center gap-1.5">
+                <BookOpen className="size-3 text-blue-400" />
+                Topics
+              </h5>
               <div className="space-y-0.5">
-                {projects.map((project, idx) => (
-                  <ProjectCheckbox
+                {topics.map((topic, idx) => (
+                  <TopicCheckbox
                     key={idx}
-                    title={project}
-                    isChecked={completedProjectsSet.has(idx)}
+                    title={topic}
+                    isChecked={completedTopicsSet.has(idx)}
                     onToggle={() =>
-                      toggleProject({ userId, weekId: weekId as any, projectIndex: idx })
+                      toggleTopic({ userId, weekId: weekId as any, topicIndex: idx })
                     }
                   />
                 ))}
               </div>
             </section>
-          </>
-        )}
+          )}
 
-        {integratedCourses && integratedCourses.length > 0 && (
-          <>
-            <Separator />
-            <section>
-              <h4 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">
-                Integrated Courses
-              </h4>
-              <div className="space-y-2">
-                {integratedCourses.map((course, idx) => (
-                  <a
-                    key={idx}
-                    href={course.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="block"
-                  >
-                    <Button
-                      variant="outline"
-                      className="w-full justify-between gap-2 h-auto py-2 text-left"
+          {projects.length > 0 && (
+            <>
+              <Separator className="bg-white/5" />
+              <section>
+                <h5 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground/60 mb-1.5">
+                  Practice Projects
+                </h5>
+                <div className="space-y-0.5">
+                  {projects.map((project, idx) => (
+                    <ProjectCheckbox
+                      key={idx}
+                      title={project}
+                      isChecked={completedProjectsSet.has(idx)}
+                      onToggle={() =>
+                        toggleProject({ userId, weekId: weekId as any, projectIndex: idx })
+                      }
+                    />
+                  ))}
+                </div>
+              </section>
+            </>
+          )}
+
+          {integratedCourses && integratedCourses.length > 0 && (
+            <>
+              <Separator className="bg-white/5" />
+              <section>
+                <h5 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground/60 mb-1.5 flex items-center gap-1.5">
+                  <PlayCircle className="size-3 text-violet-400" />
+                  Integrated Courses
+                </h5>
+                <div className="space-y-1.5">
+                  {integratedCourses.map((course, idx) => (
+                    <a
+                      key={idx}
+                      href={course.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="block"
                     >
-                      <div className="min-w-0">
-                        <p className="text-sm font-medium truncate">{course.title}</p>
-                        <p className="text-xs text-muted-foreground truncate">
-                          {course.description}
-                        </p>
-                      </div>
-                      <ExternalLink className="size-4 shrink-0 text-muted-foreground" />
-                    </Button>
-                  </a>
-                ))}
-              </div>
-            </section>
-          </>
-        )}
-      </CardContent>
-    </Card>
+                      <Button
+                        variant="outline"
+                        className="w-full justify-between gap-2 h-auto py-2 text-left border-white/5 bg-white/[0.02] hover:bg-white/[0.05] hover:border-white/10"
+                      >
+                        <div className="min-w-0">
+                          <p className="text-sm font-medium truncate">{course.title}</p>
+                          <p className="text-xs text-muted-foreground truncate">
+                            {course.description}
+                          </p>
+                        </div>
+                        <ExternalLink className="size-3.5 shrink-0 text-muted-foreground" />
+                      </Button>
+                    </a>
+                  ))}
+                </div>
+              </section>
+            </>
+          )}
+        </div>
+      </div>
+    </GlassCard>
   );
 }

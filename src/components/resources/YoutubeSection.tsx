@@ -1,7 +1,6 @@
 "use client";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { GlassCard } from "@/components/ui/glass-card";
 import { ExternalLink } from "lucide-react";
 
 const channels = [
@@ -21,29 +20,25 @@ const searchUrl = (name: string) => {
 
 export function YoutubeSection() {
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="text-lg">YouTube Channels</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="divide-y">
-          {channels.map((ch) => (
-            <a
-              key={ch.name}
-              href={searchUrl(ch.name)}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center justify-between gap-2 py-2.5 first:pt-0 last:pb-0 hover:text-primary transition-colors group"
-            >
-              <div>
-                <p className="text-sm font-medium">{ch.name}</p>
-                <p className="text-xs text-muted-foreground">{ch.note}</p>
-              </div>
-              <ExternalLink className="size-4 shrink-0 text-muted-foreground group-hover:text-primary transition-colors" />
-            </a>
-          ))}
-        </div>
-      </CardContent>
-    </Card>
+    <GlassCard className="p-5">
+      <h3 className="text-lg font-semibold mb-4">YouTube Channels</h3>
+      <div className="divide-y divide-white/5">
+        {channels.map((ch) => (
+          <a
+            key={ch.name}
+            href={searchUrl(ch.name)}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center justify-between gap-2 py-2.5 first:pt-0 last:pb-0 hover:text-violet-400 transition-colors group"
+          >
+            <div>
+              <p className="text-sm font-medium">{ch.name}</p>
+              <p className="text-xs text-muted-foreground">{ch.note}</p>
+            </div>
+            <ExternalLink className="size-4 shrink-0 text-muted-foreground group-hover:text-violet-400 transition-colors" />
+          </a>
+        ))}
+      </div>
+    </GlassCard>
   );
 }

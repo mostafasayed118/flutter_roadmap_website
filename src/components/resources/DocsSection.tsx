@@ -1,6 +1,6 @@
 "use client";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { GlassCard } from "@/components/ui/glass-card";
 import { Button } from "@/components/ui/button";
 import { ExternalLink } from "lucide-react";
 
@@ -14,22 +14,21 @@ const docs = [
 
 export function DocsSection() {
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="text-lg">Official Documentation</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-          {docs.map((doc) => (
-            <a key={doc.name} href={doc.url} target="_blank" rel="noopener noreferrer">
-              <Button variant="outline" className="w-full justify-between gap-1 h-auto py-2">
-                <span className="text-xs font-medium">{doc.name}</span>
-                <ExternalLink className="size-3 shrink-0 text-muted-foreground" />
-              </Button>
-            </a>
-          ))}
-        </div>
-      </CardContent>
-    </Card>
+    <GlassCard className="p-5">
+      <h3 className="text-lg font-semibold mb-4">Official Documentation</h3>
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+        {docs.map((doc) => (
+          <a key={doc.name} href={doc.url} target="_blank" rel="noopener noreferrer">
+            <Button
+              variant="outline"
+              className="w-full justify-between gap-1 h-auto py-2 border-white/5 bg-white/[0.02] hover:bg-white/[0.05] hover:border-white/10"
+            >
+              <span className="text-xs font-medium">{doc.name}</span>
+              <ExternalLink className="size-3 shrink-0 text-muted-foreground" />
+            </Button>
+          </a>
+        ))}
+      </div>
+    </GlassCard>
   );
 }
