@@ -24,18 +24,18 @@ The Flutter ecosystem is vast — Dart, widgets, state management, architecture,
 
 The app covers the complete 34-week journey across 10 phases:
 
-| Phase | Focus Area |
-|-------|-----------|
-| 1 | Dart Programming Language (Weeks 1–4) |
-| 2 | Flutter Fundamentals (Weeks 5–9) |
-| 3 | State Management — Cubit/Bloc (Weeks 10–13) |
-| 4 | Networking & APIs (Weeks 14–16) |
-| 5 | Local Storage & Database (Weeks 17–18) |
-| 6 | Advanced Flutter (Weeks 19–22) |
-| 7 | Architecture & Clean Code (Weeks 23–25) |
-| 8 | Testing (Weeks 26–27) |
-| 9 | Firebase & Backend Services (Weeks 28–30) |
-| 10 | Deployment & Portfolio Projects (Weeks 31–34) |
+| Phase | Focus Area | Weeks |
+|-------|-----------|-------|
+| 1 | Dart Programming Language | 1–4 |
+| 2 | Flutter Fundamentals | 5–9 |
+| 3 | State Management — Cubit/Bloc | 10–13 |
+| 4 | Networking & APIs | 14–16 |
+| 5 | Local Storage & Database | 17–18 |
+| 6 | Advanced Flutter | 19–22 |
+| 7 | Architecture & Clean Code | 23–25 |
+| 8 | Testing | 26–27 |
+| 9 | Firebase & Backend Services | 28–30 |
+| 10 | Deployment & Portfolio Projects | 31–34 |
 
 ---
 
@@ -49,6 +49,7 @@ The app covers the complete 34-week journey across 10 phases:
 - **Animated progress charts** — Glowing SVG radial chart and gradient-filled progress bars using Recharts and Framer Motion
 - **Responsive design** — Fully responsive from mobile to desktop with a collapsible sidebar
 - **Modular architecture** — Clean separation between Convex backend functions, React components, and page routes
+- **WCAG accessible** — Proper heading hierarchy, aria-labels, and color contrast compliance
 
 ---
 
@@ -62,7 +63,7 @@ The app covers the complete 34-week journey across 10 phases:
 | **Styling** | Tailwind CSS 4, shadcn/ui (Radix UI primitives) |
 | **Animations** | Framer Motion 12, Canvas Confetti |
 | **Icons** | Lucide React |
-| **Charts** | Recharts (SVG radial progress, bar charts) |
+| **Charts** | Recharts (SVG radial progress) |
 | **Utilities** | clsx, tailwind-merge, class-variance-authority |
 
 ---
@@ -134,7 +135,12 @@ NEXT_PUBLIC_CONVEX_URL=https://your-project.convex.cloud
 NEXT_PUBLIC_CONVEX_SITE_URL=https://your-project.convex.site
 ```
 
-For production deployment on Vercel, set these in **Settings → Environment Variables** in your Vercel dashboard.
+### Deploying to Vercel
+
+1. Run `npx convex deploy` to push your Convex functions to production
+2. Copy the generated `NEXT_PUBLIC_CONVEX_URL` value
+3. In Vercel dashboard → **Settings → Environment Variables**, add `NEXT_PUBLIC_CONVEX_URL`
+4. Deploy with `vercel --prod`
 
 ---
 
