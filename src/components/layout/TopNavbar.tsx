@@ -6,6 +6,7 @@ import { useUserId } from "@/hooks/use-user-id";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { GradientProgress } from "@/components/ui/gradient-progress";
 import { motion } from "framer-motion";
+import { LogSessionDialog } from "@/components/time-tracker/LogSessionDialog";
 import { Flame, MapPin, Trophy } from "lucide-react";
 
 export function TopNavbar() {
@@ -66,14 +67,21 @@ export function TopNavbar() {
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="hidden lg:flex items-center gap-1.5 px-2 py-1 rounded-full bg-violet-500/10 border border-violet-500/20"
+            className={`hidden lg:flex items-center gap-1.5 px-2 py-1 rounded-full border ${
+              percentage === 100
+                ? "bg-emerald-500/10 border-emerald-500/20"
+                : "bg-violet-500/10 border-violet-500/20"
+            }`}
           >
-            <Trophy className="size-3 text-violet-400" />
-            <span className="text-xs font-medium text-violet-300">
-              Week {stats?.currentWeekNumber ?? 1}
+            <Trophy className={`size-3 ${percentage === 100 ? "text-emerald-400" : "text-violet-400"}`} />
+            <span className={`text-xs font-medium ${percentage === 100 ? "text-emerald-300" : "text-violet-300"}`}>
+              {percentage === 100 ? "Complete!" : `Week ${stats?.currentWeekNumber ?? 1}`}
             </span>
           </motion.div>
         )}
+        <div className="hidden sm:block">
+          <LogSessionDialog />
+        </div>
       </header>
     </>
   );

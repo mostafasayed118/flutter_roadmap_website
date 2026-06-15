@@ -18,6 +18,7 @@ import {
   Map,
   CheckSquare,
   BookOpen,
+  Terminal,
   Flame,
 } from "lucide-react";
 
@@ -26,6 +27,7 @@ const navItems = [
   { href: "/roadmap", label: "Roadmap", icon: Map },
   { href: "/skills", label: "Skills Checklist", icon: CheckSquare },
   { href: "/resources", label: "Resources", icon: BookOpen },
+  { href: "/cheat-sheet", label: "Cheat Sheet", icon: Terminal },
 ];
 
 export function AppSidebar() {

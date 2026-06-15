@@ -6,6 +6,8 @@ import { useUserId } from "@/hooks/use-user-id";
 import { OverallProgressCard } from "@/components/dashboard/OverallProgressCard";
 import { QuickStatsGrid } from "@/components/dashboard/QuickStatsGrid";
 import { NextStepsCard } from "@/components/dashboard/NextStepsCard";
+import { StudyTimeCard } from "@/components/dashboard/StudyTimeCard";
+import { SessionList } from "@/components/time-tracker/SessionList";
 import { AnimatedPage } from "@/components/layout/AnimatedPage";
 import { GlassCard } from "@/components/ui/glass-card";
 import { GradientProgress } from "@/components/ui/gradient-progress";
@@ -77,6 +79,11 @@ export default function DashboardPage() {
         </div>
 
         <NextStepsCard items={stats.nextItems} isLoading={false} />
+
+        <div className="grid gap-6 lg:grid-cols-2">
+          <StudyTimeCard />
+          <SessionList />
+        </div>
       </div>
     </AnimatedPage>
   );

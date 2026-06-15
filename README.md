@@ -43,12 +43,13 @@ The app covers the complete 34-week journey across 10 phases:
 
 - **Real-time progress tracking** — All changes sync instantly across the app via Convex reactive queries
 - **Interactive roadmap** — Collapsible phase accordions containing 34 weeks of topics and projects
-- **Gamified skills checklist** — 9 categories (Dart, Flutter UI, State Management, Networking, Data Storage, Architecture, Testing, Firebase, Deployment) with animated checkboxes
+- **Study time monitor** — Log, edit, and delete study sessions with per-week tracking and a weekly bar chart
+- **Gamified skills checklist** — 9 categories with animated checkboxes and progress bars
+- **Developer cheat sheet** — 40+ copy-paste code snippets organized by category with one-click clipboard
 - **Glassmorphism UI** — Dark-mode default with `backdrop-blur` cards, gradient accents, and Framer Motion page transitions
 - **Confetti celebrations** — Custom canvas-confetti explosions when you complete a week, phase, or the entire roadmap
-- **Animated progress charts** — Glowing SVG radial chart and gradient-filled progress bars using Recharts and Framer Motion
+- **Animated progress charts** — Glowing SVG radial chart and gradient-filled progress bars using Recharts
 - **Responsive design** — Fully responsive from mobile to desktop with a collapsible sidebar
-- **Modular architecture** — Clean separation between Convex backend functions, React components, and page routes
 - **WCAG accessible** — Proper heading hierarchy, aria-labels, and color contrast compliance
 
 ---
@@ -63,8 +64,8 @@ The app covers the complete 34-week journey across 10 phases:
 | **Styling** | Tailwind CSS 4, shadcn/ui (Radix UI primitives) |
 | **Animations** | Framer Motion 12, Canvas Confetti |
 | **Icons** | Lucide React |
-| **Charts** | Recharts (SVG radial progress) |
-| **Utilities** | clsx, tailwind-merge, class-variance-authority |
+| **Charts** | Recharts (SVG radial progress, bar charts) |
+| **Utilities** | clsx, tailwind-merge, class-variance-authority, sonner (toasts) |
 
 ---
 
@@ -104,19 +105,19 @@ This will:
 - Generate a `.env.local` file with your deployment URL
 - Start the local Convex backend
 
-4. **In a separate terminal, start the dev server**
+4. **Seed the roadmap data**
+
+In a separate terminal (with Convex running), navigate to the Roadmap page and click **"Load Roadmap Data"** to populate the database with all 34 weeks of content.
+
+5. **Start the dev server**
 
 ```bash
 npm run dev
 ```
 
-5. **Open the app**
+6. **Open the app**
 
 Navigate to [http://localhost:3000](http://localhost:3000) in your browser.
-
-6. **Seed the roadmap data**
-
-On first visit, navigate to the **Roadmap** page and click **"Load Roadmap Data"** to populate the database with all 34 weeks of content.
 
 ---
 
@@ -135,12 +136,7 @@ NEXT_PUBLIC_CONVEX_URL=https://your-project.convex.cloud
 NEXT_PUBLIC_CONVEX_SITE_URL=https://your-project.convex.site
 ```
 
-### Deploying to Vercel
-
-1. Run `npx convex deploy` to push your Convex functions to production
-2. Copy the generated `NEXT_PUBLIC_CONVEX_URL` value
-3. In Vercel dashboard → **Settings → Environment Variables**, add `NEXT_PUBLIC_CONVEX_URL`
-4. Deploy with `vercel --prod`
+For production deployment, see [DEPLOYMENT.md](./DEPLOYMENT.md).
 
 ---
 
@@ -149,49 +145,53 @@ NEXT_PUBLIC_CONVEX_SITE_URL=https://your-project.convex.site
 ```
 flutterpath/
 ├── convex/
-│   ├── schema.ts          # Database schema (4 tables)
-│   ├── seed.ts            # Roadmap data seeding mutation
-│   ├── progress.ts        # Queries & mutations for topic/project tracking
-│   └── skills.ts          # Queries & mutations for skills checklist
+│   ├── schema.ts              # Database schema (5 tables)
+│   ├── seed.ts                # Roadmap data seeding mutation
+│   ├── progress.ts            # Topic/project tracking queries & mutations
+│   ├── skills.ts              # Skills checklist queries & mutations
+│   └── timeTracker.ts         # Study session CRUD & analytics
 │
 ├── src/
 │   ├── app/
-│   │   ├── layout.tsx     # Root layout (sidebar + navbar)
-│   │   ├── page.tsx       # Redirects to /dashboard
-│   │   ├── dashboard/     # Dashboard page with progress stats
-│   │   ├── roadmap/       # Interactive 34-week roadmap view
-│   │   ├── skills/        # Skills checklist with 9 categories
-│   │   └── resources/     # YouTube channels, courses, docs, tools
+│   │   ├── layout.tsx         # Root layout (sidebar + navbar + error boundary)
+│   │   ├── page.tsx           # Redirects to /dashboard
+│   │   ├── dashboard/         # Progress stats, study time chart, session list
+│   │   ├── roadmap/           # Interactive 34-week roadmap with accordions
+│   │   ├── skills/            # 9-category skills checklist
+│   │   ├── resources/         # YouTube, courses, docs, tools, schedule
+│   │   └── cheat-sheet/       # 40+ copy-paste Flutter code snippets
 │   │
 │   ├── components/
-│   │   ├── dashboard/     # OverallProgressCard, QuickStatsGrid, NextStepsCard
-│   │   ├── roadmap/       # WeekCard, PhaseAccordion, TopicCheckbox, ProjectCheckbox
-│   │   ├── skills/        # SkillCategoryCard
-│   │   ├── resources/     # YoutubeSection, CoursesSection, DocsSection, etc.
-│   │   ├── layout/        # AppSidebar, TopNavbar, AnimatedPage
-│   │   ├── providers/     # ConvexClientProvider
-│   │   └── ui/            # shadcn/ui components + custom animated components
+│   │   ├── dashboard/         # OverallProgressCard, StudyTimeCard, QuickStatsGrid
+│   │   ├── roadmap/           # WeekCard, PhaseAccordion, TopicCheckbox
+│   │   ├── skills/            # SkillCategoryCard
+│   │   ├── time-tracker/      # LogSessionDialog, EditSession, DeleteSession, SessionList
+│   │   ├── resources/         # YoutubeSection, CoursesSection, DocsSection
+│   │   ├── layout/            # AppSidebar, TopNavbar, AnimatedPage
+│   │   ├── providers/         # ConvexClientProvider, ErrorBoundary, ClientProviders
+│   │   └── ui/                # shadcn/ui + custom animated components
 │   │
 │   ├── hooks/
 │   │   ├── use-mobile.ts
 │   │   └── use-user-id.ts
 │   │
 │   └── lib/
-│       ├── utils.ts       # cn() utility
-│       ├── confetti.ts    # Confetti celebration functions
-│       └── motion.ts      # Framer Motion animation variants
+│       ├── utils.ts           # cn() utility
+│       ├── confetti.ts        # Confetti celebration functions
+│       ├── format-time.ts     # Minutes → "2h 30m" formatter
+│       └── motion.ts          # Framer Motion animation variants
 ```
 
 ---
 
 ## How to Use
 
-1. **Dashboard** — View your overall progress percentage, total topics/projects completed, current phase, and next 3 incomplete items
-2. **Roadmap** — Browse all 34 weeks grouped by phase. Check off topics and projects as you complete them — your Dashboard updates instantly
-3. **Skills Checklist** — Track mastery across 9 skill categories. Each category shows a mini progress bar and individual skill checkboxes
-4. **Resources** — Access curated YouTube channels, Udemy courses, official documentation, essential tools, a daily study schedule, and final tips
-
-All progress is saved in real-time. Check a checkbox on any page, and every other page reflects the change immediately.
+1. **Dashboard** — View your overall progress percentage, total topics/projects completed, current phase, study time chart, and recent sessions
+2. **Roadmap** — Browse all 34 weeks grouped by phase. Check off topics and projects — your Dashboard updates instantly
+3. **Skills Checklist** — Track mastery across 9 categories with animated checkboxes and progress bars
+4. **Resources** — Access curated YouTube channels, Udemy courses, official documentation, essential tools, and a daily study schedule
+5. **Cheat Sheet** — Copy-paste ready code snippets for Dart, Flutter widgets, state management, Firebase, and deployment
+6. **Study Time** — Log sessions via the navbar button, view per-week badges on the roadmap, and track your total study time
 
 ---
 
@@ -224,6 +224,7 @@ Distributed under the MIT License. See `LICENSE` for more information.
 - **[Canvas Confetti](https://www.kirilv.com/canvas-confetti/)** — Lightweight confetti effects for celebrations
 - **[Lucide](https://lucide.dev/)** — Clean, consistent icon library
 - **[Recharts](https://recharts.org/)** — Composable charting library built on D3
+- **[sonner](https://sonner.emilkowal.ski/)** — Beautiful toast notifications
 
 ---
 

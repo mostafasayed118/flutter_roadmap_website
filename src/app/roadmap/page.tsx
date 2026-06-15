@@ -106,7 +106,7 @@ export default function RoadmapPage() {
           </p>
         </div>
 
-        <Accordion className="space-y-3" defaultValue={roadmap.map((p) => `phase-${p.order}`)}>
+        <Accordion className="space-y-3" defaultValue={roadmap.length > 0 ? [`phase-${roadmap[0]!.order}`] : []}>
           {roadmap.map((phase) => (
             <PhaseAccordion
               key={phase._id}

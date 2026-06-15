@@ -9,11 +9,12 @@ import { Badge } from "@/components/ui/badge";
 import { GradientProgress } from "@/components/ui/gradient-progress";
 import { WeekCard } from "./WeekCard";
 import { CheckCircle2 } from "lucide-react";
+import { Id } from "@convex/_generated/dataModel";
 
 interface WeekData {
-  _id: string;
+  _id: Id<"roadmapWeeks">;
   _creationTime: number;
-  phaseId: string;
+  phaseId: Id<"roadmapPhases">;
   order: number;
   title: string;
   estimatedHours: string;

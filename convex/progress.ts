@@ -17,7 +17,7 @@ export const getRoadmapWithProgress = query({
       progressMap.set(p.weekId, p);
     }
 
-    const phasesWithWeeks = phases.map((phase) => {
+    return phases.map((phase) => {
       const phaseWeeks = weeks
         .filter((w) => w.phaseId === phase._id)
         .sort((a, b) => a.order - b.order)
@@ -26,10 +26,7 @@ export const getRoadmapWithProgress = query({
           return {
             ...week,
             progress: progress
-              ? {
-                  completedTopics: progress.completedTopics,
-                  completedProjects: progress.completedProjects,
-                }
+              ? { completedTopics: progress.completedTopics, completedProjects: progress.completedProjects }
               : { completedTopics: [], completedProjects: [] },
           };
         });
@@ -42,16 +39,9 @@ export const getRoadmapWithProgress = query({
       return {
         ...phase,
         weeks: phaseWeeks,
-        stats: {
-          totalTopics,
-          totalProjects,
-          completedTopics: doneTopics,
-          completedProjects: doneProjects,
-        },
+        stats: { totalTopics, totalProjects, completedTopics: doneTopics, completedProjects: doneProjects },
       };
     });
-
-    return phasesWithWeeks;
   },
 });
 
@@ -103,7 +93,7 @@ export const getOverallStats = query({
       if (currentWeek) break;
     }
 
-    const allWeeks = weeks.sort((a, b) => a.order - b.order);
+    const allWeeks = [...weeks].sort((a, b) => a.order - b.order);
     const weekIndex = allWeeks.findIndex((w) => w._id === currentWeek?._id);
     const currentWeekNumber = weekIndex >= 0 ? weekIndex + 1 : null;
 
@@ -147,13 +137,17 @@ export const getOverallStats = query({
 export const toggleTopic = mutation({
   args: { userId: v.string(), weekId: v.id("roadmapWeeks"), topicIndex: v.number() },
   handler: async (ctx, args) => {
+    const week = await ctx.db.get(args.weekId);
+    if (!week) throw new Error("Week not found");
+
+    if (args.topicIndex < 0 || args.topicIndex >= week.topics.length) {
+      throw new Error(`Invalid topic index: ${args.topicIndex}. Must be 0–${week.topics.length - 1}`);
+    }
+
     const existing = await ctx.db
       .query("userProgress")
       .withIndex("by_user_week", (q) => q.eq("userId", args.userId).eq("weekId", args.weekId))
       .first();
-
-    const week = await ctx.db.get(args.weekId);
-    if (!week) throw new Error("Week not found");
 
     if (existing) {
       const completed = new Set(existing.completedTopics);
@@ -163,7 +157,7 @@ export const toggleTopic = mutation({
         completed.add(args.topicIndex);
       }
       await ctx.db.patch(existing._id, {
-        completedTopics: Array.from(completed).sort(),
+        completedTopics: Array.from(completed).sort((a, b) => a - b),
       });
     } else {
       await ctx.db.insert("userProgress", {
@@ -179,13 +173,17 @@ export const toggleTopic = mutation({
 export const toggleProject = mutation({
   args: { userId: v.string(), weekId: v.id("roadmapWeeks"), projectIndex: v.number() },
   handler: async (ctx, args) => {
+    const week = await ctx.db.get(args.weekId);
+    if (!week) throw new Error("Week not found");
+
+    if (args.projectIndex < 0 || args.projectIndex >= week.projects.length) {
+      throw new Error(`Invalid project index: ${args.projectIndex}. Must be 0–${week.projects.length - 1}`);
+    }
+
     const existing = await ctx.db
       .query("userProgress")
       .withIndex("by_user_week", (q) => q.eq("userId", args.userId).eq("weekId", args.weekId))
       .first();
-
-    const week = await ctx.db.get(args.weekId);
-    if (!week) throw new Error("Week not found");
 
     if (existing) {
       const completed = new Set(existing.completedProjects);
@@ -195,7 +193,7 @@ export const toggleProject = mutation({
         completed.add(args.projectIndex);
       }
       await ctx.db.patch(existing._id, {
-        completedProjects: Array.from(completed).sort(),
+        completedProjects: Array.from(completed).sort((a, b) => a - b),
       });
     } else {
       await ctx.db.insert("userProgress", {

@@ -132,13 +132,17 @@ export const initSkills = mutation({
 export const toggleSkill = mutation({
   args: { userId: v.string(), category: v.string(), itemIndex: v.number() },
   handler: async (ctx, args) => {
-    const record = await ctx.db
+    const target = await ctx.db
       .query("skillsChecklist")
       .withIndex("by_user", (q) => q.eq("userId", args.userId))
-      .collect();
+      .filter((q) => q.eq(q.field("category"), args.category))
+      .first();
 
-    const target = record.find((r) => r.category === args.category);
     if (!target) throw new Error("Category not found");
+
+    if (args.itemIndex < 0 || args.itemIndex >= target.items.length) {
+      throw new Error(`Invalid item index: ${args.itemIndex}. Must be 0–${target.items.length - 1}`);
+    }
 
     const items = target.items.map((item, i) => {
       if (i === args.itemIndex) {

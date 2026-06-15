@@ -11,6 +11,7 @@
 import type * as progress from "../progress.js";
 import type * as seed from "../seed.js";
 import type * as skills from "../skills.js";
+import type * as timeTracker from "../timeTracker.js";
 
 import type {
   ApiFromModules,
@@ -22,6 +23,7 @@ declare const fullApi: ApiFromModules<{
   progress: typeof progress;
   seed: typeof seed;
   skills: typeof skills;
+  timeTracker: typeof timeTracker;
 }>;
 
 /**

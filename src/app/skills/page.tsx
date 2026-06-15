@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useQuery, useMutation } from "convex/react";
 import { api } from "@convex/_generated/api";
 import { useUserId } from "@/hooks/use-user-id";
@@ -15,9 +15,15 @@ export default function SkillsPage() {
   const initSkills = useMutation(api.skills.initSkills);
   const toggleSkill = useMutation(api.skills.toggleSkill);
 
+  const initAttempted = useRef(false);
+
   useEffect(() => {
-    if (skills !== undefined && skills.length === 0) {
-      initSkills({ userId });
+    if (skills !== undefined && skills.length === 0 && !initAttempted.current) {
+      initAttempted.current = true;
+      initSkills({ userId }).catch((err) => {
+        console.error("Failed to initialize skills:", err);
+        initAttempted.current = false;
+      });
     }
   }, [skills, initSkills, userId]);
 

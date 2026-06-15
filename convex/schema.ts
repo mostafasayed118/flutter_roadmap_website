@@ -41,4 +41,13 @@ export default defineSchema({
       })
     ),
   }).index("by_user", ["userId"]),
+  studySessions: defineTable({
+    userId: v.string(),
+    weekId: v.optional(v.id("roadmapWeeks")),
+    durationMinutes: v.number(),
+    date: v.number(),
+    notes: v.optional(v.string()),
+  })
+    .index("by_user", ["userId"])
+    .index("by_user_week", ["userId", "weekId"]),
 });

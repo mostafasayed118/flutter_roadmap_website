@@ -1,5 +1,6 @@
 "use client";
 
+import { useId } from "react";
 import { motion } from "framer-motion";
 import { GlassCard } from "@/components/ui/glass-card";
 
@@ -8,6 +9,7 @@ interface OverallProgressCardProps {
 }
 
 export function OverallProgressCard({ percentage }: OverallProgressCardProps) {
+  const gradientId = useId();
   const radius = 70;
   const circumference = 2 * Math.PI * radius;
   const strokeDashoffset = circumference - (percentage / 100) * circumference;
@@ -31,7 +33,7 @@ export function OverallProgressCard({ percentage }: OverallProgressCardProps) {
               cy="80"
               r={radius}
               fill="none"
-              stroke="url(#progressGradient)"
+              stroke={`url(#${gradientId})`}
               strokeWidth="8"
               strokeLinecap="round"
               strokeDasharray={circumference}
@@ -40,7 +42,7 @@ export function OverallProgressCard({ percentage }: OverallProgressCardProps) {
               transition={{ duration: 1.2, ease: "easeOut", delay: 0.2 }}
             />
             <defs>
-              <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+              <linearGradient id={gradientId} x1="0%" y1="0%" x2="100%" y2="0%">
                 <stop offset="0%" stopColor="#8b5cf6" />
                 <stop offset="50%" stopColor="#6366f1" />
                 <stop offset="100%" stopColor="#06b6d4" />
