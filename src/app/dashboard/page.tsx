@@ -1,23 +1,19 @@
 "use client";
 
-import { useQuery } from "convex/react";
-import { api } from "@convex/_generated/api";
-import { useUserId } from "@/hooks/use-user-id";
-import { OverallProgressCard } from "@/components/dashboard/OverallProgressCard";
-import { QuickStatsGrid } from "@/components/dashboard/QuickStatsGrid";
-import { NextStepsCard } from "@/components/dashboard/NextStepsCard";
-import { StudyTimeCard } from "@/components/dashboard/StudyTimeCard";
-import { SessionList } from "@/components/time-tracker/SessionList";
+import { useProgress } from "@/hooks/use-progress";
+import { OverallProgressCard } from "@/components/features/dashboard/OverallProgressCard";
+import { QuickStatsGrid } from "@/components/features/dashboard/QuickStatsGrid";
+import { NextStepsCard } from "@/components/features/dashboard/NextStepsCard";
+import { StudyTimeCard } from "@/components/features/dashboard/StudyTimeCard";
+import { SessionList } from "@/components/features/time-tracker/SessionList";
 import { AnimatedPage } from "@/components/layout/AnimatedPage";
 import { GlassCard } from "@/components/ui/glass-card";
-import { GradientProgress } from "@/components/ui/gradient-progress";
-import { motion } from "framer-motion";
+import { Skeleton } from "@/components/ui/skeleton";
 import { fireBigCelebration } from "@/lib/confetti";
 import { useEffect, useRef } from "react";
 
 export default function DashboardPage() {
-  const userId = useUserId();
-  const stats = useQuery(api.progress.getOverallStats, { userId });
+  const { stats, isLoading } = useProgress();
   const wasRef = useRef(0);
 
   useEffect(() => {
@@ -27,18 +23,76 @@ export default function DashboardPage() {
     if (stats) wasRef.current = stats.overallPercentage;
   }, [stats]);
 
-  if (!stats) {
+  if (isLoading || !stats) {
     return (
       <div className="space-y-6">
         <div>
-          <div className="h-8 w-48 animate-pulse rounded bg-white/5" />
-          <div className="h-4 w-64 mt-1 animate-pulse rounded bg-white/5" />
+          <Skeleton className="h-8 w-48 rounded-md" />
+          <Skeleton className="mt-1 h-4 w-64 rounded-md" />
         </div>
         <div className="grid gap-6 sm:grid-cols-3">
-          <div className="h-48 animate-pulse rounded-xl bg-white/5" />
-          {[1, 2].map((i) => (
-            <div key={i} className="h-32 animate-pulse rounded-xl bg-white/5" />
-          ))}
+          <GlassCard className="p-6">
+            <div className="flex flex-col items-center gap-4">
+              <Skeleton className="h-4 w-28 rounded-md" />
+              <Skeleton className="size-40 rounded-full" />
+              <Skeleton className="h-4 w-32 rounded-md" />
+            </div>
+          </GlassCard>
+          <div className="grid gap-4 sm:col-span-2 sm:grid-cols-3">
+            {[1, 2, 3].map((i) => (
+              <GlassCard key={i} className="p-4">
+                <div className="flex items-start gap-3">
+                  <Skeleton className="size-9 shrink-0 rounded-lg" />
+                  <div className="flex-1 space-y-2">
+                    <Skeleton className="h-3 w-24 rounded-md" />
+                    <Skeleton className="h-6 w-20 rounded-md" />
+                  </div>
+                </div>
+              </GlassCard>
+            ))}
+          </div>
+        </div>
+        <GlassCard className="p-6">
+          <Skeleton className="mb-4 h-5 w-28 rounded-md" />
+          <div className="space-y-3">
+            {[1, 2, 3].map((i) => (
+              <div
+                key={i}
+                className="flex items-start gap-3 rounded-lg border border-white/5 bg-white/[0.02] p-3"
+              >
+                <Skeleton className="mt-0.5 size-4 shrink-0 rounded" />
+                <div className="flex-1 space-y-2">
+                  <Skeleton className="h-4 w-3/4 rounded-md" />
+                  <Skeleton className="h-3 w-1/2 rounded-md" />
+                </div>
+                <Skeleton className="h-5 w-14 shrink-0 rounded-full" />
+              </div>
+            ))}
+          </div>
+        </GlassCard>
+        <div className="grid gap-6 lg:grid-cols-2">
+          <GlassCard className="p-5">
+            <Skeleton className="mb-4 h-5 w-36 rounded-md" />
+            <Skeleton className="h-40 w-full rounded-lg" />
+          </GlassCard>
+          <GlassCard className="p-5">
+            <Skeleton className="mb-3 h-5 w-32 rounded-md" />
+            <div className="space-y-2">
+              {[1, 2, 3].map((i) => (
+                <div
+                  key={i}
+                  className="flex items-center gap-3 rounded-lg border border-white/5 bg-white/[0.02] p-3"
+                >
+                  <Skeleton className="size-9 shrink-0 rounded-lg" />
+                  <div className="flex-1 space-y-2">
+                    <Skeleton className="h-4 w-20 rounded-md" />
+                    <Skeleton className="h-3 w-32 rounded-md" />
+                  </div>
+                  <Skeleton className="h-3 w-16 shrink-0 rounded-md" />
+                </div>
+              ))}
+            </div>
+          </GlassCard>
         </div>
       </div>
     );
@@ -57,7 +111,7 @@ export default function DashboardPage() {
               Dashboard
             </span>
           </h1>
-          <p className="text-sm text-muted-foreground mt-1">
+          <p className="mt-1 text-sm text-muted-foreground">
             Track your Flutter learning journey across 34 weeks
             {stats.currentWeekNumber
               ? ` · Currently on Week ${stats.currentWeekNumber}`
@@ -78,7 +132,7 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        <NextStepsCard items={stats.nextItems} isLoading={false} />
+        <NextStepsCard items={stats.nextItems} />
 
         <div className="grid gap-6 lg:grid-cols-2">
           <StudyTimeCard />

@@ -2,6 +2,7 @@
 
 import { useState, useCallback } from "react";
 import { Copy, Check } from "lucide-react";
+import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
 interface CopyableCodeBlockProps {
@@ -17,6 +18,7 @@ export function CopyableCodeBlock({ code, language, label }: CopyableCodeBlockPr
     try {
       await navigator.clipboard.writeText(code);
       setCopied(true);
+      toast.success("Copied to clipboard");
       setTimeout(() => setCopied(false), 2000);
     } catch {
       const textarea = document.createElement("textarea");
@@ -28,6 +30,7 @@ export function CopyableCodeBlock({ code, language, label }: CopyableCodeBlockPr
       document.execCommand("copy");
       document.body.removeChild(textarea);
       setCopied(true);
+      toast.success("Copied to clipboard");
       setTimeout(() => setCopied(false), 2000);
     }
   }, [code]);
@@ -53,11 +56,11 @@ export function CopyableCodeBlock({ code, language, label }: CopyableCodeBlockPr
         <button
           onClick={handleCopy}
           className={cn(
-            "absolute top-2 right-2 flex items-center gap-1 rounded-md px-2 py-1 text-xs font-medium transition-all",
+            "absolute top-2 right-2 flex items-center gap-1 rounded-md px-2 py-1 text-xs font-medium transition-all duration-200",
             "opacity-0 group-hover:opacity-100 focus:opacity-100",
             copied
-              ? "bg-emerald-500/20 text-emerald-400"
-              : "bg-white/10 text-muted-foreground hover:bg-white/20 hover:text-foreground"
+              ? "bg-emerald-500/20 text-emerald-400 scale-100"
+              : "bg-white/10 text-muted-foreground hover:bg-white/20 hover:text-foreground hover:scale-105"
           )}
           aria-label={copied ? "Copied" : "Copy to clipboard"}
         >

@@ -1,15 +1,18 @@
 import { v } from "convex/values";
 import { query, mutation } from "./_generated/server";
-import { Doc, Id } from "./_generated/dataModel";
+import { Doc } from "./_generated/dataModel";
 
 export const getRoadmapWithProgress = query({
   args: { userId: v.string() },
   handler: async (ctx, args) => {
-    const phases = (await ctx.db.query("roadmapPhases").collect()).sort((a, b) => a.order - b.order);
-    const weeks = await ctx.db.query("roadmapWeeks").collect();
+    const phases = await ctx.db
+      .query("roadmapPhases")
+      .withIndex("by_order")
+      .collect();
+
     const progressRecords = await ctx.db
       .query("userProgress")
-      .withIndex("by_user_week", (q) => q.eq("userId", args.userId))
+      .withIndex("by_user", (q) => q.eq("userId", args.userId))
       .collect();
 
     const progressMap = new Map<string, Doc<"userProgress">>();
@@ -17,31 +20,56 @@ export const getRoadmapWithProgress = query({
       progressMap.set(p.weekId, p);
     }
 
-    return phases.map((phase) => {
-      const phaseWeeks = weeks
-        .filter((w) => w.phaseId === phase._id)
-        .sort((a, b) => a.order - b.order)
-        .map((week) => {
-          const progress = progressMap.get(week._id);
-          return {
-            ...week,
-            progress: progress
-              ? { completedTopics: progress.completedTopics, completedProjects: progress.completedProjects }
-              : { completedTopics: [], completedProjects: [] },
-          };
-        });
+    const phasesWithWeeks = [];
+    for (const phase of phases) {
+      const phaseWeeks = await ctx.db
+        .query("roadmapWeeks")
+        .withIndex("by_phase_order", (q) => q.eq("phaseId", phase._id))
+        .collect();
 
-      const totalTopics = phaseWeeks.reduce((s, w) => s + w.topics.length, 0);
-      const totalProjects = phaseWeeks.reduce((s, w) => s + w.projects.length, 0);
-      const doneTopics = phaseWeeks.reduce((s, w) => s + w.progress.completedTopics.length, 0);
-      const doneProjects = phaseWeeks.reduce((s, w) => s + w.progress.completedProjects.length, 0);
+      const enrichedWeeks = phaseWeeks.map((week) => {
+        const progress = progressMap.get(week._id);
+        return {
+          ...week,
+          progress: progress
+            ? {
+                completedTopics: progress.completedTopics,
+                completedProjects: progress.completedProjects,
+              }
+            : { completedTopics: [], completedProjects: [] },
+        };
+      });
 
-      return {
+      const totalTopics = enrichedWeeks.reduce(
+        (s, w) => s + w.topics.length,
+        0
+      );
+      const totalProjects = enrichedWeeks.reduce(
+        (s, w) => s + w.projects.length,
+        0
+      );
+      const doneTopics = enrichedWeeks.reduce(
+        (s, w) => s + w.progress.completedTopics.length,
+        0
+      );
+      const doneProjects = enrichedWeeks.reduce(
+        (s, w) => s + w.progress.completedProjects.length,
+        0
+      );
+
+      phasesWithWeeks.push({
         ...phase,
-        weeks: phaseWeeks,
-        stats: { totalTopics, totalProjects, completedTopics: doneTopics, completedProjects: doneProjects },
-      };
-    });
+        weeks: enrichedWeeks,
+        stats: {
+          totalTopics,
+          totalProjects,
+          completedTopics: doneTopics,
+          completedProjects: doneProjects,
+        },
+      });
+    }
+
+    return phasesWithWeeks;
   },
 });
 
@@ -51,7 +79,7 @@ export const getOverallStats = query({
     const weeks = await ctx.db.query("roadmapWeeks").collect();
     const progressRecords = await ctx.db
       .query("userProgress")
-      .withIndex("by_user_week", (q) => q.eq("userId", args.userId))
+      .withIndex("by_user", (q) => q.eq("userId", args.userId))
       .collect();
 
     const progressMap = new Map<string, Doc<"userProgress">>();
@@ -72,19 +100,31 @@ export const getOverallStats = query({
 
     const totalItems = totalTopics + totalProjects;
     const completedItems = completedTopics + completedProjects;
-    const overallPercentage = totalItems > 0 ? Math.round((completedItems / totalItems) * 100) : 0;
+    const overallPercentage =
+      totalItems > 0 ? Math.round((completedItems / totalItems) * 100) : 0;
 
-    const phases = (await ctx.db.query("roadmapPhases").collect()).sort((a, b) => a.order - b.order);
-    let currentPhase = null;
-    let currentWeek = null;
+    const phases = await ctx.db
+      .query("roadmapPhases")
+      .withIndex("by_order")
+      .collect();
+
+    let currentPhase: Doc<"roadmapPhases"> | null = null;
+    let currentWeek: Doc<"roadmapWeeks"> | null = null;
 
     for (const phase of phases) {
-      const phaseWeeks = weeks.filter((w) => w.phaseId === phase._id).sort((a, b) => a.order - b.order);
+      const phaseWeeks = await ctx.db
+        .query("roadmapWeeks")
+        .withIndex("by_phase_order", (q) => q.eq("phaseId", phase._id))
+        .collect();
+
       for (const week of phaseWeeks) {
         const p = progressMap.get(week._id);
         const doneTopics = p ? p.completedTopics.length : 0;
         const doneProjects = p ? p.completedProjects.length : 0;
-        if (doneTopics < week.topics.length || doneProjects < week.projects.length) {
+        if (
+          doneTopics < week.topics.length ||
+          doneProjects < week.projects.length
+        ) {
           currentPhase = phase;
           currentWeek = week;
           break;
@@ -94,10 +134,16 @@ export const getOverallStats = query({
     }
 
     const allWeeks = [...weeks].sort((a, b) => a.order - b.order);
-    const weekIndex = allWeeks.findIndex((w) => w._id === currentWeek?._id);
+    const weekIndex = allWeeks.findIndex(
+      (w) => w._id === currentWeek?._id
+    );
     const currentWeekNumber = weekIndex >= 0 ? weekIndex + 1 : null;
 
-    const nextItems: { title: string; week: string; type: "topic" | "project" }[] = [];
+    const nextItems: {
+      title: string;
+      week: string;
+      type: "topic" | "project";
+    }[] = [];
     for (const week of allWeeks) {
       const p = progressMap.get(week._id);
       const doneTopicsSet = new Set(p?.completedTopics ?? []);
@@ -105,7 +151,11 @@ export const getOverallStats = query({
 
       for (let i = 0; i < week.topics.length; i++) {
         if (!doneTopicsSet.has(i)) {
-          nextItems.push({ title: week.topics[i]!, week: week.title, type: "topic" });
+          nextItems.push({
+            title: week.topics[i]!,
+            week: week.title,
+            type: "topic",
+          });
           if (nextItems.length >= 3) break;
         }
       }
@@ -113,7 +163,11 @@ export const getOverallStats = query({
 
       for (let i = 0; i < week.projects.length; i++) {
         if (!doneProjectsSet.has(i)) {
-          nextItems.push({ title: week.projects[i]!, week: week.title, type: "project" });
+          nextItems.push({
+            title: week.projects[i]!,
+            week: week.title,
+            type: "project",
+          });
           if (nextItems.length >= 3) break;
         }
       }
@@ -134,19 +188,88 @@ export const getOverallStats = query({
   },
 });
 
-export const toggleTopic = mutation({
-  args: { userId: v.string(), weekId: v.id("roadmapWeeks"), topicIndex: v.number() },
+export const toggleItem = mutation({
+  args: {
+    userId: v.string(),
+    weekId: v.id("roadmapWeeks"),
+    type: v.union(v.literal("topic"), v.literal("project")),
+    index: v.number(),
+  },
   handler: async (ctx, args) => {
     const week = await ctx.db.get(args.weekId);
-    if (!week) throw new Error("Week not found");
+    if (!week) {
+      throw new Error(`Week not found: ${args.weekId}`);
+    }
 
-    if (args.topicIndex < 0 || args.topicIndex >= week.topics.length) {
-      throw new Error(`Invalid topic index: ${args.topicIndex}. Must be 0–${week.topics.length - 1}`);
+    const maxIndex =
+      args.type === "topic"
+        ? week.topics.length
+        : week.projects.length;
+
+    if (args.index < 0 || args.index >= maxIndex) {
+      throw new Error(
+        `Invalid ${args.type} index: ${args.index}. Must be 0–${maxIndex - 1}`
+      );
     }
 
     const existing = await ctx.db
       .query("userProgress")
-      .withIndex("by_user_week", (q) => q.eq("userId", args.userId).eq("weekId", args.weekId))
+      .withIndex("by_user_week", (q) =>
+        q.eq("userId", args.userId).eq("weekId", args.weekId)
+      )
+      .first();
+
+    if (existing) {
+      const completedField =
+        args.type === "topic"
+          ? existing.completedTopics
+          : existing.completedProjects;
+      const completed = new Set(completedField);
+
+      if (completed.has(args.index)) {
+        completed.delete(args.index);
+      } else {
+        completed.add(args.index);
+      }
+
+      const sorted = Array.from(completed).sort((a, b) => a - b);
+      await ctx.db.patch(existing._id, {
+        [args.type === "topic" ? "completedTopics" : "completedProjects"]:
+          sorted,
+      });
+    } else {
+      await ctx.db.insert("userProgress", {
+        userId: args.userId,
+        weekId: args.weekId,
+        completedTopics: args.type === "topic" ? [args.index] : [],
+        completedProjects: args.type === "project" ? [args.index] : [],
+      });
+    }
+  },
+});
+
+/** @deprecated Use `toggleItem` instead. Kept for backward compatibility. */
+export const toggleTopic = mutation({
+  args: {
+    userId: v.string(),
+    weekId: v.id("roadmapWeeks"),
+    topicIndex: v.number(),
+  },
+  handler: async (ctx, args) => {
+    const week = await ctx.db.get(args.weekId);
+    if (!week) throw new Error(`Week not found: ${args.weekId}`);
+
+    if (args.topicIndex < 0 || args.topicIndex >= week.topics.length) {
+      throw new Error(
+        `Invalid topic index: ${args.topicIndex}. Must be 0–${week.topics.length - 1}`
+      );
+    }
+
+    const existing = await ctx.db
+      .query("userProgress")
+      .withIndex("by_user_week", (q) =>
+        q.eq("userId", args.userId).eq("weekId", args.weekId)
+      )
       .first();
 
     if (existing) {
@@ -170,19 +293,28 @@ export const toggleTopic = mutation({
   },
 });
 
+/** @deprecated Use `toggleItem` instead. Kept for backward compatibility. */
 export const toggleProject = mutation({
-  args: { userId: v.string(), weekId: v.id("roadmapWeeks"), projectIndex: v.number() },
+  args: {
+    userId: v.string(),
+    weekId: v.id("roadmapWeeks"),
+    projectIndex: v.number(),
+  },
   handler: async (ctx, args) => {
     const week = await ctx.db.get(args.weekId);
-    if (!week) throw new Error("Week not found");
+    if (!week) throw new Error(`Week not found: ${args.weekId}`);
 
     if (args.projectIndex < 0 || args.projectIndex >= week.projects.length) {
-      throw new Error(`Invalid project index: ${args.projectIndex}. Must be 0–${week.projects.length - 1}`);
+      throw new Error(
+        `Invalid project index: ${args.projectIndex}. Must be 0–${week.projects.length - 1}`
+      );
     }
 
     const existing = await ctx.db
       .query("userProgress")
-      .withIndex("by_user_week", (q) => q.eq("userId", args.userId).eq("weekId", args.weekId))
+      .withIndex("by_user_week", (q) =>
+        q.eq("userId", args.userId).eq("weekId", args.weekId)
+      )
       .first();
 
     if (existing) {

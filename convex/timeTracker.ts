@@ -14,13 +14,18 @@ export const addSession = mutation({
     notes: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
-    if (args.durationMinutes < MIN_DURATION || args.durationMinutes > MAX_DURATION) {
-      throw new Error(`Duration must be between ${MIN_DURATION} and ${MAX_DURATION} minutes`);
+    if (
+      args.durationMinutes < MIN_DURATION ||
+      args.durationMinutes > MAX_DURATION
+    ) {
+      throw new Error(
+        `Duration must be between ${MIN_DURATION} and ${MAX_DURATION} minutes`
+      );
     }
 
     if (args.weekId) {
       const week = await ctx.db.get(args.weekId);
-      if (!week) throw new Error("Referenced week not found");
+      if (!week) throw new Error(`Referenced week not found: ${args.weekId}`);
     }
 
     return await ctx.db.insert("studySessions", {
@@ -37,24 +42,35 @@ export const updateSession = mutation({
   args: {
     sessionId: v.id("studySessions"),
     durationMinutes: v.optional(v.number()),
+    date: v.optional(v.number()),
     notes: v.optional(v.string()),
     weekId: v.optional(v.id("roadmapWeeks")),
   },
   handler: async (ctx, args) => {
     const session = await ctx.db.get(args.sessionId);
-    if (!session) throw new Error("Session not found");
+    if (!session) throw new Error(`Session not found: ${args.sessionId}`);
 
     const patch: {
       durationMinutes?: number;
+      date?: number;
       notes?: string;
       weekId?: Id<"roadmapWeeks">;
     } = {};
 
     if (args.durationMinutes !== undefined) {
-      if (args.durationMinutes < MIN_DURATION || args.durationMinutes > MAX_DURATION) {
-        throw new Error(`Duration must be between ${MIN_DURATION} and ${MAX_DURATION} minutes`);
+      if (
+        args.durationMinutes < MIN_DURATION ||
+        args.durationMinutes > MAX_DURATION
+      ) {
+        throw new Error(
+          `Duration must be between ${MIN_DURATION} and ${MAX_DURATION} minutes`
+        );
       }
       patch.durationMinutes = args.durationMinutes;
+    }
+
+    if (args.date !== undefined) {
+      patch.date = args.date;
     }
 
     if (args.notes !== undefined) {
@@ -64,7 +80,8 @@ export const updateSession = mutation({
     if (args.weekId !== undefined) {
       if (args.weekId !== null) {
         const week = await ctx.db.get(args.weekId);
-        if (!week) throw new Error("Referenced week not found");
+        if (!week)
+          throw new Error(`Referenced week not found: ${args.weekId}`);
       }
       patch.weekId = args.weekId;
     }
@@ -77,7 +94,7 @@ export const deleteSession = mutation({
   args: { sessionId: v.id("studySessions") },
   handler: async (ctx, args) => {
     const session = await ctx.db.get(args.sessionId);
-    if (!session) throw new Error("Session not found");
+    if (!session) throw new Error(`Session not found: ${args.sessionId}`);
     await ctx.db.delete(args.sessionId);
   },
 });
@@ -101,7 +118,10 @@ export const getUserTotalTime = query({
       .withIndex("by_user", (q) => q.eq("userId", args.userId))
       .collect();
 
-    const totalMinutes = sessions.reduce((sum, s) => sum + s.durationMinutes, 0);
+    const totalMinutes = sessions.reduce(
+      (sum, s) => sum + s.durationMinutes,
+      0
+    );
     const totalHours = Math.floor(totalMinutes / 60);
     const remainingMinutes = totalMinutes % 60;
 
@@ -122,23 +142,32 @@ export const getWeeklyTimeBreakdown = query({
       .withIndex("by_user", (q) => q.eq("userId", args.userId))
       .collect();
 
-    const weekIds = new Set<string>();
+    const weekIdSet = new Set<string>();
     for (const session of sessions) {
-      if (session.weekId) weekIds.add(session.weekId);
+      if (session.weekId) weekIdSet.add(session.weekId);
     }
 
-    const weekMap = new Map<string, { order: number }>();
-    for (const id of weekIds) {
-      const week = await ctx.db.get(id as Id<"roadmapWeeks">);
-      if (week) weekMap.set(id, { order: week.order });
+    const weekDataMap = new Map<string, { order: number }>();
+    const weekIdArray = Array.from(weekIdSet) as Id<"roadmapWeeks">[];
+    const weekFetches = await Promise.all(
+      weekIdArray.map((id) => ctx.db.get(id))
+    );
+    for (let i = 0; i < weekFetches.length; i++) {
+      const week = weekFetches[i];
+      if (week) weekDataMap.set(weekIdArray[i]!, { order: week.order });
     }
 
-    const breakdown = new Map<string, { weekTitle: string; order: number; minutes: number }>();
+    const breakdown = new Map<
+      string,
+      { weekTitle: string; order: number; minutes: number }
+    >();
 
     for (const session of sessions) {
       const key = session.weekId ?? "general";
       if (!breakdown.has(key)) {
-        const weekData = session.weekId ? weekMap.get(session.weekId) : null;
+        const weekData = session.weekId
+          ? weekDataMap.get(session.weekId)
+          : null;
         breakdown.set(key, {
           weekTitle: weekData ? `Week ${weekData.order}` : "General",
           order: weekData?.order ?? 0,
@@ -164,7 +193,10 @@ export const getWeekTotalTime = query({
       )
       .collect();
 
-    const totalMinutes = sessions.reduce((sum, s) => sum + s.durationMinutes, 0);
+    const totalMinutes = sessions.reduce(
+      (sum, s) => sum + s.durationMinutes,
+      0
+    );
     const hours = Math.floor(totalMinutes / 60);
     const minutes = totalMinutes % 60;
 

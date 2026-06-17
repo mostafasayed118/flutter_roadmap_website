@@ -7,7 +7,8 @@ export default defineSchema({
     title: v.string(),
     duration: v.string(),
     period: v.string(),
-  }),
+  }).index("by_order", ["order"]),
+
   roadmapWeeks: defineTable({
     phaseId: v.id("roadmapPhases"),
     order: v.number(),
@@ -24,13 +25,19 @@ export default defineSchema({
         })
       )
     ),
-  }),
+  })
+    .index("by_phase", ["phaseId"])
+    .index("by_phase_order", ["phaseId", "order"]),
+
   userProgress: defineTable({
     userId: v.string(),
     weekId: v.id("roadmapWeeks"),
     completedTopics: v.array(v.number()),
     completedProjects: v.array(v.number()),
-  }).index("by_user_week", ["userId", "weekId"]),
+  })
+    .index("by_user", ["userId"])
+    .index("by_user_week", ["userId", "weekId"]),
+
   skillsChecklist: defineTable({
     userId: v.string(),
     category: v.string(),
@@ -40,7 +47,10 @@ export default defineSchema({
         completed: v.boolean(),
       })
     ),
-  }).index("by_user", ["userId"]),
+  })
+    .index("by_user", ["userId"])
+    .index("by_user_category", ["userId", "category"]),
+
   studySessions: defineTable({
     userId: v.string(),
     weekId: v.optional(v.id("roadmapWeeks")),

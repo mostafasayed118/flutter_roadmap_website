@@ -1,44 +1,55 @@
 "use client";
 
-import { useQuery, useMutation } from "convex/react";
-import { api } from "@convex/_generated/api";
-import { useUserId } from "@/hooks/use-user-id";
-import { PhaseAccordion } from "@/components/roadmap/PhaseAccordion";
+import { useState } from "react";
+import { useRoadmap } from "@/hooks/use-progress";
+import { PhaseAccordion } from "@/components/features/roadmap/PhaseAccordion";
 import { Accordion } from "@/components/ui/accordion";
 import { AnimatedPage } from "@/components/layout/AnimatedPage";
 import { GlassCard } from "@/components/ui/glass-card";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
+import { EmptyState } from "@/components/ui/empty-state";
 import { motion } from "framer-motion";
 import { Database, ArrowRight } from "lucide-react";
-import { useState } from "react";
+import { toast } from "sonner";
 
 export default function RoadmapPage() {
-  const userId = useUserId();
-  const roadmap = useQuery(api.progress.getRoadmapWithProgress, { userId });
-  const seedRoadmap = useMutation(api.seed.seedRoadmap);
+  const { roadmap, isLoading, seedRoadmap } = useRoadmap();
   const [isSeeding, setIsSeeding] = useState(false);
 
   const handleSeed = async () => {
     setIsSeeding(true);
     try {
       await seedRoadmap();
+      toast.success("Roadmap loaded successfully");
     } catch (err) {
       console.error("Seed failed:", err);
+      toast.error("Failed to load roadmap data");
     } finally {
       setIsSeeding(false);
     }
   };
 
-  if (!roadmap) {
+  if (isLoading || !roadmap) {
     return (
       <div className="space-y-6">
         <div>
-          <div className="h-8 w-48 animate-pulse rounded bg-white/5" />
-          <div className="h-4 w-72 mt-1 animate-pulse rounded bg-white/5" />
+          <Skeleton className="h-8 w-48 rounded-md" />
+          <Skeleton className="mt-1 h-4 w-72 rounded-md" />
         </div>
         <div className="space-y-3">
           {Array.from({ length: 5 }).map((_, i) => (
-            <div key={i} className="h-20 w-full animate-pulse rounded-xl bg-white/5" />
+            <GlassCard key={i} className="p-4">
+              <div className="mb-3 flex items-start justify-between">
+                <Skeleton className="h-5 w-48 rounded-md" />
+                <Skeleton className="h-5 w-16 rounded-full" />
+              </div>
+              <div className="space-y-2">
+                <Skeleton className="h-4 w-full rounded-md" />
+                <Skeleton className="h-4 w-3/4 rounded-md" />
+                <Skeleton className="h-4 w-1/2 rounded-md" />
+              </div>
+            </GlassCard>
           ))}
         </div>
       </div>
@@ -55,37 +66,41 @@ export default function RoadmapPage() {
                 Flutter Roadmap
               </span>
             </h1>
-            <p className="text-sm text-muted-foreground mt-1">
-              34 weeks · 10 phases · Track your progress by checking off topics and projects
+            <p className="mt-1 text-sm text-muted-foreground">
+              34 weeks · 10 phases · Track your progress by checking off topics
+              and projects
             </p>
           </div>
-          <GlassCard className="p-12 flex flex-col items-center justify-center text-center gap-4">
-            <Database className="size-12 text-violet-400/50" />
-            <div>
-              <h2 className="text-lg font-semibold mb-1">No roadmap data yet</h2>
-              <p className="text-sm text-muted-foreground max-w-md">
-                The roadmap database is empty. Click the button below to load all 34 weeks
-                of Flutter learning content.
-              </p>
-            </div>
-            <Button
-              onClick={handleSeed}
-              disabled={isSeeding}
-              className="bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500"
-            >
-              {isSeeding ? (
-                <motion.div
-                  animate={{ rotate: 360 }}
-                  transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                  className="size-4 border-2 border-white/30 border-t-white rounded-full"
-                />
-              ) : (
-                <>
-                  Load Roadmap Data
-                  <ArrowRight className="size-4 ml-2" />
-                </>
-              )}
-            </Button>
+          <GlassCard className="p-12">
+            <EmptyState
+              icon={Database}
+              title="No roadmap data yet"
+              description="The roadmap database is empty. Click the button below to load all 34 weeks of Flutter learning content."
+              action={
+                <Button
+                  onClick={handleSeed}
+                  disabled={isSeeding}
+                  className="bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 hover:scale-[1.02] transition-all duration-200"
+                >
+                  {isSeeding ? (
+                    <motion.div
+                      animate={{ rotate: 360 }}
+                      transition={{
+                        duration: 1,
+                        repeat: Infinity,
+                        ease: "linear",
+                      }}
+                      className="size-4 rounded-full border-2 border-white/30 border-t-white"
+                    />
+                  ) : (
+                    <>
+                      Load Roadmap Data
+                      <ArrowRight className="size-4 ml-2" />
+                    </>
+                  )}
+                </Button>
+              }
+            />
           </GlassCard>
         </div>
       </AnimatedPage>
@@ -101,12 +116,18 @@ export default function RoadmapPage() {
               Flutter Roadmap
             </span>
           </h1>
-          <p className="text-sm text-muted-foreground mt-1">
-            34 weeks · 10 phases · Track your progress by checking off topics and projects
+          <p className="mt-1 text-sm text-muted-foreground">
+            34 weeks · 10 phases · Track your progress by checking off topics
+            and projects
           </p>
         </div>
 
-        <Accordion className="space-y-3" defaultValue={roadmap.length > 0 ? [`phase-${roadmap[0]!.order}`] : []}>
+        <Accordion
+          className="space-y-3"
+          defaultValue={
+            roadmap.length > 0 ? [`phase-${roadmap[0]!.order}`] : []
+          }
+        >
           {roadmap.map((phase) => (
             <PhaseAccordion
               key={phase._id}

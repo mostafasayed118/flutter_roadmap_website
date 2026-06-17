@@ -4,12 +4,12 @@ import { query, mutation } from "./_generated/server";
 export const getSkills = query({
   args: { userId: v.string() },
   handler: async (ctx, args) => {
-    const existing = await ctx.db
+    const records = await ctx.db
       .query("skillsChecklist")
       .withIndex("by_user", (q) => q.eq("userId", args.userId))
       .collect();
 
-    return existing.map((s) => ({
+    return records.map((s) => ({
       _id: s._id,
       category: s.category,
       items: s.items,
@@ -33,7 +33,10 @@ export const initSkills = mutation({
         items: [
           { name: "Write clean, null-safe Dart code", completed: false },
           { name: "Use OOP principles effectively", completed: false },
-          { name: "Handle async operations (Future, Stream)", completed: false },
+          {
+            name: "Handle async operations (Future, Stream)",
+            completed: false,
+          },
           { name: "Use generics and extensions", completed: false },
           { name: "Handle errors properly", completed: false },
         ],
@@ -53,7 +56,10 @@ export const initSkills = mutation({
         items: [
           { name: "Manage state with Cubit", completed: false },
           { name: "Handle complex state scenarios", completed: false },
-          { name: "Use BlocBuilder, BlocListener, BlocConsumer", completed: false },
+          {
+            name: "Use BlocBuilder, BlocListener, BlocConsumer",
+            completed: false,
+          },
           { name: "Implement Bloc (event-driven)", completed: false },
           { name: "Test Cubits/Blocs", completed: false },
         ],
@@ -130,18 +136,29 @@ export const initSkills = mutation({
 });
 
 export const toggleSkill = mutation({
-  args: { userId: v.string(), category: v.string(), itemIndex: v.number() },
+  args: {
+    userId: v.string(),
+    category: v.string(),
+    itemIndex: v.number(),
+  },
   handler: async (ctx, args) => {
     const target = await ctx.db
       .query("skillsChecklist")
-      .withIndex("by_user", (q) => q.eq("userId", args.userId))
-      .filter((q) => q.eq(q.field("category"), args.category))
+      .withIndex("by_user_category", (q) =>
+        q.eq("userId", args.userId).eq("category", args.category)
+      )
       .first();
 
-    if (!target) throw new Error("Category not found");
+    if (!target) {
+      throw new Error(
+        `Category "${args.category}" not found for user ${args.userId}`
+      );
+    }
 
     if (args.itemIndex < 0 || args.itemIndex >= target.items.length) {
-      throw new Error(`Invalid item index: ${args.itemIndex}. Must be 0–${target.items.length - 1}`);
+      throw new Error(
+        `Invalid item index: ${args.itemIndex}. Must be 0–${target.items.length - 1}`
+      );
     }
 
     const items = target.items.map((item, i) => {

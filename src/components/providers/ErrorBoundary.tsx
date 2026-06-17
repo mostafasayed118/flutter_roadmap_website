@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { usePathname } from "next/navigation";
 import { AlertTriangle, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -9,13 +10,14 @@ interface ErrorBoundaryState {
   error: Error | null;
 }
 
-interface ErrorBoundaryProps {
+interface ErrorBoundaryInnerProps {
   children: React.ReactNode;
   fallback?: React.ReactNode;
+  onError?: (error: Error, errorInfo: React.ErrorInfo) => void;
 }
 
-export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundaryState> {
-  constructor(props: ErrorBoundaryProps) {
+class ErrorBoundaryInner extends React.Component<ErrorBoundaryInnerProps, ErrorBoundaryState> {
+  constructor(props: ErrorBoundaryInnerProps) {
     super(props);
     this.state = { hasError: false, error: null };
   }
@@ -26,9 +28,10 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
     console.error("ErrorBoundary caught:", error, errorInfo);
+    this.props.onError?.(error, errorInfo);
   }
 
-  handleReset = () => {
+  resetError = () => {
     this.setState({ hasError: false, error: null });
   };
 
@@ -47,7 +50,7 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
               {this.state.error?.message ?? "An unexpected error occurred."}
             </p>
             <Button
-              onClick={this.handleReset}
+              onClick={this.resetError}
               variant="outline"
               className="border-white/10 bg-white/5 hover:bg-white/10"
             >
@@ -61,4 +64,24 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
 
     return this.props.children;
   }
+}
+
+interface ErrorBoundaryProps {
+  children: React.ReactNode;
+  fallback?: React.ReactNode;
+}
+
+export function ErrorBoundary({ children, fallback }: ErrorBoundaryProps) {
+  const pathname = usePathname();
+  const boundaryRef = React.useRef<ErrorBoundaryInner>(null);
+
+  React.useEffect(() => {
+    boundaryRef.current?.resetError();
+  }, [pathname]);
+
+  return (
+    <ErrorBoundaryInner ref={boundaryRef} fallback={fallback}>
+      {children}
+    </ErrorBoundaryInner>
+  );
 }

@@ -20,12 +20,14 @@ import {
   BookOpen,
   Terminal,
   Flame,
+  FileText,
 } from "lucide-react";
 
 const navItems = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/roadmap", label: "Roadmap", icon: Map },
   { href: "/skills", label: "Skills Checklist", icon: CheckSquare },
+  { href: "/docs", label: "Knowledge Base", icon: FileText },
   { href: "/resources", label: "Resources", icon: BookOpen },
   { href: "/cheat-sheet", label: "Cheat Sheet", icon: Terminal },
 ];
@@ -61,7 +63,7 @@ export function AppSidebar() {
           </SidebarGroupLabel>
           <SidebarMenu>
             {navItems.map((item) => {
-              const isActive = pathname === item.href;
+              const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
               const Icon = item.icon;
               return (
                 <SidebarMenuItem key={item.href}>

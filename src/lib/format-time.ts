@@ -6,3 +6,11 @@ export function formatMinutes(totalMinutes: number): string {
   if (minutes === 0) return `${hours}h`;
   return `${hours}h ${minutes}m`;
 }
+
+export function toDateInputValue(date: Date): string {
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+}
+
+export function todayInputValue(): string {
+  return toDateInputValue(new Date());
+}

@@ -4,11 +4,16 @@ import { ConvexProvider, ConvexReactClient } from "convex/react";
 import { ReactNode, useMemo } from "react";
 import { AlertTriangle } from "lucide-react";
 
-export default function ConvexClientProvider({ children }: { children: ReactNode }) {
+export function ConvexClientProvider({ children }: { children: ReactNode }) {
   const client = useMemo(() => {
     const url = process.env.NEXT_PUBLIC_CONVEX_URL;
     if (!url) return null;
-    return new ConvexReactClient(url);
+    try {
+      return new ConvexReactClient(url);
+    } catch (err) {
+      console.error("Failed to initialize Convex client:", err);
+      return null;
+    }
   }, []);
 
   if (!client) {
@@ -19,7 +24,7 @@ export default function ConvexClientProvider({ children }: { children: ReactNode
           <h2 className="text-lg font-semibold text-red-300">Convex Configuration Missing</h2>
           <p className="text-sm text-muted-foreground">
             The <code className="rounded bg-white/10 px-1.5 py-0.5 font-mono text-xs">NEXT_PUBLIC_CONVEX_URL</code> environment
-            variable is not set. The app cannot connect to the backend.
+            variable is not set or is invalid. The app cannot connect to the backend.
           </p>
           <p className="text-xs text-muted-foreground/60">
             Run <code className="rounded bg-white/10 px-1.5 py-0.5 font-mono text-xs">npx convex dev</code> to generate it, or set

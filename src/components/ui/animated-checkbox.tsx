@@ -23,15 +23,12 @@ export function AnimatedCheckbox({
       className="relative flex shrink-0 cursor-pointer items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500/50 rounded"
       style={{ width: dim, height: dim }}
     >
-      <motion.div
-        className="absolute inset-0 rounded-md border"
-        animate={{
-          borderColor: checked ? "oklch(0.7 0.2 160)" : "oklch(0.4 0 0)",
-          backgroundColor: checked
-            ? "oklch(0.7 0.2 160 / 0.2)"
-            : "transparent",
-        }}
-        transition={{ duration: 0.2 }}
+      <div
+        className={`absolute inset-0 rounded-md border transition-colors duration-200 ${
+          checked
+            ? "border-[oklch(0.7_0.2_160)] bg-[oklch(0.7_0.2_160/0.2)]"
+            : "border-[oklch(0.4_0_0)] bg-transparent"
+        }`}
       />
       <AnimatePresence>
         {checked && (

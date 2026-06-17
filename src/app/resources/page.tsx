@@ -1,12 +1,10 @@
-"use client";
-
 import { AnimatedPage } from "@/components/layout/AnimatedPage";
-import { YoutubeSection } from "@/components/resources/YoutubeSection";
-import { CoursesSection } from "@/components/resources/CoursesSection";
-import { DocsSection } from "@/components/resources/DocsSection";
-import { ToolsSection } from "@/components/resources/ToolsSection";
-import { ScheduleTable } from "@/components/resources/ScheduleTable";
-import { FinalTips } from "@/components/resources/FinalTips";
+import { YoutubeSection } from "@/components/features/resources/YoutubeSection";
+import { CoursesSection } from "@/components/features/resources/CoursesSection";
+import { DocsSection } from "@/components/features/resources/DocsSection";
+import { ToolsSection } from "@/components/features/resources/ToolsSection";
+import { ScheduleTable } from "@/components/features/resources/ScheduleTable";
+import { FinalTips } from "@/components/features/resources/FinalTips";
 
 export default function ResourcesPage() {
   return (
