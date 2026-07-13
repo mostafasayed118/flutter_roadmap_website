@@ -71,8 +71,15 @@ export function EditSessionDialog({
 
     setIsSaving(true);
     try {
-      const [year, month, day] = date.split("-").map(Number);
-      const dateTimestamp = Date.UTC(year!, month! - 1, day!);
+      const parts = date.split("-").map(Number);
+      const year = parts[0];
+      const month = parts[1];
+      const day = parts[2];
+      if (!year || !month || !day) {
+        toast.error("Invalid date");
+        return;
+      }
+      const dateTimestamp = Date.UTC(year, month - 1, day);
 
       await updateSession({
         sessionId,

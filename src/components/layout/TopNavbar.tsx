@@ -1,14 +1,17 @@
 "use client";
 
 import { useProgress } from "@/hooks/use-progress";
+import { useKeyboardShortcutsContext } from "@/components/providers/KeyboardShortcutsProvider";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { GradientProgress } from "@/components/ui/gradient-progress";
+import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { LogSessionDialog } from "@/components/features/time-tracker/LogSessionDialog";
-import { Flame, MapPin, Trophy } from "lucide-react";
+import { Flame, MapPin, Trophy, Keyboard } from "lucide-react";
 
 export function TopNavbar() {
   const { stats } = useProgress();
+  const { setHelpOpen } = useKeyboardShortcutsContext();
 
   const percentage = stats?.overallPercentage ?? 0;
 
@@ -86,6 +89,15 @@ export function TopNavbar() {
             </span>
           </motion.div>
         )}
+        <Button
+          variant="ghost"
+          size="icon-sm"
+          onClick={() => setHelpOpen(true)}
+          aria-label="Keyboard shortcuts"
+          className="text-muted-foreground hover:text-foreground"
+        >
+          <Keyboard className="size-4" />
+        </Button>
         <div className="hidden sm:block">
           <LogSessionDialog />
         </div>

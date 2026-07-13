@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import {
   AccordionContent,
   AccordionItem,
@@ -10,6 +11,7 @@ import { GradientProgress } from "@/components/ui/gradient-progress";
 import { WeekCard } from "./WeekCard";
 import { CheckCircle2 } from "lucide-react";
 import { Id } from "@convex/_generated/dataModel";
+import { fireWeekComplete } from "@/lib/confetti";
 
 interface WeekData {
   _id: Id<"roadmapWeeks">;
@@ -54,6 +56,14 @@ export function PhaseAccordion({
   const doneItems = stats.completedTopics + stats.completedProjects;
   const phaseProgress = totalItems > 0 ? Math.round((doneItems / totalItems) * 100) : 0;
   const isPhaseComplete = phaseProgress === 100;
+  const wasCompleteRef = useRef(isPhaseComplete);
+
+  useEffect(() => {
+    if (isPhaseComplete && !wasCompleteRef.current) {
+      fireWeekComplete();
+    }
+    wasCompleteRef.current = isPhaseComplete;
+  }, [isPhaseComplete]);
 
   return (
     <AccordionItem

@@ -123,15 +123,26 @@ export const initSkills = mutation({
       },
     ];
 
+    let inserted = 0;
     for (const cat of defaultSkills) {
-      await ctx.db.insert("skillsChecklist", {
-        userId: args.userId,
-        category: cat.category,
-        items: cat.items,
-      });
+      const alreadyExists = await ctx.db
+        .query("skillsChecklist")
+        .withIndex("by_user_category", (q) =>
+          q.eq("userId", args.userId).eq("category", cat.category)
+        )
+        .first();
+
+      if (!alreadyExists) {
+        await ctx.db.insert("skillsChecklist", {
+          userId: args.userId,
+          category: cat.category,
+          items: cat.items,
+        });
+        inserted++;
+      }
     }
 
-    return { message: "Skills initialized" };
+    return { message: "Skills initialized", inserted };
   },
 });
 

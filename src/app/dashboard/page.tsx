@@ -1,6 +1,10 @@
 "use client";
 
+import { useState, useCallback } from "react";
 import { useProgress } from "@/hooks/use-progress";
+import { useStudyTimerContext } from "@/components/features/time-tracker/StudyTimerProvider";
+import { StudyTimer } from "@/components/features/time-tracker/StudyTimer";
+import { SaveSessionDialog } from "@/components/features/time-tracker/SaveSessionDialog";
 import { OverallProgressCard } from "@/components/features/dashboard/OverallProgressCard";
 import { QuickStatsGrid } from "@/components/features/dashboard/QuickStatsGrid";
 import { NextStepsCard } from "@/components/features/dashboard/NextStepsCard";
@@ -15,6 +19,9 @@ import { useEffect, useRef } from "react";
 export default function DashboardPage() {
   const { stats, isLoading } = useProgress();
   const wasRef = useRef(0);
+  const [saveOpen, setSaveOpen] = useState(false);
+  const [savedDuration, setSavedDuration] = useState(0);
+  const timer = useStudyTimerContext();
 
   useEffect(() => {
     if (stats && stats.overallPercentage === 100 && wasRef.current < 100) {
@@ -22,6 +29,18 @@ export default function DashboardPage() {
     }
     if (stats) wasRef.current = stats.overallPercentage;
   }, [stats]);
+
+  // Intercept timer stop to open save dialog
+  const originalStop = timer.stop;
+  const interceptedStop = useCallback(() => {
+    const elapsed = timer.time;
+    originalStop();
+    if (elapsed > 60000) {
+      // Only show dialog if >1 minute
+      setSavedDuration(elapsed);
+      setSaveOpen(true);
+    }
+  }, [timer.time, originalStop]);
 
   if (isLoading || !stats) {
     return (
@@ -132,13 +151,30 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        <NextStepsCard items={stats.nextItems} />
+        <div className="grid gap-6 lg:grid-cols-3">
+          <div className="lg:col-span-1">
+            <StudyTimer onStop={interceptedStop} />
+          </div>
+          <div className="lg:col-span-2">
+            <NextStepsCard items={stats.nextItems} />
+          </div>
+        </div>
 
         <div className="grid gap-6 lg:grid-cols-2">
           <StudyTimeCard />
           <SessionList />
         </div>
       </div>
+
+      <SaveSessionDialog
+        open={saveOpen}
+        onOpenChange={setSaveOpen}
+        durationMs={savedDuration}
+        onSaved={() => {
+          setSaveOpen(false);
+          timer.reset();
+        }}
+      />
     </AnimatedPage>
   );
 }

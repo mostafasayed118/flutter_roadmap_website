@@ -40,7 +40,7 @@ export function WeekCard({
   completedTopics,
   completedProjects,
 }: WeekCardProps) {
-  const { userId, toggleTopic, toggleProject } = useWeekProgress();
+  const { userId, toggleItem } = useWeekProgress();
   const { weekTime } = useWeekTime(weekId);
 
   const completedTopicsSet = useMemo(
@@ -123,7 +123,7 @@ export function WeekCard({
                     title={topic}
                     isChecked={completedTopicsSet.has(idx)}
                     onToggle={() =>
-                      toggleTopic({ userId, weekId, topicIndex: idx })
+                      toggleItem({ weekId, type: "topic", index: idx })
                     }
                   />
                 ))}
@@ -145,11 +145,7 @@ export function WeekCard({
                       title={project}
                       isChecked={completedProjectsSet.has(idx)}
                       onToggle={() =>
-                        toggleProject({
-                          userId,
-                          weekId,
-                          projectIndex: idx,
-                        })
+                        toggleItem({ weekId, type: "project", index: idx })
                       }
                       icon={Hammer}
                     />

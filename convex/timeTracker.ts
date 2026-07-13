@@ -168,8 +168,16 @@ export const getWeeklyTimeBreakdown = query({
         const weekData = session.weekId
           ? weekDataMap.get(session.weekId)
           : null;
+        let weekTitle: string;
+        if (weekData) {
+          weekTitle = `Week ${weekData.order}`;
+        } else if (session.weekId) {
+          weekTitle = "Deleted Week";
+        } else {
+          weekTitle = "General";
+        }
         breakdown.set(key, {
-          weekTitle: weekData ? `Week ${weekData.order}` : "General",
+          weekTitle,
           order: weekData?.order ?? 0,
           minutes: 0,
         });

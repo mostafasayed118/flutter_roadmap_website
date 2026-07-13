@@ -7,7 +7,7 @@ import { AnimatedPage } from "@/components/layout/AnimatedPage";
 import { GlassCard } from "@/components/ui/glass-card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { EmptyState } from "@/components/ui/empty-state";
-import { CheckSquare } from "lucide-react";
+import { Trophy } from "lucide-react";
 
 export default function SkillsPage() {
   const { skills, isLoading, toggleSkill, userId } = useSkills();
@@ -68,9 +68,9 @@ export default function SkillsPage() {
           </div>
           <GlassCard className="p-12">
             <EmptyState
-              icon={CheckSquare}
-              title="No skills found"
-              description="Skills will appear here once they are initialized. Try refreshing the page."
+              icon={Trophy}
+              title="Your Flutter mastery begins here"
+              description="Check off skills as you learn them!"
             />
           </GlassCard>
         </div>

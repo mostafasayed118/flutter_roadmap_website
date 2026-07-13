@@ -1,7 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { useRoadmap } from "@/hooks/use-progress";
+import { useStudyTimerContext } from "@/components/features/time-tracker/StudyTimerProvider";
+import { MiniTimer } from "@/components/features/time-tracker/MiniTimer";
+import { SaveSessionDialog } from "@/components/features/time-tracker/SaveSessionDialog";
 import { PhaseAccordion } from "@/components/features/roadmap/PhaseAccordion";
 import { Accordion } from "@/components/ui/accordion";
 import { AnimatedPage } from "@/components/layout/AnimatedPage";
@@ -15,7 +18,10 @@ import { toast } from "sonner";
 
 export default function RoadmapPage() {
   const { roadmap, isLoading, seedRoadmap } = useRoadmap();
+  const timer = useStudyTimerContext();
   const [isSeeding, setIsSeeding] = useState(false);
+  const [saveOpen, setSaveOpen] = useState(false);
+  const [savedDuration, setSavedDuration] = useState(0);
 
   const handleSeed = async () => {
     setIsSeeding(true);
@@ -29,6 +35,16 @@ export default function RoadmapPage() {
       setIsSeeding(false);
     }
   };
+
+  // Intercept timer stop to open save dialog
+  const handleTimerStop = useCallback(() => {
+    const elapsed = timer.time;
+    timer.stop();
+    if (elapsed > 60000) {
+      setSavedDuration(elapsed);
+      setSaveOpen(true);
+    }
+  }, [timer]);
 
   if (isLoading || !roadmap) {
     return (
@@ -110,16 +126,19 @@ export default function RoadmapPage() {
   return (
     <AnimatedPage>
       <div className="space-y-6">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight">
-            <span className="bg-gradient-to-r from-violet-400 via-indigo-400 to-cyan-400 bg-clip-text text-transparent">
-              Flutter Roadmap
-            </span>
-          </h1>
-          <p className="mt-1 text-sm text-muted-foreground">
-            34 weeks · 10 phases · Track your progress by checking off topics
-            and projects
-          </p>
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <h1 className="text-2xl font-bold tracking-tight">
+              <span className="bg-gradient-to-r from-violet-400 via-indigo-400 to-cyan-400 bg-clip-text text-transparent">
+                Flutter Roadmap
+              </span>
+            </h1>
+            <p className="mt-1 text-sm text-muted-foreground">
+              34 weeks · 10 phases · Track your progress by checking off topics
+              and projects
+            </p>
+          </div>
+          <MiniTimer onStop={handleTimerStop} />
         </div>
 
         <Accordion
@@ -142,6 +161,16 @@ export default function RoadmapPage() {
           ))}
         </Accordion>
       </div>
+
+      <SaveSessionDialog
+        open={saveOpen}
+        onOpenChange={setSaveOpen}
+        durationMs={savedDuration}
+        onSaved={() => {
+          setSaveOpen(false);
+          timer.reset();
+        }}
+      />
     </AnimatedPage>
   );
 }

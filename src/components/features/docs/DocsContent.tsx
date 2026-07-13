@@ -1,9 +1,10 @@
 "use client";
 
 import { useState, useMemo, useCallback } from "react";
-import { Menu, Search, X } from "lucide-react";
+import { Menu, Search, SearchX, X } from "lucide-react";
 import { docsData, type DocSection } from "@/lib/docs-data";
 import { filterCategories } from "@/lib/search";
+import { useKeyboardShortcutsContext } from "@/components/providers/KeyboardShortcutsProvider";
 import { DocsSidebar } from "./DocsSidebar";
 import { CopyableCodeBlock } from "@/components/ui/copyable-code-block";
 import {
@@ -47,6 +48,7 @@ function HighlightedText({ text, query }: { text: string; query: string }) {
 export function DocsContent() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const { searchInputRef } = useKeyboardShortcutsContext();
 
   const filteredData = useMemo(
     () => filterCategories(docsData, searchQuery),
@@ -96,7 +98,7 @@ export function DocsContent() {
       <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         {/* Page header + search */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold tracking-tight text-foreground">
+          <h1 className="text-2xl font-bold tracking-tight text-foreground">
             Knowledge Base
           </h1>
           <p className="mt-2 text-muted-foreground">
@@ -108,6 +110,7 @@ export function DocsContent() {
           <div className="relative mt-6 max-w-xl">
             <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
             <input
+              ref={searchInputRef}
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
@@ -146,12 +149,12 @@ export function DocsContent() {
           <main className="min-w-0 lg:col-span-3">
             {filteredData.length === 0 && searchQuery && (
               <div className="flex flex-col items-center justify-center rounded-xl border border-white/5 bg-white/[0.02] py-20 text-center">
-                <Search className="mb-4 size-10 text-muted-foreground/30" />
+                <SearchX className="mb-4 size-10 text-muted-foreground/30" />
                 <p className="text-lg font-medium text-foreground">
-                  No results found
+                  No matching topics found
                 </p>
                 <p className="mt-1 text-sm text-muted-foreground">
-                  Try a different search term like &ldquo;dio&rdquo;,
+                  Try different keywords like &ldquo;dio&rdquo;,
                   &ldquo;go_router&rdquo;, or &ldquo;sealed class&rdquo;
                 </p>
                 <Button

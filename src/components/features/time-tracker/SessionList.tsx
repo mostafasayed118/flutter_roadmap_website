@@ -9,7 +9,7 @@ import { EmptyState } from "@/components/ui/empty-state";
 import { formatMinutes } from "@/lib/format-time";
 import { EditSessionDialog } from "./EditSessionDialog";
 import { DeleteSessionDialog } from "./DeleteSessionDialog";
-import { Clock, Calendar, FileText } from "lucide-react";
+import { Calendar, Clock, FileText } from "lucide-react";
 import { motion } from "framer-motion";
 
 function buildWeekNameMap(
@@ -59,9 +59,9 @@ export function SessionList() {
       <GlassCard className="p-5">
         <h2 className="mb-3 text-lg font-semibold">Recent Sessions</h2>
         <EmptyState
-          icon={Clock}
-          title="No sessions logged yet"
-          description='Click "Log Session" to get started'
+          icon={Calendar}
+          title="No study sessions yet"
+          description="Start the timer above to track your progress."
         />
       </GlassCard>
     );
