@@ -19,9 +19,9 @@ export function GlassCard({
   return (
     <div
       className={cn(
-        "rounded-xl border border-white/10 bg-white/5 backdrop-blur-xl shadow-lg",
+        "rounded-xl border border-white/10 bg-white/5 backdrop-blur-xl shadow-lg shadow-black/10",
         hover &&
-          "transition-all duration-300 hover:scale-[1.015] hover:border-white/20 hover:shadow-xl",
+          "transition-all duration-300 ease-out hover:scale-[1.015] hover:border-white/20 hover:shadow-xl hover:shadow-black/15",
         glow &&
           glowColor === "violet" &&
           "ring-1 ring-violet-500/20 hover:ring-violet-500/40",
