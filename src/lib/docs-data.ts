@@ -18,6 +18,8 @@ export interface DocSection {
   title: string;
   content: string;
   codeSnippets?: CodeSnippet[];
+  relatedWeeks?: number[];
+  tags?: string[];
 }
 
 export interface DocCategory {
@@ -25,6 +27,8 @@ export interface DocCategory {
   title: string;
   icon: LucideIcon;
   description: string;
+  relatedWeeks?: number[];
+  tags?: string[];
   sections: DocSection[];
 }
 
@@ -35,11 +39,31 @@ export const docsData: DocCategory[] = [
     icon: Code2,
     description:
       "Master the Dart language — types, OOP, async, null safety, generics, and effective Dart guidelines.",
+    relatedWeeks: [1, 2, 3, 4],
+    tags: ["dart", "language", "fundamentals", "types", "null-safety", "async", "generics", "oop"],
     sections: [
+      {
+        id: "dart-hello-world",
+        title: "Hello World",
+        content: `Every Dart app requires a top-level \`main()\` function as the entry point. Dart is a **client-optimized, type-safe, object-oriented language** that powers Flutter and is optimized for fast development with sub-second hot reload, high-quality production compilation to native ARM/x64/JavaScript/WebAssembly, and multi-platform support.`,
+        relatedWeeks: [1],
+        tags: ["dart", "hello-world", "main", "entry-point"],
+        codeSnippets: [
+          {
+            language: "dart",
+            label: "Hello World",
+            code: `void main() {
+  print('Hello, World!');
+}`,
+          },
+        ],
+      },
       {
         id: "dart-variables",
         title: "Variables & Types",
         content: `Dart is a **client-optimized, type-safe, object-oriented language** that powers Flutter. It uses type inference with \`var\`, immutable bindings with \`final\`, compile-time constants with \`const\`, and deferred initialization with \`late\`.`,
+        relatedWeeks: [1],
+        tags: ["dart", "variables", "types", "inference", "final", "const", "late"],
         codeSnippets: [
           {
             language: "dart",
@@ -73,6 +97,8 @@ description = 'Initialized later';`,
         id: "dart-built-in-types",
         title: "Built-in Types",
         content: `Dart provides **Numbers** (\`int\`, \`double\`, \`num\`), **Strings** with interpolation and multi-line support, **Booleans**, **Lists** (ordered collections), **Sets** (unordered unique), **Maps** (key-value pairs), and Dart 3+ **Records** (anonymous immutable value types).`,
+        relatedWeeks: [1],
+        tags: ["dart", "numbers", "strings", "lists", "sets", "maps", "records"],
         codeSnippets: [
           {
             language: "dart",
@@ -104,6 +130,8 @@ var (name, age) = ('Mustafa', 25);`,
         id: "dart-operators",
         title: "Operators",
         content: `Dart supports standard arithmetic, comparison, logical, and assignment operators. Key features include **null-aware operators** (\`??\`, \`?.\`, \`??=\`), the **cascade** operator (\`..\`) for chained method calls, and the **spread** operator (\`...\`) for expanding collections.`,
+        relatedWeeks: [1],
+        tags: ["dart", "operators", "null-aware", "cascade", "spread", "type-test"],
         codeSnippets: [
           {
             language: "dart",
@@ -131,6 +159,8 @@ obj as String;                // type cast`,
         id: "dart-functions",
         title: "Functions",
         content: `Dart functions support **named parameters**, **optional positional parameters**, **closures**, and **higher-order functions** (functions as first-class citizens). Use \`=>\` for concise single-expression bodies.`,
+        relatedWeeks: [1],
+        tags: ["dart", "functions", "named-parameters", "closures", "higher-order"],
         codeSnippets: [
           {
             language: "dart",
@@ -170,6 +200,8 @@ triple(5); // 15`,
         id: "dart-classes-oop",
         title: "Classes & OOP",
         content: `Dart supports **classes** with constructors (named, factory), **inheritance** (\`extends\`), **abstract classes**, **interfaces** (\`implements\`), **mixins** (\`mixin\`), **enhanced enums** (Dart 2.17+), and **extension methods** for adding functionality to existing types.`,
+        relatedWeeks: [2],
+        tags: ["dart", "classes", "oop", "inheritance", "mixins", "interfaces", "enums", "extensions"],
         codeSnippets: [
           {
             language: "dart",
@@ -214,6 +246,8 @@ extension StringExtensions on String {
         id: "dart-null-safety",
         title: "Null Safety",
         content: `Dart's **null safety** system distinguishes between nullable (\`String?\`) and non-nullable (\`String\`) types. Use the **null-aware operators** (\`??\`, \`?.\`, \`??=\`) for safe operations and the **null assertion** operator (\`!\`) only when you're certain a value isn't null.`,
+        relatedWeeks: [2],
+        tags: ["dart", "null-safety", "nullable", "null-aware", "type-safety"],
         codeSnippets: [
           {
             language: "dart",
@@ -244,6 +278,8 @@ String forced = nullableName!;  // throws if null`,
         id: "dart-async",
         title: "Asynchronous Programming",
         content: `Dart provides **Futures** (single async values), **Streams** (sequences of async data), and **Isolates** (true concurrency without shared memory). Use \`async\`/\`await\` for clean asynchronous code and \`Isolate.run()\` or \`compute()\` for heavy computations.`,
+        relatedWeeks: [3],
+        tags: ["dart", "async", "futures", "streams", "isolates", "concurrency"],
         codeSnippets: [
           {
             language: "dart",
@@ -279,6 +315,8 @@ final result = await compute(heavyComputation, inputData);`,
         id: "dart-error-handling",
         title: "Error Handling",
         content: `Dart uses **try-catch-finally** for exception handling with typed catch clauses (\`on FormatException\`). You can create **custom exceptions** by implementing the \`Exception\` interface and throw them with the \`throw\` keyword.`,
+        relatedWeeks: [3],
+        tags: ["dart", "error-handling", "try-catch", "exceptions", "custom-exceptions"],
         codeSnippets: [
           {
             language: "dart",
@@ -313,6 +351,8 @@ throw NetworkException('Not found', 404);`,
         id: "dart-generics",
         title: "Generics",
         content: `Generics enable you to write **reusable, type-safe** code. Define generic classes (\`Box<T>\`), generic functions (\`T first<T>(List<T>)\`), and use **bounded generics** (\`<T extends num>\`) to constrain type parameters.`,
+        relatedWeeks: [3],
+        tags: ["dart", "generics", "type-safety", "bounded-generics"],
         codeSnippets: [
           {
             language: "dart",
@@ -351,6 +391,8 @@ switch (obj) {
         id: "dart-control-flow",
         title: "Control Flow",
         content: `Dart supports standard **if/else**, **loops** (for, for-in, while, do-while), and Dart 3+ **enhanced switch** with expression syntax and **pattern matching** for destructuring complex types.`,
+        relatedWeeks: [1],
+        tags: ["dart", "control-flow", "if-else", "loops", "switch", "pattern-matching"],
         codeSnippets: [
           {
             language: "dart",
@@ -380,6 +422,8 @@ String grade = score >= 60 ? 'Pass' : 'Fail';`,
         id: "dart-libraries",
         title: "Libraries & Packages",
         content: `Dart uses \`import\` to bring in standard libraries (\`dart:math\`, \`dart:convert\`, \`dart:async\`), pub packages (\`package:http\`), and local files. The \`pubspec.yaml\` file declares dependencies, assets, and fonts for your project.`,
+        relatedWeeks: [4],
+        tags: ["dart", "libraries", "packages", "imports", "pubspec", "dependencies"],
         codeSnippets: [
           {
             language: "yaml",
@@ -435,6 +479,8 @@ import 'dart:math' hide Random;`,
         id: "dart-effective-dart",
         title: "Effective Dart & CLI",
         content: `Follow **Effective Dart** guidelines: use \`lowerCamelCase\` for variables/functions, \`UpperCamelCase\` for classes, single quotes for strings, and prefer \`final\`/\`const\` over \`var\`. Key CLI tools include \`dart analyze\`, \`dart format\`, \`dart test\`, and \`dart fix --apply\`.`,
+        relatedWeeks: [4],
+        tags: ["dart", "effective-dart", "style-guide", "cli", "linting", "formatting"],
         codeSnippets: [
           {
             language: "bash",
@@ -452,6 +498,64 @@ dart fix --apply                 # Auto-fix lint issues`,
           },
         ],
       },
+      {
+        id: "dart-enhanced-enums",
+        title: "Enhanced Enums & Extension Methods",
+        content: `Dart 2.17+ introduces **enhanced enums** that can have fields, constructors, and methods. **Extension methods** add functionality to existing types without modifying them.`,
+        relatedWeeks: [2],
+        tags: ["dart", "enums", "extension-methods", "enhanced-enums"],
+        codeSnippets: [
+          {
+            language: "dart",
+            label: "Enhanced Enums & Extensions",
+            code: `// Enhanced Enum
+enum Planet {
+  mercury(mass: 3.3e23, radius: 2.44e6),
+  earth(mass: 5.97e24, radius: 6.37e6);
+
+  const Planet({required this.mass, required this.radius});
+  final double mass;
+  final double radius;
+  double get gravity => 6.67e-11 * mass / (radius * radius);
+}
+
+print(Planet.earth.gravity); // 9.8
+
+// Extension Methods
+extension StringExtensions on String {
+  String get capitalize =>
+      isEmpty ? this : '\${this[0].toUpperCase()}\${substring(1)}';
+  bool get isEmail => contains('@') && contains('.');
+}
+
+'hello'.capitalize;       // 'Hello'
+'test@email.com'.isEmail; // true`,
+          },
+        ],
+      },
+      {
+        id: "dart-core-libraries",
+        title: "Core Libraries",
+        content: `Dart provides essential core libraries for common operations. Understanding these libraries is fundamental to effective Dart programming.`,
+        relatedWeeks: [3],
+        tags: ["dart", "core-libraries", "dart-async", "dart-math", "dart-convert", "dart-io"],
+        codeSnippets: [
+          {
+            language: "text",
+            label: "Core Libraries Reference",
+            code: `| Library         | Purpose                                              |
+|-----------------|------------------------------------------------------|
+| dart:core       | Built-in types (String, List, Map, DateTime, etc.)   |
+| dart:async      | Async programming (Future, Stream, StreamController) |
+| dart:math       | Math functions (sqrt, pow, Random, pi, e)            |
+| dart:convert    | Encoding/decoding (jsonEncode, jsonDecode, utf8)     |
+| dart:io         | File/socket/process I/O (non-web)                    |
+| dart:isolate    | Isolates for true concurrency                        |
+| dart:collection | Additional collection types (Queue, LinkedHashMap)   |
+| dart:js_interop | JavaScript interop for web                           |`,
+          },
+        ],
+      },
     ],
   },
   {
@@ -460,11 +564,15 @@ dart fix --apply                 # Auto-fix lint issues`,
     icon: Smartphone,
     description:
       "Widgets, layout system, navigation, state management, animations, theming, and testing in Flutter.",
+    relatedWeeks: [5, 6, 7, 8, 9],
+    tags: ["flutter", "widgets", "layout", "navigation", "animations", "state", "theming", "testing"],
     sections: [
       {
         id: "flutter-widgets",
         title: "Widgets & Architecture",
         content: `In Flutter, **everything is a widget**. Widgets describe what their view should look like given the current configuration and state. **StatelessWidget** is immutable; **StatefulWidget** maintains mutable state via \`setState()\`. The layout rule: **"Constraints flow down. Sizes flow up. Parents set positions."**`,
+        relatedWeeks: [5],
+        tags: ["flutter", "widgets", "stateless", "stateful", "widget-tree", "architecture"],
         codeSnippets: [
           {
             language: "dart",
@@ -502,6 +610,8 @@ class _CounterState extends State<Counter> {
         id: "flutter-layout",
         title: "Layout System",
         content: `Flutter's layout uses **Row** (horizontal), **Column** (vertical), **Stack** (overlapping), **Container** (flexible box), and **Expanded** (fills available space). For scrolling, use **ListView.builder**, **GridView**, and **CustomScrollView** with **Slivers**.`,
+        relatedWeeks: [5],
+        tags: ["flutter", "layout", "row", "column", "stack", "container", "slivers"],
         codeSnippets: [
           {
             language: "dart",
@@ -568,6 +678,8 @@ GridView.builder(
         id: "flutter-navigation",
         title: "Navigation & Routing",
         content: `The recommended approach is **go_router** — the official Flutter team package. It provides URL-based routing, deep linking, nested navigation with **ShellRoute**, redirect guards, and path/query parameters. Navigator 1.0 is still available for simpler use cases.`,
+        relatedWeeks: [6],
+        tags: ["flutter", "navigation", "routing", "go-router", "shell-route", "deep-linking"],
         codeSnippets: [
           {
             language: "dart",
@@ -608,6 +720,8 @@ context.goNamed('profile');      // named route`,
         id: "flutter-networking",
         title: "Networking & JSON",
         content: `For HTTP requests, use the **http** package for simple calls or **Dio** for advanced features (interceptors, file upload/download). JSON serialization can be done manually with \`fromJson\`/\`toJson\` or automated with **json_serializable** + **build_runner**.`,
+        relatedWeeks: [6],
+        tags: ["flutter", "networking", "http", "dio", "json", "serialization"],
         codeSnippets: [
           {
             language: "dart",
@@ -663,6 +777,8 @@ class User {
         id: "flutter-animations",
         title: "Animations",
         content: `Flutter offers **implicit animations** (AnimatedContainer, AnimatedOpacity) for simple property transitions, **explicit animations** (AnimationController) for full control, and **Hero animations** for shared element transitions between routes.`,
+        relatedWeeks: [7],
+        tags: ["flutter", "animations", "implicit", "explicit", "animation-controller", "hero"],
         codeSnippets: [
           {
             language: "dart",
@@ -707,6 +823,8 @@ Hero(tag: 'hero-image-\${item.id}', child: Image.network(item.imageUrl))`,
         id: "flutter-state-management",
         title: "State Management",
         content: `Flutter offers multiple state management options: **setState** (local), **Provider** (lightweight), **Riverpod** (compile-safe), **flutter_bloc** (event-driven, scalable), **GetX** (all-in-one), and **MobX** (reactive). Choose based on app complexity and team preference.`,
+        relatedWeeks: [8],
+        tags: ["flutter", "state-management", "provider", "riverpod", "bloc", "getx", "mobx"],
         codeSnippets: [
           {
             language: "dart",
@@ -739,6 +857,8 @@ context.read<CounterModel>().increment()  // no rebuild`,
         id: "flutter-theming",
         title: "Theming & Material 3",
         content: `Use \`ThemeData\` with **Material 3** enabled for modern design. Access theme values via \`Theme.of(context).colorScheme\` and \`Theme.of(context).textTheme\`. Support dark mode with \`darkTheme\` and \`themeMode: ThemeMode.system\`.`,
+        relatedWeeks: [7],
+        tags: ["flutter", "theming", "material3", "color-scheme", "dark-mode"],
         codeSnippets: [
           {
             language: "dart",
@@ -765,6 +885,8 @@ Theme.of(context).textTheme.headlineMedium`,
         id: "flutter-testing",
         title: "Testing",
         content: `Flutter supports **unit tests** (logic), **widget tests** (UI components), and **integration tests** (full app flows). Use \`test\` package for unit/widget tests and \`integration_test\` package for end-to-end testing.`,
+        relatedWeeks: [9],
+        tags: ["flutter", "testing", "unit-test", "widget-test", "integration-test"],
         codeSnippets: [
           {
             language: "dart",
@@ -791,6 +913,8 @@ testWidgets('MyWidget shows title', (tester) async {
         id: "flutter-cli",
         title: "CLI Commands",
         content: `Essential Flutter CLI commands for creating projects, running apps, building for different platforms, managing dependencies, and running tests.`,
+        relatedWeeks: [5],
+        tags: ["flutter", "cli", "commands", "build", "run", "debug"],
         codeSnippets: [
           {
             language: "bash",
@@ -811,6 +935,224 @@ flutter test                     # Run tests`,
           },
         ],
       },
+      {
+        id: "flutter-widget-catalog",
+        title: "Widget Catalog",
+        content: `Flutter provides a comprehensive widget catalog organized by design system (**Material** for Android/Cross-platform, **Cupertino** for iOS-style) and by category (Layout, Scrolling, Input, Interaction, Animation, Async, Text, Assets, Painting, Accessibility).`,
+        relatedWeeks: [5],
+        tags: ["flutter", "widget-catalog", "material", "cupertino", "design-system"],
+        codeSnippets: [
+          {
+            language: "text",
+            label: "Widget Catalog Overview",
+            code: `Material Components: MaterialApp, Scaffold, AppBar, ElevatedButton, TextButton,
+  OutlinedButton, FloatingActionButton, TextField, Form, DropdownButton,
+  ListView, GridView, Card, Chip, Dialog, SnackBar, BottomSheet,
+  NavigationBar, NavigationRail, Drawer, ThemeData, ColorScheme
+
+Cupertino: CupertinoApp, CupertinoPageScaffold, CupertinoButton,
+  CupertinoTextField, CupertinoNavigationBar, CupertinoTabBar,
+  CupertinoAlertDialog, CupertinoActionSheet
+
+Categories:
+  Layout:       Row, Column, Stack, Flex, Wrap, Expanded, SizedBox, Container, Padding, Center, Align
+  Scrolling:     ListView, GridView, SingleChildScrollView, CustomScrollView, Sliver*
+  Input:         TextField, Checkbox, Radio, Switch, Slider, Form
+  Interaction:   GestureDetector, InkWell, Dismissible, Draggable
+  Animation:     AnimatedContainer, AnimatedOpacity, Hero, AnimationController
+  Async:         FutureBuilder, StreamBuilder
+  Text:          Text, RichText, DefaultTextStyle
+  Assets:        Image, Icon, AssetImage, NetworkImage
+  Painting:      CustomPaint, ClipRRect, DecoratedBox, BackdropFilter
+  Accessibility: Semantics, MergeSemantics, ExcludeSemantics`,
+          },
+        ],
+      },
+      {
+        id: "flutter-adaptive-design",
+        title: "Adaptive & Responsive Design",
+        content: `Flutter supports adaptive and responsive design through **MediaQuery** for screen dimensions, **LayoutBuilder** for constraint-based layouts, **SafeArea** for notch/cutout handling, and breakpoint-based layouts for mobile/tablet/desktop.`,
+        relatedWeeks: [8],
+        tags: ["flutter", "adaptive", "responsive", "layout-builder", "media-query", "breakpoints"],
+        codeSnippets: [
+          {
+            language: "dart",
+            label: "Adaptive Layout Patterns",
+            code: `// MediaQuery for screen size
+final size = MediaQuery.of(context).size;
+final screenWidth = size.width;
+
+// LayoutBuilder for constraint-based layout
+LayoutBuilder(
+  builder: (context, constraints) {
+    if (constraints.maxWidth > 600) {
+      return WideLayout();
+    }
+    return NarrowLayout();
+  },
+)
+
+// SafeArea for notch handling
+SafeArea(child: Scaffold(...))
+
+// Breakpoints
+bool get isMobile => screenWidth < 600;
+bool get isTablet => screenWidth >= 600 && screenWidth < 1200;
+bool get isDesktop => screenWidth >= 1200;`,
+          },
+        ],
+      },
+      {
+        id: "flutter-accessibility",
+        title: "Accessibility",
+        content: `Flutter provides built-in accessibility support through **Semantics** widgets, dynamic font sizing via **TextScaler**, and platform-specific screen reader support (TalkBack on Android, VoiceOver on iOS).`,
+        relatedWeeks: [9],
+        tags: ["flutter", "accessibility", "semantics", "a11y", "screen-reader", "contrast"],
+        codeSnippets: [
+          {
+            language: "dart",
+            label: "Accessibility Patterns",
+            code: `Semantics(
+  label: 'Submit form button',
+  button: true,
+  child: ElevatedButton(
+    onPressed: onSubmit,
+    child: const Text('Submit'),
+  ),
+)
+
+// Key practices:
+// - Always provide semantic labels for images and icons
+// - Use sufficient color contrast ratios
+// - Support dynamic font sizes via TextScaler
+// - Test with TalkBack (Android) and VoiceOver (iOS)`,
+          },
+        ],
+      },
+      {
+        id: "flutter-internationalization",
+        title: "Internationalization (i18n)",
+        content: `Flutter supports internationalization through **flutter_localizations** and the **intl** package. Use code generation for type-safe translations.`,
+        relatedWeeks: [9],
+        tags: ["flutter", "i18n", "internationalization", "localization", "translations"],
+        codeSnippets: [
+          {
+            language: "yaml",
+            label: "pubspec.yaml for i18n",
+            code: `dependencies:
+  flutter_localizations:
+    sdk: flutter
+  intl: any
+
+flutter:
+  generate: true`,
+          },
+          {
+            language: "dart",
+            label: "Using Localizations",
+            code: `MaterialApp(
+  localizationsDelegates: AppLocalizations.localizationsDelegates,
+  supportedLocales: AppLocalizations.supportedLocales,
+)
+
+Text(AppLocalizations.of(context)!.helloWorld)`,
+          },
+        ],
+      },
+      {
+        id: "flutter-assets-images",
+        title: "Assets & Images",
+        content: `Flutter supports asset images, network images, and custom fonts through the \`pubspec.yaml\` configuration. Use **cached_network_image** for efficient image caching.`,
+        relatedWeeks: [5],
+        tags: ["flutter", "assets", "images", "fonts", "cached-network-image"],
+        codeSnippets: [
+          {
+            language: "yaml",
+            label: "pubspec.yaml Assets",
+            code: `flutter:
+  assets:
+    - assets/images/logo.png
+    - assets/icons/
+  fonts:
+    - family: MyFont
+      fonts:
+        - asset: assets/fonts/MyFont-Regular.ttf
+        - asset: assets/fonts/MyFont-Bold.ttf
+          weight: 700`,
+          },
+          {
+            language: "dart",
+            label: "Loading Assets",
+            code: `Image.asset('assets/images/logo.png')
+Image.network('https://example.com/image.jpg')
+CachedNetworkImage(imageUrl: url, placeholder: (_, __) => CircularProgressIndicator())`,
+          },
+        ],
+      },
+      {
+        id: "flutter-devtools",
+        title: "Flutter DevTools",
+        content: `Flutter DevTools is a suite of performance and debugging tools including Widget Inspector, Performance profiler, CPU Profiler, Memory tracker, Network monitor, Logging, and Layout Explorer.`,
+        relatedWeeks: [9],
+        tags: ["flutter", "devtools", "debugging", "performance", "profiling"],
+        codeSnippets: [
+          {
+            language: "bash",
+            label: "Launching DevTools",
+            code: `flutter run --debug
+# Then open link printed in terminal, or:
+dart devtools`,
+          },
+          {
+            language: "text",
+            label: "DevTools Tools",
+            code: `| Tool             | Purpose                              |
+|------------------|--------------------------------------|
+| Widget Inspector | Visualize widget tree and properties |
+| Performance      | Frame rendering, jank detection      |
+| CPU Profiler     | Identify slow code                   |
+| Memory           | Track memory usage and leaks         |
+| Network          | Monitor HTTP requests                |
+| Logging          | View print statements and errors     |
+| Layout Explorer  | Debug layout constraints             |`,
+          },
+        ],
+      },
+      {
+        id: "flutter-local-storage",
+        title: "Local Storage",
+        content: `Flutter offers several local storage options: **shared_preferences** for simple key-value storage, **sqflite** for full SQLite relational database, **Hive** for fast NoSQL with typed boxes, and **flutter_secure_storage** for encrypted key-value storage.`,
+        relatedWeeks: [6],
+        tags: ["flutter", "storage", "shared-preferences", "sqflite", "hive", "secure-storage"],
+        codeSnippets: [
+          {
+            language: "dart",
+            label: "shared_preferences",
+            code: `final prefs = await SharedPreferences.getInstance();
+await prefs.setString('username', 'mustafa');
+final name = prefs.getString('username') ?? 'Guest';`,
+          },
+          {
+            language: "dart",
+            label: "sqflite (SQLite)",
+            code: `final db = await openDatabase('app.db', version: 1,
+  onCreate: (db, version) {
+    return db.execute('CREATE TABLE items (id INTEGER PRIMARY KEY, name TEXT)');
+  },
+);
+await db.insert('items', {'name': 'Task 1'});
+final List<Map<String, dynamic>> rows = await db.query('items');`,
+          },
+          {
+            language: "dart",
+            label: "Hive (Fast NoSQL)",
+            code: `await Hive.initFlutter();
+final box = await Hive.openBox('settings');
+box.put('darkMode', true);
+final darkMode = box.get('darkMode', defaultValue: false);`,
+          },
+        ],
+      },
     ],
   },
   {
@@ -819,17 +1161,23 @@ flutter test                     # Run tests`,
     icon: Layers,
     description:
       "Predictable state management with Cubit (simple) and Bloc (event-driven), Flutter widgets, architecture patterns, and testing.",
+    relatedWeeks: [10, 11, 12, 13],
+    tags: ["bloc", "cubit", "state-management", "event-driven", "flutter-bloc", "hydrated-bloc"],
     sections: [
       {
         id: "bloc-why",
         title: "Why Bloc?",
         content: `**Bloc** (Business Logic Component) separates presentation from business logic, making apps easier to test, maintain, and scale. It provides **separation of concerns**, **testability** via pure functions, **predictability** (same event → same state), and **traceability** (every state change is logged).`,
+        relatedWeeks: [10],
+        tags: ["bloc", "architecture", "separation-of-concerns", "testability"],
         codeSnippets: [],
       },
       {
         id: "bloc-cubit-concept",
         title: "Cubit: Simple State Management",
         content: `A **Cubit** extends \`BlocBase\` and exposes **functions** to trigger state changes (no events needed). The flow is: **UI → calls Cubit function → Cubit emits new state → UI rebuilds**. Use \`onChange\` and \`BlocObserver\` for debugging.`,
+        relatedWeeks: [10],
+        tags: ["bloc", "cubit", "state", "emit", "bloc-observer"],
         codeSnippets: [
           {
             language: "dart",
@@ -868,6 +1216,8 @@ void onChange(Change<int> change) {
         id: "bloc-event-concept",
         title: "Bloc: Event-Driven State",
         content: `A **Bloc** uses **Events** instead of functions. Events are dispatched from the UI → Bloc maps them to states. This provides better traceability and supports advanced event handling with **transformers** (debounce, throttle, sequential).`,
+        relatedWeeks: [11],
+        tags: ["bloc", "events", "event-driven", "traceability"],
         codeSnippets: [
           {
             language: "dart",
@@ -904,12 +1254,16 @@ class WeatherError extends WeatherState {
         id: "bloc-vs-cubit",
         title: "Cubit vs Bloc",
         content: `**Cubit** is simpler with less boilerplate — best for simple state (toggle, counter, form fields). **Bloc** provides event traceability, advanced event handling (transformers), and structured testing — best for complex flows and large teams.`,
+        relatedWeeks: [10],
+        tags: ["bloc", "cubit", "comparison", "trade-offs"],
         codeSnippets: [],
       },
       {
         id: "bloc-widgets",
         title: "Flutter Bloc Widgets",
         content: `**BlocProvider** provides a Bloc/Cubit to the widget tree. **BlocBuilder** rebuilds UI on state changes. **BlocSelector** rebuilds only when a specific value changes. **BlocListener** reacts without rebuilding (for side effects). **BlocConsumer** combines Builder + Listener. **RepositoryProvider** provides data layer dependencies.`,
+        relatedWeeks: [11],
+        tags: ["bloc", "widgets", "bloc-provider", "bloc-builder", "bloc-listener", "bloc-consumer"],
         codeSnippets: [
           {
             language: "dart",
@@ -999,6 +1353,8 @@ final username = context.select<AuthCubit, String>(
         id: "bloc-architecture",
         title: "3-Layer Architecture",
         content: `Recommended architecture: **Presentation Layer** (Widgets, Pages, BlocBuilders) → **Business Logic Layer** (Bloc / Cubit) → **Data Layer** (Repositories, APIs, Local DB). Use a feature-based folder structure with separate files for bloc, cubit, state, event, and view.`,
+        relatedWeeks: [12],
+        tags: ["bloc", "architecture", "clean-architecture", "folder-structure", "layers"],
         codeSnippets: [
           {
             language: "text",
@@ -1029,6 +1385,8 @@ final username = context.select<AuthCubit, String>(
         id: "bloc-event-transformers",
         title: "Event Transformers",
         content: `Use **bloc_concurrency** to control how concurrent events are handled: **sequential** (queue), **droppable** (ignore new), **restartable** (cancel and restart), and **concurrent** (parallel, default). Common pattern: debounce for search queries.`,
+        relatedWeeks: [13],
+        tags: ["bloc", "event-transformers", "bloc-concurrency", "debounce", "sequential"],
         codeSnippets: [
           {
             language: "dart",
@@ -1060,6 +1418,8 @@ on<SearchQueryChanged>(
         id: "bloc-state-modeling",
         title: "State Modeling",
         content: `Use **sealed classes** (Dart 3+) for exhaustive pattern matching in UI, or a **single class with copyWith** for simpler states. Sealed classes ensure you handle every possible state in the UI.`,
+        relatedWeeks: [12],
+        tags: ["bloc", "state-modeling", "sealed-classes", "pattern-matching", "copyWith"],
         codeSnippets: [
           {
             language: "dart",
@@ -1102,6 +1462,8 @@ class CounterState {
         id: "bloc-testing",
         title: "Testing with bloc_test",
         content: `Use **bloc_test** and **mocktail** for testing Bloc/Cubit. The \`blocTest\` function validates the exact sequence of emitted states, with \`build\`, \`act\`, \`expect\`, and optional \`verify\` callbacks.`,
+        relatedWeeks: [13],
+        tags: ["bloc", "testing", "bloc-test", "mocktail", "unit-test"],
         codeSnippets: [
           {
             language: "dart",
@@ -1135,6 +1497,8 @@ blocTest<WeatherBloc, WeatherState>(
         id: "bloc-hydrated",
         title: "hydrated_bloc (Persistence)",
         content: `Use **hydrated_bloc** to automatically save and restore Bloc/Cubit state across app restarts. Extend \`HydratedCubit\` instead of \`Cubit\` and implement \`fromJson\`/\`toJson\`.`,
+        relatedWeeks: [13],
+        tags: ["bloc", "hydrated-bloc", "persistence", "state-restoration"],
         codeSnippets: [
           {
             language: "dart",
@@ -1170,7 +1534,129 @@ class ThemeCubit extends HydratedCubit<ThemeMode> {
         id: "bloc-naming",
         title: "Naming Conventions",
         content: `Follow consistent naming: \`<Feature>Cubit\` / \`<Feature>Bloc\` for classes, \`<Feature>Event\` for events, \`<Feature>State\` for state. Concrete events: \`<Feature><Action>\` (e.g., \`WeatherRequested\`). Concrete states: \`<Feature><Status>\` (e.g., \`WeatherLoading\`).`,
+        relatedWeeks: [10],
+        tags: ["bloc", "naming-conventions", "best-practices"],
         codeSnippets: [],
+      },
+      {
+        id: "bloc-installation",
+        title: "Installation & Setup",
+        content: `Install **flutter_bloc** for Flutter apps or **bloc** for pure Dart. The packages include Cubit, Bloc, and all Flutter widgets.`,
+        relatedWeeks: [10],
+        tags: ["bloc", "installation", "setup", "dependencies"],
+        codeSnippets: [
+          {
+            language: "yaml",
+            label: "pubspec.yaml",
+            code: `dependencies:
+  flutter_bloc: ^9.0.0
+
+# or for pure Dart (no Flutter)
+dependencies:
+  bloc: ^9.0.0`,
+          },
+          {
+            language: "bash",
+            label: "Install Commands",
+            code: `flutter pub get
+# Or add directly
+dart pub add bloc
+dart pub add flutter_bloc`,
+          },
+        ],
+      },
+      {
+        id: "bloc-streams-concept",
+        title: "Core Concept: Streams",
+        content: `Bloc is built on top of Dart **Streams** — sequences of asynchronous data. Understanding streams is essential for working with Bloc effectively.`,
+        relatedWeeks: [10],
+        tags: ["bloc", "streams", "async", "dart"],
+        codeSnippets: [
+          {
+            language: "dart",
+            label: "Streams with Bloc",
+            code: `// Creating a stream
+Stream<int> countStream(int max) async* {
+  for (int i = 0; i < max; i++) {
+    yield i;
+  }
+}
+
+// Consuming a stream
+Future<int> sumStream(Stream<int> stream) async {
+  int sum = 0;
+  await for (final value in stream) {
+    sum += value;
+  }
+  return sum;
+}`,
+          },
+        ],
+      },
+      {
+        id: "bloc-complete-example",
+        title: "Complete Example: Counter App",
+        content: `A complete Flutter counter app using Bloc/Cubit with BlocProvider, BlocBuilder, and context extensions.`,
+        relatedWeeks: [10],
+        tags: ["bloc", "example", "counter", "complete-app"],
+        codeSnippets: [
+          {
+            language: "dart",
+            label: "Full Counter App with Bloc",
+            code: `// counter_cubit.dart
+class CounterCubit extends Cubit<int> {
+  CounterCubit() : super(0);
+  void increment() => emit(state + 1);
+  void decrement() => emit(state - 1);
+}
+
+// main.dart
+void main() {
+  runApp(
+    BlocProvider(
+      create: (_) => CounterCubit(),
+      child: const MyApp(),
+    ),
+  );
+}
+
+// counter_page.dart
+class CounterPage extends StatelessWidget {
+  const CounterPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Counter')),
+      body: Center(
+        child: BlocBuilder<CounterCubit, int>(
+          builder: (context, count) {
+            return Text(
+              '$count',
+              style: Theme.of(context).textTheme.displayLarge,
+            );
+          },
+        ),
+      ),
+      floatingActionButton: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          FloatingActionButton(
+            onPressed: () => context.read<CounterCubit>().increment(),
+            child: const Icon(Icons.add),
+          ),
+          const SizedBox(height: 8),
+          FloatingActionButton(
+            onPressed: () => context.read<CounterCubit>().decrement(),
+            child: const Icon(Icons.remove),
+          ),
+        ],
+      ),
+    );
+  }
+}`,
+          },
+        ],
       },
     ],
   },
@@ -1180,11 +1666,15 @@ class ThemeCubit extends HydratedCubit<ThemeMode> {
     icon: Package,
     description:
       "Production-proven packages for networking (Dio), navigation (go_router), state, storage (Hive), serialization (Freezed), UI, and device APIs.",
+    relatedWeeks: [14, 15, 16],
+    tags: ["packages", "dio", "go-router", "riverpod", "hive", "freezed", "ui", "device"],
     sections: [
       {
         id: "pkg-dio",
         title: "Dio — HTTP Client",
         content: `**Dio** is the most popular HTTP client for Flutter with interceptors, global config, FormData, file upload/download, request cancellation, timeout, and retry support.`,
+        relatedWeeks: [14],
+        tags: ["packages", "dio", "http", "interceptors", "networking"],
         codeSnippets: [
           {
             language: "dart",
@@ -1227,6 +1717,8 @@ await dio.post('/upload', data: formData);`,
         id: "pkg-go-router",
         title: "go_router — Navigation",
         content: `**go_router** is the official Flutter navigation package with URL-based routing, deep linking, nested navigation via **ShellRoute**, redirect guards, and path/query parameters.`,
+        relatedWeeks: [14],
+        tags: ["packages", "go-router", "navigation", "routing", "deep-linking"],
         codeSnippets: [
           {
             language: "dart",
@@ -1265,6 +1757,8 @@ await dio.post('/upload', data: formData);`,
         id: "pkg-state",
         title: "State Management Packages",
         content: `**Provider** for lightweight apps, **flutter_bloc** for event-driven scalable apps, **Riverpod** for compile-safe modern state, and **get_it** as a service locator for dependency injection.`,
+        relatedWeeks: [15],
+        tags: ["packages", "provider", "riverpod", "get-it", "state-management", "dependency-injection"],
         codeSnippets: [
           {
             language: "dart",
@@ -1301,6 +1795,8 @@ final api = getIt<ApiService>();`,
         id: "pkg-storage",
         title: "Local Storage",
         content: `**shared_preferences** for simple key-value storage, **hive** for fast NoSQL with typed boxes, **sqflite** for full SQLite relational database, and **flutter_secure_storage** for encrypted key-value storage.`,
+        relatedWeeks: [15],
+        tags: ["packages", "shared-preferences", "hive", "sqflite", "secure-storage", "storage"],
         codeSnippets: [
           {
             language: "dart",
@@ -1334,6 +1830,8 @@ final token = await storage.read(key: 'auth_token');`,
         id: "pkg-serialization",
         title: "JSON & Freezed",
         content: `**json_serializable** generates \`fromJson\`/\`toJson\` with \`build_runner\`. **Freezed** provides immutable data classes with \`copyWith\`, \`==\`, \`hashCode\`, \`toString\`, and union types (sealed states) — the gold standard for data classes in Dart.`,
+        relatedWeeks: [16],
+        tags: ["packages", "json-serializable", "freezed", "serialization", "immutable", "data-classes"],
         codeSnippets: [
           {
             language: "dart",
@@ -1381,6 +1879,8 @@ state.when(
         id: "pkg-ui",
         title: "UI Enhancement",
         content: `**cached_network_image** for image caching, **flutter_svg** for SVG rendering, **shimmer** for loading skeletons, **lottie** for animations, **flutter_screenutil** for responsive UI, and **google_fonts** for 1000+ Google Fonts.`,
+        relatedWeeks: [16],
+        tags: ["packages", "cached-network-image", "flutter-svg", "shimmer", "lottie", "google-fonts", "ui"],
         codeSnippets: [
           {
             language: "dart",
@@ -1414,6 +1914,8 @@ Text('Hello', style: GoogleFonts.poppins(fontSize: 18, fontWeight: FontWeight.w6
         id: "pkg-device",
         title: "Device & Platform",
         content: `**permission_handler** for runtime permissions, **image_picker** for gallery/camera access, **path_provider** for file system paths, **connectivity_plus** for network status, **url_launcher** for opening URLs, and **share_plus** for sharing content.`,
+        relatedWeeks: [16],
+        tags: ["packages", "permission-handler", "image-picker", "path-provider", "connectivity-plus", "device"],
         codeSnippets: [
           {
             language: "dart",
@@ -1447,6 +1949,8 @@ await Share.share('Check out Flutter: https://flutter.dev');`,
         id: "pkg-utilities",
         title: "Utilities & Testing",
         content: `**intl** for internationalization and date formatting, **logger** for beautiful console output, **equatable** for value equality, **dartz** for functional programming (Either), **mocktail** for mocking in tests, and **golden_toolkit** for golden file tests.`,
+        relatedWeeks: [16],
+        tags: ["packages", "intl", "logger", "equatable", "dartz", "mocktail", "testing"],
         codeSnippets: [
           {
             language: "dart",
@@ -1486,6 +1990,108 @@ when(() => mockApi.getUsers()).thenAnswer((_) async => [User(id: 1, name: 'Test'
           },
         ],
       },
+      {
+        id: "pkg-http",
+        title: "http — Simple HTTP Client",
+        content: `The **http** package is the official Dart HTTP client for simple requests. It provides a straightforward API for GET, POST, PUT, DELETE operations with JSON encoding.`,
+        relatedWeeks: [14],
+        tags: ["packages", "http", "networking", "official"],
+        codeSnippets: [
+          {
+            language: "dart",
+            label: "http Package Usage",
+            code: `import 'package:http/http.dart' as http;
+import 'dart:convert';
+
+final response = await http.get(
+  Uri.parse('https://api.example.com/posts'),
+  headers: {'Authorization': 'Bearer $token'},
+);
+
+if (response.statusCode == 200) {
+  final data = jsonDecode(response.body);
+}
+
+// POST
+final response = await http.post(
+  Uri.parse('https://api.example.com/posts'),
+  headers: {'Content-Type': 'application/json'},
+  body: jsonEncode({'title': 'Hello', 'body': 'World'}),
+);`,
+          },
+        ],
+      },
+      {
+        id: "pkg-riverpod",
+        title: "Riverpod — Modern State Management",
+        content: `**Riverpod** is a compile-safe, testable state management solution. It provides providers that don't depend on widgets, making them reusable across the app.`,
+        relatedWeeks: [15],
+        tags: ["packages", "riverpod", "state-management", "compile-safe", "providers"],
+        codeSnippets: [
+          {
+            language: "dart",
+            label: "Riverpod Setup",
+            code: `import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+// 1. Define provider
+final counterProvider = StateNotifierProvider<CounterNotifier, int>(
+  (ref) => CounterNotifier(),
+);
+
+class CounterNotifier extends StateNotifier<int> {
+  CounterNotifier() : super(0);
+  void increment() => state++;
+}
+
+// Async provider
+final usersProvider = FutureProvider<List<User>>((ref) async {
+  final api = ref.read(apiProvider);
+  return api.getUsers();
+});
+
+// 2. Wrap app
+void main() {
+  runApp(const ProviderScope(child: MyApp()));
+}
+
+// 3. Consume
+class MyWidget extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final count = ref.watch(counterProvider);
+    return Text('$count');
+  }
+}`,
+          },
+        ],
+      },
+      {
+        id: "pkg-get-it",
+        title: "get_it — Service Locator / DI",
+        content: `**get_it** is a simple service locator for dependency injection. It allows you to register and retrieve objects without context, useful for non-widget code.`,
+        relatedWeeks: [15],
+        tags: ["packages", "get-it", "dependency-injection", "service-locator"],
+        codeSnippets: [
+          {
+            language: "dart",
+            label: "get_it Setup",
+            code: `import 'package:get_it/get_it.dart';
+
+final getIt = GetIt.instance;
+
+// Register (in main or setup file)
+void setupDI() {
+  getIt.registerSingleton<ApiService>(ApiService());
+  getIt.registerLazySingleton<AuthRepository>(() => AuthRepository(getIt()));
+  getIt.registerFactory<LoginCubit>(() => LoginCubit(getIt()));
+}
+
+// Use anywhere (no context needed)
+final api = getIt<ApiService>();
+final cubit = getIt<LoginCubit>();`,
+          },
+        ],
+      },
     ],
   },
   {
@@ -1494,11 +2100,15 @@ when(() => mockApi.getUsers()).thenAnswer((_) async => [User(id: 1, name: 'Test'
     icon: Flame,
     description:
       "FlutterFire setup, Authentication, Firestore, Storage, FCM, Analytics, Crashlytics, Remote Config, and Security Rules.",
+    relatedWeeks: [28, 29, 30],
+    tags: ["firebase", "flutterfire", "authentication", "firestore", "storage", "fcm", "analytics", "crashlytics"],
     sections: [
       {
         id: "firebase-setup",
         title: "Setup & Initialization",
         content: `Use **FlutterFire CLI** to configure Firebase. Run \`flutterfire configure\` to register your app, download config files, and generate \`lib/firebase_options.dart\`. Initialize Firebase in \`main.dart\` with \`Firebase.initializeApp()\`.`,
+        relatedWeeks: [28],
+        tags: ["firebase", "setup", "flutterfire-cli", "initialization"],
         codeSnippets: [
           {
             language: "bash",
@@ -1533,6 +2143,8 @@ void main() async {
         id: "firebase-auth",
         title: "Firebase Authentication",
         content: `**firebase_auth** supports Email/Password, Google, Apple, Phone, and anonymous sign-in. Listen to auth state changes with \`authStateChanges()\` stream. Handle errors with typed \`FirebaseAuthException\` catch clauses.`,
+        relatedWeeks: [28],
+        tags: ["firebase", "authentication", "email-password", "google-sign-in", "phone-auth"],
         codeSnippets: [
           {
             language: "dart",
@@ -1615,6 +2227,8 @@ await FirebaseAuth.instance.signInWithCredential(credential);`,
         id: "firebase-firestore",
         title: "Cloud Firestore",
         content: `**cloud_firestore** is a NoSQL, real-time, cloud-hosted document database organized in collections and documents. Supports CRUD operations, queries with filters, real-time listeners, batch writes, transactions, and type-safe converters.`,
+        relatedWeeks: [29],
+        tags: ["firebase", "firestore", "nosql", "realtime", "crud", "queries", "transactions"],
         codeSnippets: [
           {
             language: "dart",
@@ -1691,6 +2305,8 @@ await batch.commit();`,
         id: "firebase-storage",
         title: "Firebase Storage",
         content: `**firebase_storage** stores files (images, videos, documents) with fine-grained access control. Supports upload from File/bytes, download URL retrieval, progress tracking, and file listing.`,
+        relatedWeeks: [29],
+        tags: ["firebase", "storage", "file-upload", "download", "images"],
         codeSnippets: [
           {
             language: "dart",
@@ -1729,6 +2345,8 @@ for (final item in result.items) {
         id: "firebase-fcm",
         title: "Cloud Messaging (FCM)",
         content: `**firebase_messaging** handles push notifications for Android, iOS, and Web. Supports foreground/background messages, topic subscriptions, token management, and integration with **flutter_local_notifications** for local notifications.`,
+        relatedWeeks: [30],
+        tags: ["firebase", "fcm", "push-notifications", "messaging", "topics"],
         codeSnippets: [
           {
             language: "dart",
@@ -1773,6 +2391,8 @@ await messaging.subscribeToTopic('news');`,
         id: "firebase-analytics",
         title: "Firebase Analytics",
         content: `**firebase_analytics** tracks user behavior automatically (first_open, session_start, screen_view) and with custom events. Set user ID and properties for cross-device tracking.`,
+        relatedWeeks: [30],
+        tags: ["firebase", "analytics", "events", "user-tracking", "screen-views"],
         codeSnippets: [
           {
             language: "dart",
@@ -1808,6 +2428,8 @@ await analytics.logSearch(searchTerm: 'flutter tutorial');`,
         id: "firebase-crashlytics",
         title: "Firebase Crashlytics",
         content: `**firebase_crashlytics** provides real-time crash reporting. Pass all Flutter errors to Crashlytics in \`main.dart\`, set user info for context, and use custom keys and logs for debugging.`,
+        relatedWeeks: [30],
+        tags: ["firebase", "crashlytics", "crash-reporting", "error-tracking", "debugging"],
         codeSnippets: [
           {
             language: "dart",
@@ -1848,6 +2470,8 @@ FirebaseCrashlytics.instance.log('User clicked checkout');`,
         id: "firebase-remote-config",
         title: "Remote Config",
         content: `**firebase_remote_config** lets you change app behavior and appearance without publishing an update. Set defaults, fetch and activate configs, and listen to real-time updates.`,
+        relatedWeeks: [30],
+        tags: ["firebase", "remote-config", "feature-flags", "a-b-testing", "config"],
         codeSnippets: [
           {
             language: "dart",
@@ -1882,6 +2506,8 @@ remoteConfig.onConfigUpdated.listen((event) async {
         id: "firebase-security-rules",
         title: "Security Rules",
         content: `Write **Firestore** and **Storage** rules to protect your data. Use \`request.auth\` to verify authentication, \`resource.data\` to access existing data, and \`request.resource.data\` for incoming data validation.`,
+        relatedWeeks: [29],
+        tags: ["firebase", "security-rules", "firestore-rules", "storage-rules", "access-control"],
         codeSnippets: [
           {
             language: "javascript",
@@ -1923,6 +2549,8 @@ service firebase.storage {
         id: "firebase-patterns",
         title: "Common Patterns",
         content: `Common Firebase patterns include **auth-gated routing** with go_router, **saving user documents** after sign-up, and **chat message streams** with real-time Firestore listeners.`,
+        relatedWeeks: [30],
+        tags: ["firebase", "patterns", "auth-gated", "chat", "realtime-streams"],
         codeSnippets: [
           {
             language: "dart",
@@ -1952,6 +2580,200 @@ Stream<List<Message>> getMessages(String chatId) {
           .map((doc) => Message.fromFirestore(doc))
           .toList());
 }`,
+          },
+        ],
+      },
+      {
+        id: "firebase-realtime-db",
+        title: "Realtime Database",
+        content: `**firebase_database** is a NoSQL cloud database that stores and syncs data in JSON format in real time. Better suited for very low-latency, high-frequency updates (e.g. chat, gaming) compared to Firestore.`,
+        relatedWeeks: [29],
+        tags: ["firebase", "realtime-database", "nosql", "json", "realtime", "chat"],
+        codeSnippets: [
+          {
+            language: "dart",
+            label: "Realtime Database CRUD",
+            code: `final db = FirebaseDatabase.instance;
+
+// Write
+await db.ref('users/userId123').set({'name': 'Mustafa', 'age': 25});
+
+// Update
+await db.ref('users/userId123').update({'age': 26});
+
+// Read once
+final snapshot = await db.ref('users/userId123').get();
+if (snapshot.exists) print(snapshot.value);
+
+// Listen to changes (real-time)
+db.ref('users/userId123').onValue.listen((DatabaseEvent event) {
+  final data = event.snapshot.value as Map<dynamic, dynamic>?;
+  print(data?['name']);
+});
+
+// Delete
+await db.ref('users/userId123').remove();
+
+// Transaction
+await db.ref('counters/views').runTransaction((value) {
+  return Transaction.success((value as int? ?? 0) + 1);
+});`,
+          },
+        ],
+      },
+      {
+        id: "firebase-apple-auth",
+        title: "Apple Sign-In",
+        content: `**sign_in_with_apple** enables Apple Sign-In for iOS and Web. It works with Firebase Auth to create or link Apple credentials.`,
+        relatedWeeks: [28],
+        tags: ["firebase", "apple-sign-in", "ios", "authentication", "oauth"],
+        codeSnippets: [
+          {
+            language: "dart",
+            label: "Apple Sign-In",
+            code: `import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+
+Future<UserCredential> signInWithApple() async {
+  final appleCredential = await SignInWithApple.getAppleIDCredential(
+    scopes: [
+      AppleIDAuthorizationScopes.email,
+      AppleIDAuthorizationScopes.fullName,
+    ],
+  );
+
+  final oauthCredential = OAuthProvider('apple.com').credential(
+    idToken: appleCredential.identityToken,
+    accessToken: appleCredential.authorizationCode,
+  );
+
+  return await FirebaseAuth.instance.signInWithCredential(oauthCredential);
+}`,
+          },
+        ],
+      },
+      {
+        id: "firebase-emulator",
+        title: "Firebase Emulator Suite",
+        content: `The Firebase Emulator Suite lets you run Firebase services locally for development and testing without affecting production data.`,
+        relatedWeeks: [28],
+        tags: ["firebase", "emulator", "local-development", "testing", "debugging"],
+        codeSnippets: [
+          {
+            language: "bash",
+            label: "Emulator Setup",
+            code: `npm install -g firebase-tools
+firebase init emulators
+firebase emulators:start`,
+          },
+          {
+            language: "dart",
+            label: "Connect to Emulators",
+            code: `if (kDebugMode) {
+  await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
+  FirebaseFirestore.instance.useFirestoreEmulator('localhost', 8080);
+  await FirebaseStorage.instance.useStorageEmulator('localhost', 9199);
+  FirebaseDatabase.instance.useDatabaseEmulator('localhost', 9000);
+}`,
+          },
+        ],
+      },
+      {
+        id: "firebase-user-info",
+        title: "Current User Info",
+        content: `Access the currently signed-in user's properties including UID, email, display name, photo URL, and provider data.`,
+        relatedWeeks: [28],
+        tags: ["firebase", "user-info", "profile", "current-user"],
+        codeSnippets: [
+          {
+            language: "dart",
+            label: "User Properties",
+            code: `final user = FirebaseAuth.instance.currentUser!;
+print(user.uid);            // unique user ID
+print(user.email);          // email
+print(user.displayName);    // display name
+print(user.photoURL);       // profile photo URL
+print(user.emailVerified);  // bool
+print(user.phoneNumber);    // phone number
+print(user.isAnonymous);    // bool
+print(user.metadata.creationTime);
+print(user.providerData);   // list of sign-in providers`,
+          },
+        ],
+      },
+      {
+        id: "firebase-data-converter",
+        title: "Data Modeling with Converter",
+        content: `Firestore's **withConverter** method provides type-safe document access by mapping between Firestore documents and Dart model classes.`,
+        relatedWeeks: [29],
+        tags: ["firebase", "firestore", "converter", "type-safe", "data-modeling"],
+        codeSnippets: [
+          {
+            language: "dart",
+            label: "Firestore Converter",
+            code: `class UserModel {
+  final String id;
+  final String name;
+  final int age;
+
+  const UserModel({required this.id, required this.name, required this.age});
+
+  factory UserModel.fromFirestore(
+      DocumentSnapshot<Map<String, dynamic>> snap, _) {
+    final data = snap.data()!;
+    return UserModel(id: snap.id, name: data['name'], age: data['age']);
+  }
+
+  Map<String, Object?> toFirestore() => {'name': name, 'age': age};
+}
+
+// Typed collection reference
+final usersRef = db.collection('users').withConverter<UserModel>(
+  fromFirestore: UserModel.fromFirestore,
+  toFirestore: (user, _) => user.toFirestore(),
+);
+
+// Type-safe usage
+final snap = await usersRef.doc('userId123').get();
+final user = snap.data(); // UserModel?`,
+          },
+        ],
+      },
+      {
+        id: "firebase-local-notifications",
+        title: "Local Notifications",
+        content: `**flutter_local_notifications** enables displaying local notifications on Android, iOS, and macOS. Works with FCM to show notifications when the app is in the foreground.`,
+        relatedWeeks: [30],
+        tags: ["firebase", "local-notifications", "flutter-local-notifications", "android", "ios"],
+        codeSnippets: [
+          {
+            language: "dart",
+            label: "Local Notifications Setup",
+            code: `final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+
+// Initialize
+await flutterLocalNotificationsPlugin.initialize(
+  const InitializationSettings(
+    android: AndroidInitializationSettings('@mipmap/ic_launcher'),
+    iOS: DarwinInitializationSettings(),
+  ),
+  onDidReceiveNotificationResponse: (details) {
+    // handle tap
+  },
+);
+
+// Show notification
+await flutterLocalNotificationsPlugin.show(
+  0,
+  'New message',
+  'You have a new notification',
+  const NotificationDetails(
+    android: AndroidNotificationDetails(
+      'channel_id', 'channel_name',
+      importance: Importance.max, priority: Priority.high,
+    ),
+    iOS: DarwinNotificationDetails(),
+  ),
+);`,
           },
         ],
       },

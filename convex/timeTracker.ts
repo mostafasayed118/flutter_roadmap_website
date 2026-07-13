@@ -12,6 +12,7 @@ export const addSession = mutation({
     durationMinutes: v.number(),
     date: v.number(),
     notes: v.optional(v.string()),
+    tags: v.optional(v.array(v.string())),
   },
   handler: async (ctx, args) => {
     if (
@@ -34,6 +35,7 @@ export const addSession = mutation({
       durationMinutes: args.durationMinutes,
       date: args.date,
       notes: args.notes,
+      tags: args.tags,
     });
   },
 });
@@ -45,6 +47,7 @@ export const updateSession = mutation({
     date: v.optional(v.number()),
     notes: v.optional(v.string()),
     weekId: v.optional(v.id("roadmapWeeks")),
+    tags: v.optional(v.array(v.string())),
   },
   handler: async (ctx, args) => {
     const session = await ctx.db.get(args.sessionId);
@@ -55,6 +58,7 @@ export const updateSession = mutation({
       date?: number;
       notes?: string;
       weekId?: Id<"roadmapWeeks">;
+      tags?: string[];
     } = {};
 
     if (args.durationMinutes !== undefined) {
@@ -75,6 +79,10 @@ export const updateSession = mutation({
 
     if (args.notes !== undefined) {
       patch.notes = args.notes;
+    }
+
+    if (args.tags !== undefined) {
+      patch.tags = args.tags;
     }
 
     if (args.weekId !== undefined) {
@@ -209,5 +217,34 @@ export const getWeekTotalTime = query({
     const minutes = totalMinutes % 60;
 
     return { totalMinutes, hours, minutes, sessionCount: sessions.length };
+  },
+});
+
+export const getTagBreakdown = query({
+  args: { userId: v.string() },
+  handler: async (ctx, args) => {
+    const sessions = await ctx.db
+      .query("studySessions")
+      .withIndex("by_user", (q) => q.eq("userId", args.userId))
+      .collect();
+
+    const tagMap = new Map<string, number>();
+    let untaggedMinutes = 0;
+
+    for (const session of sessions) {
+      if (session.tags && session.tags.length > 0) {
+        for (const tag of session.tags) {
+          tagMap.set(tag, (tagMap.get(tag) ?? 0) + session.durationMinutes);
+        }
+      } else {
+        untaggedMinutes += session.durationMinutes;
+      }
+    }
+
+    const tags = Array.from(tagMap.entries())
+      .map(([tag, minutes]) => ({ tag, minutes }))
+      .sort((a, b) => b.minutes - a.minutes);
+
+    return { tags, untaggedMinutes };
   },
 });

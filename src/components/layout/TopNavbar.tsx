@@ -7,6 +7,7 @@ import { GradientProgress } from "@/components/ui/gradient-progress";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { LogSessionDialog } from "@/components/features/time-tracker/LogSessionDialog";
+import { ThemeToggle } from "./ThemeToggle";
 import { Flame, MapPin, Trophy, Keyboard } from "lucide-react";
 
 export function TopNavbar() {
@@ -89,6 +90,7 @@ export function TopNavbar() {
             </span>
           </motion.div>
         )}
+        <ThemeToggle />
         <Button
           variant="ghost"
           size="icon-sm"

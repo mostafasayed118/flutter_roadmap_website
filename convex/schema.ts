@@ -34,6 +34,7 @@ export default defineSchema({
     weekId: v.id("roadmapWeeks"),
     completedTopics: v.array(v.number()),
     completedProjects: v.array(v.number()),
+    notes: v.optional(v.string()),
   })
     .index("by_user", ["userId"])
     .index("by_user_week", ["userId", "weekId"]),
@@ -57,7 +58,58 @@ export default defineSchema({
     durationMinutes: v.number(),
     date: v.number(),
     notes: v.optional(v.string()),
+    tags: v.optional(v.array(v.string())),
   })
     .index("by_user", ["userId"])
     .index("by_user_week", ["userId", "weekId"]),
+
+  // NEW: Streak tracking
+  userStreaks: defineTable({
+    userId: v.string(),
+    currentStreak: v.number(),
+    longestStreak: v.number(),
+    lastStudyDate: v.number(),
+    streakStartDate: v.number(),
+  }).index("by_user", ["userId"]),
+
+  // NEW: Weekly goals
+  userGoals: defineTable({
+    userId: v.string(),
+    weekNumber: v.number(),
+    targetHours: v.number(),
+    targetTopics: v.number(),
+    year: v.number(),
+  }).index("by_user", ["userId"])
+    .index("by_user_week", ["userId", "weekNumber", "year"]),
+
+  // NEW: Bookmarks / favorites
+  userBookmarks: defineTable({
+    userId: v.string(),
+    weekId: v.id("roadmapWeeks"),
+    topicIndex: v.number(),
+    topicTitle: v.string(),
+    note: v.optional(v.string()),
+    createdAt: v.number(),
+  }).index("by_user", ["userId"])
+    .index("by_user_week", ["userId", "weekId"]),
+
+  // NEW: Badges / milestones
+  userBadges: defineTable({
+    userId: v.string(),
+    badgeId: v.string(),
+    unlockedAt: v.number(),
+  }).index("by_user", ["userId"])
+    .index("by_user_badge", ["userId", "badgeId"]),
+
+  // NEW: Project showcase
+  projectShowcase: defineTable({
+    userId: v.string(),
+    title: v.string(),
+    description: v.string(),
+    githubUrl: v.optional(v.string()),
+    liveUrl: v.optional(v.string()),
+    imageUrl: v.optional(v.string()),
+    technologies: v.array(v.string()),
+    createdAt: v.number(),
+  }).index("by_user", ["userId"]),
 });

@@ -12,6 +12,9 @@ import { Button } from "@/components/ui/button";
 import { ExternalLink, BookOpen, PlayCircle, Clock, Hammer } from "lucide-react";
 import { fireWeekComplete } from "@/lib/confetti";
 import { formatMinutes } from "@/lib/format-time";
+import { WeekDocsLinks } from "./WeekDocsLinks";
+import { WeekNotes } from "./WeekNotes";
+import { BookmarkButton } from "./BookmarkButton";
 
 interface WeekCardProps {
   weekId: Id<"roadmapWeeks">;
@@ -81,11 +84,18 @@ export function WeekCard({
       className={isWeekComplete ? "border-emerald-500/30" : ""}
     >
       <div className="p-4">
-        <div className="mb-3 flex items-start justify-between gap-2">
-          <h3 className="text-sm font-semibold">
-            <span className="text-muted-foreground">Week {order}:</span>{" "}
-            {title}
-          </h3>
+        <div id={`week-${order}`} className="mb-3 flex items-start justify-between gap-2">
+          <div className="flex items-start gap-1.5">
+            <BookmarkButton
+              weekId={weekId}
+              topicIndex={-1}
+              topicTitle={`Week ${order}: ${title}`}
+            />
+            <h3 className="text-sm font-semibold">
+              <span className="text-muted-foreground">Week {order}:</span>{" "}
+              {title}
+            </h3>
+          </div>
           <div className="flex shrink-0 items-center gap-1.5">
             {weekTime && weekTime.totalMinutes > 0 && (
               <Badge
@@ -112,7 +122,7 @@ export function WeekCard({
         <div className="space-y-3">
           {topics.length > 0 && (
             <section>
-              <h4 className="mb-1.5 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              <h4 className="mb-1.5 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-zinc-400">
                 <BookOpen className="size-3 text-blue-400" />
                 Topics
               </h4>
@@ -135,7 +145,7 @@ export function WeekCard({
             <>
               <Separator className="bg-white/5" />
               <section>
-                <h4 className="mb-1.5 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                <h4 className="mb-1.5 text-xs font-semibold uppercase tracking-wider text-zinc-400">
                   Practice Projects
                 </h4>
                 <div className="space-y-0.5">
@@ -155,11 +165,14 @@ export function WeekCard({
             </>
           )}
 
+          <WeekDocsLinks weekNumber={order} />
+          <WeekNotes weekId={weekId} />
+
           {integratedCourses && integratedCourses.length > 0 && (
             <>
               <Separator className="bg-white/5" />
               <section>
-                <h4 className="mb-1.5 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                <h4 className="mb-1.5 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-zinc-400">
                   <PlayCircle className="size-3 text-violet-400" />
                   Integrated Courses
                 </h4>

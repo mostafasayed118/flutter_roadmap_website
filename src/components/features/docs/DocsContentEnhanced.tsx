@@ -1,0 +1,279 @@
+"use client";
+
+import { useState, useMemo, useCallback, useEffect } from "react";
+import { Menu, SearchX } from "lucide-react";
+import {
+  loadAllCategories,
+  filterLoadedCategories,
+} from "@/lib/docs";
+import type { DocCategoryGroup, DocEntry } from "@/lib/docs/types";
+import { DocsSidebarEnhanced } from "./DocsSidebarEnhanced";
+import { SearchBar } from "./SearchBar";
+import { DocEntryCard } from "./DocEntryCard";
+import { RelatedRoadmapBanner } from "./RelatedRoadmapBanner";
+import { DifficultyBadge } from "./DifficultyBadge";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
+
+function DocsSkeleton() {
+  return (
+    <div className="space-y-6">
+      <div>
+        <Skeleton className="h-8 w-72 rounded-md bg-white/5" />
+        <Skeleton className="mt-1 h-4 w-96 rounded-md bg-white/5" />
+      </div>
+      <Skeleton className="h-10 w-full max-w-xl rounded-lg bg-white/5" />
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-4">
+        <div className="hidden lg:block">
+          <div className="space-y-3">
+            {[1, 2, 3, 4, 5, 6].map((i) => (
+              <Skeleton key={i} className="h-8 w-full rounded-lg bg-white/5" />
+            ))}
+          </div>
+        </div>
+        <div className="lg:col-span-3 space-y-6">
+          {[1, 2, 3].map((i) => (
+            <div
+              key={i}
+              className="rounded-xl border border-white/5 bg-white/[0.02] p-6"
+            >
+              <Skeleton className="mb-3 h-5 w-48 rounded-md bg-white/5" />
+              <Skeleton className="mb-2 h-4 w-full rounded-md bg-white/5" />
+              <Skeleton className="mb-4 h-4 w-3/4 rounded-md bg-white/5" />
+              <Skeleton className="h-32 w-full rounded-lg bg-white/5" />
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export function DocsContentEnhanced() {
+  const [categories, setCategories] = useState<DocCategoryGroup[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState<DocEntry[]>([]);
+  const [selectedEntry, setSelectedEntry] = useState<DocEntry | null>(null);
+
+  // Load categories lazily on mount
+  useEffect(() => {
+    loadAllCategories().then((cats) => {
+      setCategories(cats);
+      setIsLoading(false);
+    });
+  }, []);
+
+  const filteredCategories = useMemo(
+    () => filterLoadedCategories(categories, searchQuery),
+    [categories, searchQuery]
+  );
+
+  const handleSearch = useCallback(
+    (query: string) => {
+      setSearchQuery(query);
+      if (query.trim()) {
+        const q = query.toLowerCase();
+        const results = categories.flatMap((cat) =>
+          cat.entries.filter(
+            (entry) =>
+              entry.title.toLowerCase().includes(q) ||
+              entry.summary.toLowerCase().includes(q) ||
+              entry.tags.some((tag) => tag.toLowerCase().includes(q))
+          )
+        );
+        setSearchResults(results);
+      } else {
+        setSearchResults([]);
+      }
+    },
+    [categories]
+  );
+
+  const handleSelectSearchResult = useCallback((entry: DocEntry) => {
+    setSelectedEntry(entry);
+    setSearchQuery("");
+    setSearchResults([]);
+    // Scroll to the entry after a short delay for DOM update
+    setTimeout(() => {
+      const el = document.getElementById(entry.id);
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }, 100);
+  }, []);
+
+  if (isLoading) {
+    return <DocsSkeleton />;
+  }
+
+  return (
+    <div className="min-h-screen bg-background">
+      {/* Mobile header bar */}
+      <div className="sticky top-0 z-30 flex h-12 items-center gap-3 border-b border-white/5 bg-background/80 px-4 backdrop-blur-xl lg:hidden">
+        <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
+          <SheetTrigger
+            render={
+              <Button
+                variant="ghost"
+                size="icon-sm"
+                aria-label="Open navigation"
+              />
+            }
+          >
+            <Menu className="size-4" />
+          </SheetTrigger>
+          <SheetContent side="left" className="w-72 p-0">
+            <SheetHeader className="border-b border-white/5 px-4 py-3">
+              <SheetTitle>Navigation</SheetTitle>
+            </SheetHeader>
+            <div className="overflow-y-auto p-3">
+              <DocsSidebarEnhanced
+                categories={filteredCategories}
+                onNavigate={() => setMobileOpen(false)}
+              />
+            </div>
+          </SheetContent>
+        </Sheet>
+        <span className="text-sm font-medium text-foreground">
+          Knowledge Base
+        </span>
+      </div>
+
+      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+        {/* Page header + search */}
+        <div className="mb-8">
+          <h1 className="text-2xl font-bold tracking-tight text-foreground">
+            <span className="bg-gradient-to-r from-violet-400 via-indigo-400 to-cyan-400 bg-clip-text text-transparent">
+              Knowledge Base
+            </span>
+          </h1>
+          <p className="mt-2 text-muted-foreground">
+            Comprehensive Flutter, Dart, Bloc, and Firebase documentation with
+            interactive code examples.
+          </p>
+
+          {/* Search bar */}
+          <div className="mt-6 max-w-xl">
+            <SearchBar
+              onSearch={handleSearch}
+              results={searchResults}
+              onSelect={handleSelectSearchResult}
+            />
+          </div>
+
+          {searchQuery && (
+            <p className="mt-2 text-xs text-muted-foreground">
+              {searchResults.length} result
+              {searchResults.length !== 1 ? "s" : ""} found for{" "}
+              <span className="font-medium text-foreground">
+                &ldquo;{searchQuery}&rdquo;
+              </span>
+            </p>
+          )}
+        </div>
+
+        {/* Selected entry banner */}
+        {selectedEntry && (
+          <div className="mb-6">
+            <div className="flex items-center gap-3 rounded-xl border border-white/5 bg-white/[0.02] p-4">
+              <div className="flex-1">
+                <div className="flex items-center gap-2">
+                  <span className="text-sm font-medium text-foreground">
+                    Viewing:
+                  </span>
+                  <span className="text-sm text-muted-foreground">
+                    {selectedEntry.title}
+                  </span>
+                  <DifficultyBadge difficulty={selectedEntry.difficulty} />
+                </div>
+              </div>
+              <button
+                onClick={() => setSelectedEntry(null)}
+                className="text-xs text-muted-foreground hover:text-foreground"
+              >
+                Clear
+              </button>
+            </div>
+            <RelatedRoadmapBanner
+              relatedWeeks={selectedEntry.relatedWeeks}
+              className="mt-3"
+            />
+          </div>
+        )}
+
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-4">
+          {/* Desktop sidebar */}
+          <aside className="hidden lg:block">
+            <div className="sticky top-24">
+              <DocsSidebarEnhanced categories={filteredCategories} />
+            </div>
+          </aside>
+
+          {/* Main content */}
+          <main className="min-w-0 lg:col-span-3">
+            {filteredCategories.length === 0 && searchQuery && (
+              <div className="flex flex-col items-center justify-center rounded-xl border border-white/5 bg-white/[0.02] py-20 text-center">
+                <SearchX className="mb-4 size-10 text-muted-foreground/30" />
+                <p className="text-lg font-medium text-foreground">
+                  No matching topics found
+                </p>
+                <p className="mt-1 text-sm text-muted-foreground">
+                  Try different keywords like &ldquo;dio&rdquo;,
+                  &ldquo;go_router&rdquo;, or &ldquo;sealed class&rdquo;
+                </p>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    setSearchQuery("");
+                    setSearchResults([]);
+                  }}
+                  className="mt-4"
+                >
+                  Clear search
+                </Button>
+              </div>
+            )}
+
+            {filteredCategories.map((cat) => (
+              <section key={cat.id} className="mb-16">
+                <div id={`cat-${cat.id}`} className="scroll-mt-24">
+                  <div className="mb-6 flex items-center gap-3">
+                    <div className="flex size-9 items-center justify-center rounded-lg bg-violet-500/10">
+                      <cat.icon className="size-5 text-violet-400" />
+                    </div>
+                    <div>
+                      <h2 className="text-2xl font-bold text-foreground">
+                        {cat.title}
+                      </h2>
+                      <p className="text-sm text-muted-foreground">
+                        {cat.description}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {cat.entries.map((entry) => (
+                  <DocEntryCard
+                    key={entry.id}
+                    entry={entry}
+                    query={searchQuery}
+                  />
+                ))}
+              </section>
+            ))}
+          </main>
+        </div>
+      </div>
+    </div>
+  );
+}

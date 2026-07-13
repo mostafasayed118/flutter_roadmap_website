@@ -26,7 +26,7 @@ export function ConvexClientProvider({ children }: { children: ReactNode }) {
             The <code className="rounded bg-white/10 px-1.5 py-0.5 font-mono text-xs">NEXT_PUBLIC_CONVEX_URL</code> environment
             variable is not set or is invalid. The app cannot connect to the backend.
           </p>
-          <p className="text-xs text-muted-foreground/60">
+          <p className="text-xs text-muted-foreground/80">
             Run <code className="rounded bg-white/10 px-1.5 py-0.5 font-mono text-xs">npx convex dev</code> to generate it, or set
             it manually in your <code className="rounded bg-white/10 px-1.5 py-0.5 font-mono text-xs">.env.local</code> file.
           </p>

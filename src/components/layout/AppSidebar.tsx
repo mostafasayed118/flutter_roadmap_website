@@ -21,6 +21,8 @@ import {
   Terminal,
   Flame,
   FileText,
+  Trophy,
+  Folder,
 } from "lucide-react";
 
 const navItems = [
@@ -30,6 +32,8 @@ const navItems = [
   { href: "/docs", label: "Knowledge Base", icon: FileText },
   { href: "/resources", label: "Resources", icon: BookOpen },
   { href: "/cheat-sheet", label: "Cheat Sheet", icon: Terminal },
+  { href: "/showcase", label: "Project Showcase", icon: Folder },
+  { href: "/leaderboard", label: "Leaderboard", icon: Trophy },
 ];
 
 export function AppSidebar() {

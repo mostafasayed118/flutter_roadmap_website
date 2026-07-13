@@ -248,6 +248,51 @@ export const toggleItem = mutation({
   },
 });
 
+export const updateWeekNotes = mutation({
+  args: {
+    userId: v.string(),
+    weekId: v.id("roadmapWeeks"),
+    notes: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const existing = await ctx.db
+      .query("userProgress")
+      .withIndex("by_user_week", (q) =>
+        q.eq("userId", args.userId).eq("weekId", args.weekId)
+      )
+      .first();
+
+    if (existing) {
+      await ctx.db.patch(existing._id, { notes: args.notes });
+    } else {
+      await ctx.db.insert("userProgress", {
+        userId: args.userId,
+        weekId: args.weekId,
+        completedTopics: [],
+        completedProjects: [],
+        notes: args.notes,
+      });
+    }
+  },
+});
+
+export const getWeekNotes = query({
+  args: {
+    userId: v.string(),
+    weekId: v.id("roadmapWeeks"),
+  },
+  handler: async (ctx, args) => {
+    const existing = await ctx.db
+      .query("userProgress")
+      .withIndex("by_user_week", (q) =>
+        q.eq("userId", args.userId).eq("weekId", args.weekId)
+      )
+      .first();
+
+    return existing?.notes ?? "";
+  },
+});
+
 /** @deprecated Use `toggleItem` instead. Kept for backward compatibility. */
 export const toggleTopic = mutation({
   args: {

@@ -24,10 +24,10 @@ export function AnimatedCheckbox({
       style={{ width: dim, height: dim }}
     >
       <div
-        className={`absolute inset-0 rounded-md border transition-colors duration-200 ${
+        className={`absolute inset-0 rounded-md border transition-colors duration-200 ease-in-out ${
           checked
-            ? "border-[oklch(0.7_0.2_160)] bg-[oklch(0.7_0.2_160/0.2)]"
-            : "border-[oklch(0.4_0_0)] bg-transparent"
+            ? "border-emerald-500 bg-emerald-500/20"
+            : "border-zinc-700 bg-transparent"
         }`}
       />
       <AnimatePresence>
@@ -44,7 +44,8 @@ export function AnimatedCheckbox({
             <motion.path
               d="M5 12l5 5L19 7"
               fill="none"
-              stroke="oklch(0.7 0.2 160)"
+              stroke="currentColor"
+              className="text-emerald-500"
               strokeWidth={3}
               strokeLinecap="round"
               strokeLinejoin="round"

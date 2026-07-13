@@ -98,7 +98,7 @@ export function KeyboardShortcutsModal({
           ))}
         </div>
 
-        <p className="mt-4 text-center text-xs text-muted-foreground/60">
+        <p className="mt-4 text-center text-xs text-muted-foreground/80">
           Shortcuts are disabled when typing in input fields
         </p>
       </DialogContent>

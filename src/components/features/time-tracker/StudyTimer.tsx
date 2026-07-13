@@ -363,7 +363,7 @@ function TimerSettingsPopover() {
               </div>
 
               {notifDenied && (
-                <p className="text-xs text-muted-foreground/60">
+                <p className="text-xs text-muted-foreground/80">
                   Blocked in browser settings
                 </p>
               )}

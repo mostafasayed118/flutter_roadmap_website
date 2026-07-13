@@ -10,6 +10,12 @@ import { QuickStatsGrid } from "@/components/features/dashboard/QuickStatsGrid";
 import { NextStepsCard } from "@/components/features/dashboard/NextStepsCard";
 import { StudyTimeCard } from "@/components/features/dashboard/StudyTimeCard";
 import { SessionList } from "@/components/features/time-tracker/SessionList";
+import { DocsSuggestions } from "@/components/features/dashboard/DocsSuggestions";
+import { StreakCard } from "@/components/features/dashboard/StreakCard";
+import { GoalSettingDialog } from "@/components/features/dashboard/GoalSettingDialog";
+import { BadgeShowcase } from "@/components/features/dashboard/BadgeShowcase";
+import { ProgressChart } from "@/components/features/dashboard/ProgressChart";
+import { ExportProgress } from "@/components/features/dashboard/ExportProgress";
 import { AnimatedPage } from "@/components/layout/AnimatedPage";
 import { GlassCard } from "@/components/ui/glass-card";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -124,23 +130,32 @@ export default function DashboardPage() {
   return (
     <AnimatedPage>
       <div className="space-y-6">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight">
-            <span className="bg-gradient-to-r from-violet-400 via-indigo-400 to-cyan-400 bg-clip-text text-transparent">
-              Dashboard
-            </span>
-          </h1>
-          <p className="mt-1 text-sm text-muted-foreground">
-            Track your Flutter learning journey across 34 weeks
-            {stats.currentWeekNumber
-              ? ` · Currently on Week ${stats.currentWeekNumber}`
-              : ""}
-          </p>
+        <div className="flex items-start justify-between">
+          <div>
+            <h1 className="text-2xl font-bold tracking-tight">
+              <span className="bg-gradient-to-r from-violet-400 via-indigo-400 to-cyan-400 bg-clip-text text-transparent">
+                Dashboard
+              </span>
+            </h1>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Track your Flutter learning journey across 34 weeks
+              {stats.currentWeekNumber
+                ? ` · Currently on Week ${stats.currentWeekNumber}`
+                : ""}
+            </p>
+          </div>
+          <ExportProgress />
         </div>
 
-        <div className="grid gap-6 sm:grid-cols-3">
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           <OverallProgressCard percentage={stats.overallPercentage} />
-          <div className="sm:col-span-2">
+          <StreakCard />
+          <GoalSettingDialog
+            weekNumber={stats.currentWeekNumber ?? 1}
+            completedTopics={stats.completedTopics}
+            completedHours={0}
+          />
+          <div className="sm:col-span-2 lg:col-span-1">
             <QuickStatsGrid
               completedTopics={stats.completedTopics}
               totalTopics={stats.totalTopics}
@@ -160,10 +175,15 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        <div className="grid gap-6 lg:grid-cols-2">
+        <div className="grid gap-6 lg:grid-cols-3">
           <StudyTimeCard />
           <SessionList />
+          <DocsSuggestions currentWeek={stats.currentWeekNumber} />
         </div>
+
+        <ProgressChart weeklyData={[]} />
+
+        <BadgeShowcase />
       </div>
 
       <SaveSessionDialog
