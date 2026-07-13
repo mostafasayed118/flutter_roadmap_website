@@ -48,6 +48,7 @@ export function QuickStatsGrid({
       color: "text-blue-400",
       bg: "bg-blue-500/10",
       border: "border-blue-500/20",
+      glow: "shadow-blue-500/10",
     },
     {
       title: "Projects Built",
@@ -56,6 +57,7 @@ export function QuickStatsGrid({
       color: "text-emerald-400",
       bg: "bg-emerald-500/10",
       border: "border-emerald-500/20",
+      glow: "shadow-emerald-500/10",
     },
     {
       title: "Current Focus",
@@ -64,6 +66,7 @@ export function QuickStatsGrid({
       color: "text-violet-400",
       bg: "bg-violet-500/10",
       border: "border-violet-500/20",
+      glow: "shadow-violet-500/10",
     },
   ];
 
@@ -76,11 +79,11 @@ export function QuickStatsGrid({
             key={stat.title}
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: 0.1 + idx * 0.08 }}
+            transition={{ duration: 0.4, delay: 0.1 + idx * 0.08, ease: "easeOut" }}
           >
             <GlassCard hover className="p-4">
               <div className="flex items-start gap-3">
-                <div className={`rounded-lg p-2 ${stat.bg} border ${stat.border}`}>
+                <div className={`rounded-lg p-2 ${stat.bg} border ${stat.border} shadow-lg ${stat.glow}`}>
                   <Icon className={`size-5 ${stat.color}`} />
                 </div>
                 <div className="min-w-0 flex-1">

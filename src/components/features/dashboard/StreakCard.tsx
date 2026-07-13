@@ -4,6 +4,7 @@ import { Flame, Trophy } from "lucide-react";
 import { GlassCard } from "@/components/ui/glass-card";
 import { useStreak } from "@/hooks/use-streak";
 import { cn } from "@/lib/utils";
+import { motion } from "framer-motion";
 
 export function StreakCard() {
   const { currentStreak, longestStreak } = useStreak();
@@ -15,16 +16,22 @@ export function StreakCard() {
       className="p-4"
     >
       <div className="flex items-start gap-3">
-        <div
+        <motion.div
           className={cn(
             "flex size-9 shrink-0 items-center justify-center rounded-lg",
             currentStreak > 0
               ? "bg-orange-500/15 text-orange-400"
               : "bg-white/5 text-muted-foreground"
           )}
+          animate={
+            currentStreak > 0
+              ? { scale: [1, 1.05, 1] }
+              : {}
+          }
+          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
         >
           <Flame className="size-5" />
-        </div>
+        </motion.div>
         <div className="min-w-0 flex-1">
           <p className="text-xs text-muted-foreground">Study Streak</p>
           <p className="text-2xl font-bold tabular-nums">

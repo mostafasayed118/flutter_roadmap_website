@@ -37,7 +37,7 @@ export function NextStepsCard({ items, isLoading = false }: NextStepsCardProps) 
       <h2 className="text-lg font-semibold mb-4">Next Steps</h2>
       {items.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-6 text-center">
-          <div className="rounded-full bg-emerald-500/10 border border-emerald-500/20 p-3 mb-3">
+          <div className="rounded-full bg-emerald-500/10 border border-emerald-500/20 p-3 mb-3 shadow-lg shadow-emerald-500/10">
             <CheckCircle2 className="size-6 text-emerald-400" />
           </div>
           <p className="text-sm font-medium">All caught up!</p>
@@ -52,14 +52,14 @@ export function NextStepsCard({ items, isLoading = false }: NextStepsCardProps) 
               key={idx}
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.3, delay: idx * 0.1 }}
-              className="flex items-start gap-3 rounded-lg border border-white/5 bg-white/[0.02] p-3 hover:bg-white/[0.04] hover:border-white/10 transition-all duration-200"
+              transition={{ duration: 0.3, delay: idx * 0.1, ease: "easeOut" }}
+              className="group flex items-start gap-3 rounded-lg border border-white/5 bg-white/[0.02] p-3 transition-all duration-200 hover:bg-white/[0.04] hover:border-white/10 hover:shadow-md hover:shadow-black/10 cursor-pointer"
             >
               <div className="mt-0.5">
                 {item.type === "topic" ? (
-                  <BookOpen className="size-4 text-blue-400" />
+                  <BookOpen className="size-4 text-blue-400 transition-transform duration-200 group-hover:scale-110" />
                 ) : (
-                  <Hammer className="size-4 text-emerald-400" />
+                  <Hammer className="size-4 text-emerald-400 transition-transform duration-200 group-hover:scale-110" />
                 )}
               </div>
               <div className="flex-1 min-w-0">
@@ -68,10 +68,10 @@ export function NextStepsCard({ items, isLoading = false }: NextStepsCardProps) 
               </div>
               <Badge
                 variant="outline"
-                className={`shrink-0 text-xs ${
+                className={`shrink-0 text-xs transition-colors duration-200 ${
                   item.type === "topic"
-                    ? "border-blue-500/30 text-blue-400"
-                    : "border-emerald-500/30 text-emerald-400"
+                    ? "border-blue-500/30 text-blue-400 group-hover:border-blue-500/50 group-hover:bg-blue-500/10"
+                    : "border-emerald-500/30 text-emerald-400 group-hover:border-emerald-500/50 group-hover:bg-emerald-500/10"
                 }`}
               >
                 {item.type === "topic" ? "Topic" : "Project"}
