@@ -23,12 +23,14 @@ import {
   FileText,
   Trophy,
   Folder,
+  BarChart3,
 } from "lucide-react";
 
 const navItems = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/roadmap", label: "Roadmap", icon: Map },
   { href: "/skills", label: "Skills Checklist", icon: CheckSquare },
+  { href: "/analytics", label: "Analytics", icon: BarChart3 },
   { href: "/docs", label: "Knowledge Base", icon: FileText },
   { href: "/resources", label: "Resources", icon: BookOpen },
   { href: "/cheat-sheet", label: "Cheat Sheet", icon: Terminal },

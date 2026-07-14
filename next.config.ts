@@ -1,12 +1,18 @@
 import type { NextConfig } from "next";
+import withPWAInit from "next-pwa";
+
+const withPWA = withPWAInit({
+  dest: "public",
+  register: true,
+  skipWaiting: true,
+  disable: process.env.NODE_ENV === "development",
+});
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
-  // Note: Turbopack dev source maps may show "Map has no mappings field" warnings in Lighthouse.
-  // Production builds generate valid source maps. This is safe to ignore.
   experimental: {
     optimizePackageImports: ["lucide-react"],
   },
 };
 
-export default nextConfig;
+export default withPWA(nextConfig);

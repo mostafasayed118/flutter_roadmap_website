@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { useProgress } from "@/hooks/use-progress";
+import { useState, useMemo } from "react";
+import { useProgress, useRoadmap } from "@/hooks/use-progress";
 import { StudyTimeCard } from "@/components/features/dashboard/StudyTimeCard";
 import { SessionList } from "@/components/features/time-tracker/SessionList";
 import { DocsSuggestions } from "@/components/features/dashboard/DocsSuggestions";
@@ -16,8 +16,28 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Clock, List, Target, Trophy, BarChart3 } from "lucide-react";
 
 export default function AnalyticsPage() {
-  const { stats, isLoading } = useProgress();
+  const { stats, isLoading: statsLoading } = useProgress();
+  const { roadmap, isLoading: roadmapLoading } = useRoadmap();
   const [activeTab, setActiveTab] = useState("overview");
+
+  const isLoading = statsLoading || roadmapLoading;
+
+  const weeklyData = useMemo(() => {
+    if (!roadmap) return [];
+    const data: { week: number; topics: number; projects: number }[] = [];
+    let weekNumber = 1;
+    for (const phase of roadmap) {
+      for (const week of phase.weeks) {
+        data.push({
+          week: weekNumber,
+          topics: week.progress.completedTopics.length,
+          projects: week.progress.completedProjects.length,
+        });
+        weekNumber++;
+      }
+    }
+    return data;
+  }, [roadmap]);
 
   if (isLoading || !stats) {
     return (
@@ -94,7 +114,7 @@ export default function AnalyticsPage() {
           </TabsContent>
 
           <TabsContent value="progress" className="mt-6">
-            <ProgressChart weeklyData={[]} />
+            <ProgressChart weeklyData={weeklyData} />
           </TabsContent>
         </Tabs>
       </div>
