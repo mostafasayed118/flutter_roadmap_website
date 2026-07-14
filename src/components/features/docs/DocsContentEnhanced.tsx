@@ -1,15 +1,15 @@
 "use client";
 
 import { useState, useMemo, useCallback, useEffect } from "react";
-import { Menu, SearchX } from "lucide-react";
+import { Menu, SearchX, X } from "lucide-react";
 import {
   loadAllCategories,
   filterLoadedCategories,
 } from "@/lib/docs";
 import type { DocCategoryGroup, DocEntry } from "@/lib/docs/types";
-import { DocsSidebarEnhanced } from "./DocsSidebarEnhanced";
+import { DocsSidebar } from "./DocsSidebar";
+import { DocContentRenderer } from "./DocContentRenderer";
 import { SearchBar } from "./SearchBar";
-import { DocEntryCard } from "./DocEntryCard";
 import { RelatedRoadmapBanner } from "./RelatedRoadmapBanner";
 import { DifficultyBadge } from "./DifficultyBadge";
 import {
@@ -21,6 +21,25 @@ import {
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
+
+const STORAGE_KEY = "flutterpath-docs-read";
+
+function getReadDocs(): Set<string> {
+  if (typeof window === "undefined") return new Set();
+  try {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    return stored ? new Set(JSON.parse(stored)) : new Set();
+  } catch {
+    return new Set();
+  }
+}
+
+function markAsRead(id: string): Set<string> {
+  const readDocs = getReadDocs();
+  readDocs.add(id);
+  localStorage.setItem(STORAGE_KEY, JSON.stringify([...readDocs]));
+  return readDocs;
+}
 
 function DocsSkeleton() {
   return (
@@ -64,6 +83,7 @@ export function DocsContentEnhanced() {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<DocEntry[]>([]);
   const [selectedEntry, setSelectedEntry] = useState<DocEntry | null>(null);
+  const [readDocs, setReadDocs] = useState<Set<string>>(() => new Set());
 
   // Load categories lazily on mount
   useEffect(() => {
@@ -76,6 +96,11 @@ export function DocsContentEnhanced() {
         setLoadError(true);
         setIsLoading(false);
       });
+  }, []);
+
+  // Load read docs from localStorage
+  useEffect(() => {
+    setReadDocs(getReadDocs());
   }, []);
 
   const filteredCategories = useMemo(
@@ -93,7 +118,12 @@ export function DocsContentEnhanced() {
             (entry) =>
               entry.title.toLowerCase().includes(q) ||
               entry.summary.toLowerCase().includes(q) ||
-              entry.tags.some((tag) => tag.toLowerCase().includes(q))
+              entry.tags.some((tag) => tag.toLowerCase().includes(q)) ||
+              entry.codeSnippets.some(
+                (snip) =>
+                  snip.label.toLowerCase().includes(q) ||
+                  snip.code.toLowerCase().includes(q)
+              )
           )
         );
         setSearchResults(results);
@@ -115,6 +145,14 @@ export function DocsContentEnhanced() {
         el.scrollIntoView({ behavior: "smooth", block: "start" });
       }
     }, 100);
+  }, []);
+
+  const handleSelectEntryFromSidebar = useCallback((entry: DocEntry) => {
+    setSelectedEntry(entry);
+  }, []);
+
+  const handleMarkRead = useCallback((entryId: string) => {
+    setReadDocs(markAsRead(entryId));
   }, []);
 
   if (isLoading) {
@@ -162,9 +200,10 @@ export function DocsContentEnhanced() {
               <SheetTitle>Navigation</SheetTitle>
             </SheetHeader>
             <div className="overflow-y-auto p-3">
-              <DocsSidebarEnhanced
+              <DocsSidebar
                 categories={filteredCategories}
                 onNavigate={() => setMobileOpen(false)}
+                onSelectEntry={handleSelectEntryFromSidebar}
               />
             </div>
           </SheetContent>
@@ -225,8 +264,9 @@ export function DocsContentEnhanced() {
               <button
                 onClick={() => setSelectedEntry(null)}
                 className="text-xs text-muted-foreground hover:text-foreground"
+                aria-label="Clear selection"
               >
-                Clear
+                <X className="size-4" />
               </button>
             </div>
             <RelatedRoadmapBanner
@@ -240,7 +280,11 @@ export function DocsContentEnhanced() {
           {/* Desktop sidebar */}
           <aside className="hidden lg:block">
             <div className="sticky top-24">
-              <DocsSidebarEnhanced categories={filteredCategories} />
+              <DocsSidebar
+                categories={filteredCategories}
+                selectedEntryId={selectedEntry?.id}
+                onSelectEntry={handleSelectEntryFromSidebar}
+              />
             </div>
           </aside>
 
@@ -270,33 +314,47 @@ export function DocsContentEnhanced() {
               </div>
             )}
 
-            {filteredCategories.map((cat) => (
-              <section key={cat.id} className="mb-16">
-                <div id={`cat-${cat.id}`} className="scroll-mt-24">
-                  <div className="mb-6 flex items-center gap-3">
-                    <div className="flex size-9 items-center justify-center rounded-lg bg-violet-500/10">
-                      <cat.icon className="size-5 text-violet-400" />
-                    </div>
-                    <div>
-                      <h2 className="text-2xl font-bold text-foreground">
-                        {cat.title}
-                      </h2>
-                      <p className="text-sm text-muted-foreground">
-                        {cat.description}
-                      </p>
+            {/* If an entry is selected, show it with DocContentRenderer */}
+            {selectedEntry ? (
+              <DocContentRenderer
+                entry={selectedEntry}
+                onMarkRead={handleMarkRead}
+              />
+            ) : (
+              /* Otherwise, show all categories with DocEntryCards */
+              filteredCategories.map((cat) => (
+                <section key={cat.id} className="mb-16">
+                  <div id={`cat-${cat.id}`} className="scroll-mt-24">
+                    <div className="mb-6 flex items-center gap-3">
+                      <div className="flex size-9 items-center justify-center rounded-lg bg-violet-500/10">
+                        <cat.icon className="size-5 text-violet-400" />
+                      </div>
+                      <div>
+                        <h2 className="text-2xl font-bold text-foreground">
+                          {cat.title}
+                        </h2>
+                        <p className="text-sm text-muted-foreground">
+                          {cat.description}
+                        </p>
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                {cat.entries.map((entry) => (
-                  <DocEntryCard
-                    key={entry.id}
-                    entry={entry}
-                    query={searchQuery}
-                  />
-                ))}
-              </section>
-            ))}
+                  {cat.entries.map((entry) => (
+                    <article
+                      key={entry.id}
+                      id={entry.id}
+                      className="mb-10 scroll-mt-24"
+                    >
+                      <DocContentRenderer
+                        entry={entry}
+                        onMarkRead={handleMarkRead}
+                      />
+                    </article>
+                  ))}
+                </section>
+              ))
+            )}
           </main>
         </div>
       </div>

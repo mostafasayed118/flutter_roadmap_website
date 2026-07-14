@@ -2,7 +2,7 @@
 
 # FlutterPath — Deployment Guide
 
-### Ship your progress tracker to production in three steps.
+### Ship your progress tracker to production in four steps.
 
 </div>
 
@@ -21,15 +21,22 @@ The backend must be deployed first — the frontend needs the production Convex 
 
 ---
 
+## Prerequisites
+
+Before deploying, ensure you have:
+
+- A **Vercel account** (free tier works) — [Sign up](https://vercel.com)
+- A **Convex account** (free tier sufficient) — [Sign up](https://convex.dev)
+- Your **GitHub repository** connected to Vercel
+- **Node.js** 18+ installed locally (for CLI commands)
+
+---
+
 ## Step 1: Deploy the Convex Backend
 
 The Convex backend contains your database schema, serverless functions, and seed data. Deploy it before the frontend.
 
-### 1.1 Create a Convex Account
-
-If you haven't already, sign up at [convex.dev](https://convex.dev) (free tier available).
-
-### 1.2 Authenticate Locally
+### 1.1 Authenticate Locally
 
 ```bash
 npx convex login
@@ -37,7 +44,7 @@ npx convex login
 
 This opens a browser window to authenticate and link your local project to your Convex account.
 
-### 1.3 Deploy to Production
+### 1.2 Deploy to Production
 
 ```bash
 npx convex deploy --prod
@@ -45,7 +52,7 @@ npx convex deploy --prod
 
 This command:
 
-- Pushes all Convex functions (`schema.ts`, `progress.ts`, `skills.ts`, `timeTracker.ts`, `seed.ts`) to production
+- Pushes all Convex functions (`schema.ts`, `progress.ts`, `skills.ts`, `timeTracker.ts`, `badges.ts`, `goals.ts`, `streaks.ts`, `bookmarks.ts`, `showcase.ts`, `seed.ts`) to production
 - Creates a production deployment with a unique, persistent URL
 - Validates the schema against your existing data
 
@@ -58,7 +65,7 @@ URL: https://happy-otter-123.convex.cloud
 
 > **Save this URL** — you'll need it when configuring Vercel in Step 2.
 
-### 1.4 Seed the Production Database
+### 1.3 Seed the Production Database
 
 Your production database is empty on first deploy. You need to populate it with the 34-week roadmap data.
 
@@ -105,7 +112,7 @@ In the Vercel dashboard, go to **Settings → Environment Variables** and add:
 |----------|-------|-------------|
 | `NEXT_PUBLIC_CONVEX_URL` | `https://your-project.convex.cloud` | Production, Preview, Development |
 
-> Replace `your-project.convex.cloud` with the URL from Step 1.3.
+> Replace `your-project.convex.cloud` with the URL from Step 1.2.
 
 **Important:** Set this variable for **all three environments** (Production, Preview, Development) to ensure pull request previews and development branches also work correctly.
 
@@ -128,15 +135,15 @@ The first build takes ~60 seconds. Subsequent builds are faster (~30 seconds).
 
 ---
 
-## Step 3: Post-Deployment Checks
+## Step 3: Verify Deployment
 
 Run through these checks after your first deployment to ensure everything works.
 
 ### 3.1 Verify the App is Live
 
-1. Open your Vercel deployment URL
-2. You should see the Dashboard page with the progress ring and stats
-3. Navigate to each page (Roadmap, Skills, Resources, Cheat Sheet) to ensure everything loads
+- [ ] Open your Vercel deployment URL
+- [ ] You should see the Dashboard page with the progress ring and stats
+- [ ] Navigate to each page (Roadmap, Skills, Docs, Cheat Sheet, Resources) to ensure everything loads
 
 ### 3.2 Verify Convex Connection
 
@@ -160,12 +167,26 @@ If the Roadmap page shows "No roadmap data yet":
 2. Check a topic in one tab
 3. Verify it updates instantly in the other tab — no refresh needed
 
-### 3.5 Verify Study Time Tracker
+### 3.5 Verify Study Timer
 
-1. Click **"Log Session"** in the top navbar
-2. Log a study session (e.g., 30 minutes with a note)
-3. Verify it appears in the Dashboard study time card
-4. Verify the week badge appears on the Roadmap page
+1. Click the timer in the top navbar
+2. Start a Pomodoro session (25 minutes)
+3. Verify the countdown updates every second
+4. Verify the browser notification fires when the timer completes
+5. Verify the session is saved and appears in the Dashboard
+
+### 3.6 Verify Knowledge Base
+
+1. Navigate to the **Docs** page
+2. Use the search bar to search for "Provider" — results should appear instantly
+3. Click a category (e.g., "Bloc/Cubit") — entries should load lazily
+4. Click a difficulty badge to filter by level
+
+### 3.7 Verify Badges
+
+1. Complete a week's topics on the Roadmap page
+2. Navigate to the Dashboard — the **week-warrior** badge should appear in the badge showcase
+3. A confetti celebration should fire on the first badge unlock
 
 ---
 
@@ -178,6 +199,8 @@ If the Roadmap page shows "No roadmap data yet":
 | Blank page after deploy | Multiple possible causes | Check browser console; most likely missing env var or schema mismatch |
 | Slow initial load | Cold Convex database | Normal on first request — subsequent loads are fast due to Convex caching |
 | Roadmap shows "No data" | Production DB not seeded | Click "Load Roadmap Data" or run `seed:seedRoadmap` from the Convex Dashboard |
+| Timer not persisting | localStorage not available | Ensure the app is served over HTTPS (Vercel handles this automatically) |
+| Search returns no results | Knowledge base not loaded | Navigate to Docs page first — categories lazy-load on initial visit |
 
 ---
 

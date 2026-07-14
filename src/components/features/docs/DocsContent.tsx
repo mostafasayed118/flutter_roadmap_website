@@ -84,7 +84,7 @@ export function DocsContent() {
             </SheetHeader>
             <div className="overflow-y-auto p-3">
               <DocsSidebar
-                categories={filteredData}
+                categories={filteredData as any}
                 onNavigate={() => setMobileOpen(false)}
               />
             </div>
@@ -141,7 +141,7 @@ export function DocsContent() {
           {/* Desktop sidebar */}
           <aside className="hidden lg:block">
             <div className="sticky top-24">
-              <DocsSidebar categories={filteredData} />
+              <DocsSidebar categories={filteredData as any} />
             </div>
           </aside>
 
