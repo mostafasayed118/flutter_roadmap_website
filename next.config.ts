@@ -10,6 +10,7 @@ const withPWA = withPWAInit({
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
+  turbopack: {},
   experimental: {
     optimizePackageImports: ["lucide-react"],
   },
