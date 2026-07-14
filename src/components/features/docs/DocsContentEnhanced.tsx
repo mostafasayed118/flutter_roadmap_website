@@ -89,10 +89,12 @@ export function DocsContentEnhanced() {
   useEffect(() => {
     loadAllCategories()
       .then((cats) => {
+        console.log("[Docs] Loaded categories:", cats.length, "with entries:", cats.reduce((sum, c) => sum + c.entries.length, 0));
         setCategories(cats);
         setIsLoading(false);
       })
-      .catch(() => {
+      .catch((err) => {
+        console.error("[Docs] Failed to load categories:", err);
         setLoadError(true);
         setIsLoading(false);
       });
