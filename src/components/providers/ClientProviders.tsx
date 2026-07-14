@@ -5,7 +5,9 @@ import { ThemeProvider } from "next-themes";
 import { ErrorBoundary } from "./ErrorBoundary";
 import { ConvexClientProvider } from "./ConvexClientProvider";
 import { StudyTimerProvider } from "@/components/features/time-tracker/StudyTimerProvider";
+import { FocusMode } from "@/components/features/time-tracker/FocusMode";
 import { KeyboardShortcutsProvider } from "./KeyboardShortcutsProvider";
+import { ShortcutsDialog } from "@/components/features/keyboard-shortcuts/ShortcutsDialog";
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/layout/AppSidebar";
 import { TopNavbar } from "@/components/layout/TopNavbar";
@@ -33,6 +35,8 @@ export function ClientProviders({ children }: { children: ReactNode }) {
                   </SidebarInset>
                   <MobileNav />
                 </SidebarProvider>
+                <ShortcutsDialog />
+                <FocusMode />
                 <Toaster />
               </ErrorBoundary>
             </TooltipProvider>

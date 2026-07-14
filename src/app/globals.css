@@ -199,3 +199,17 @@
     transform: translateY(0);
   }
 }
+
+/* Focus Mode - hides sidebar and distractions during study */
+body.focus-mode [data-sidebar="sidebar"] {
+  display: none;
+}
+body.focus-mode [data-sidebar="sidebar"] + div {
+  margin-left: 0;
+}
+body.focus-mode nav[role="navigation"] {
+  display: none;
+}
+body.focus-mode .fixed.bottom-0 {
+  display: none;
+}

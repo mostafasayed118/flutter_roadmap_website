@@ -2,12 +2,14 @@
 
 import { useState, useMemo } from "react";
 import { useProgress, useRoadmap } from "@/hooks/use-progress";
+import { useSessions } from "@/hooks/use-sessions";
 import { StudyTimeCard } from "@/components/features/dashboard/StudyTimeCard";
 import { SessionList } from "@/components/features/time-tracker/SessionList";
 import { DocsSuggestions } from "@/components/features/dashboard/DocsSuggestions";
 import { GoalSettingDialog } from "@/components/features/dashboard/GoalSettingDialog";
 import { BadgeShowcase } from "@/components/features/dashboard/BadgeShowcase";
 import { ProgressChart } from "@/components/features/dashboard/ProgressChart";
+import { StudyHeatmap } from "@/components/features/dashboard/StudyHeatmap";
 import { ExportProgress } from "@/components/features/dashboard/ExportProgress";
 import { AnimatedPage } from "@/components/layout/AnimatedPage";
 import { GlassCard } from "@/components/ui/glass-card";
@@ -18,6 +20,7 @@ import { Clock, List, Target, Trophy, BarChart3 } from "lucide-react";
 export default function AnalyticsPage() {
   const { stats, isLoading: statsLoading } = useProgress();
   const { roadmap, isLoading: roadmapLoading } = useRoadmap();
+  const { sessions } = useSessions();
   const [activeTab, setActiveTab] = useState("overview");
 
   const isLoading = statsLoading || roadmapLoading;
@@ -38,6 +41,14 @@ export default function AnalyticsPage() {
     }
     return data;
   }, [roadmap]);
+
+  const heatmapSessions = useMemo(() => {
+    if (!sessions) return [];
+    return sessions.map((s) => ({
+      date: new Date(s._creationTime).toISOString(),
+      durationMs: s.durationMinutes * 60 * 1000,
+    }));
+  }, [sessions]);
 
   if (isLoading || !stats) {
     return (
@@ -89,9 +100,12 @@ export default function AnalyticsPage() {
           </TabsList>
 
           <TabsContent value="overview" className="mt-6">
-            <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
-              <StudyTimeCard />
-              <DocsSuggestions currentWeek={stats.currentWeekNumber} />
+            <div className="space-y-4">
+              <StudyHeatmap sessions={heatmapSessions} />
+              <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
+                <StudyTimeCard />
+                <DocsSuggestions currentWeek={stats.currentWeekNumber} />
+              </div>
             </div>
           </TabsContent>
 
