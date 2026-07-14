@@ -2,14 +2,56 @@ import type { DocEntry } from "./types";
 
 export const dartDocs: DocEntry[] = [
   {
+    id: "dart-what-is-dart",
+    title: "What is Dart?",
+    category: "dart",
+    summary:
+      "Dart is a client-optimized, type-safe, object-oriented language for developing fast apps on any platform.",
+    content: `Dart is a **client-optimized, type-safe, object-oriented language** for developing fast apps on any platform. It is the language that powers Flutter and is optimized for:
+
+- **Fast development** — sub-second stateful hot reload
+- **High-quality production** — compiles to native ARM, x64, JavaScript, and WebAssembly
+- **Multi-platform** — mobile, web, desktop, server
+
+> Dart is designed for a technical envelope that's particularly suited to client development. It forms the foundation of Flutter.`,
+    codeSnippets: [],
+    relatedWeeks: [1],
+    tags: ["dart", "language", "overview", "flutter", "client-optimized", "multi-platform"],
+    difficulty: "beginner",
+    sourceUrl: "https://dart.dev",
+  },
+  {
+    id: "dart-hello-world",
+    title: "Hello World",
+    category: "dart",
+    summary:
+      "Every Dart app requires a top-level main() function as the entry point.",
+    content: `Every Dart app requires a top-level \`main()\` function as the entry point.`,
+    codeSnippets: [
+      {
+        id: "dart-hello-world-main",
+        language: "dart",
+        label: "Hello World Entry Point",
+        code: `void main() {
+  print('Hello, World!');
+}`,
+      },
+    ],
+    relatedWeeks: [1],
+    tags: ["hello world", "main", "entry point", "basics", "print"],
+    difficulty: "beginner",
+    sourceUrl: "https://dart.dev",
+  },
+  {
     id: "dart-variables",
-    title: "Variables & Types",
+    title: "Variables",
     category: "dart",
     summary:
       "Master Dart's type system: var, final, const, late, and explicit type declarations.",
-    content: `Dart is a **client-optimized, type-safe, object-oriented language** that powers Flutter. It uses type inference with \`var\`, immutable bindings with \`final\`, compile-time constants with \`const\`, and deferred initialization with \`late\`.`,
+    content: `Dart supports type inference with \`var\`, immutable bindings with \`final\`, compile-time constants with \`const\`, and deferred initialization with \`late\`.`,
     codeSnippets: [
       {
+        id: "dart-variables-declarations",
         language: "dart",
         label: "Variable Declarations",
         code: `// Type inference
@@ -39,51 +81,239 @@ description = 'Initialized later';`,
     relatedWeeks: [1, 2],
     tags: ["var", "final", "const", "late", "types", "inference", "dart basics"],
     difficulty: "beginner",
+    sourceUrl: "https://dart.dev",
   },
   {
-    id: "dart-built-in-types",
-    title: "Built-in Types",
+    id: "dart-numbers",
+    title: "Numbers",
     category: "dart",
     summary:
-      "Numbers, strings, booleans, lists, sets, maps, and Dart 3+ records.",
-    content: `Dart provides **Numbers** (\`int\`, \`double\`, \`num\`), **Strings** with interpolation and multi-line support, **Booleans**, **Lists** (ordered collections), **Sets** (unordered unique), **Maps** (key-value pairs), and Dart 3+ **Records** (anonymous immutable value types).`,
+      "Dart provides int, double, and num types for numeric values with parsing and conversion methods.",
+    content: `Dart's numeric types include \`int\` for integers, \`double\` for floating-point numbers, and \`num\` as a supertype that can be either. Use \`parse()\` to convert strings to numbers and \`toString()\` for the reverse.`,
     codeSnippets: [
       {
+        id: "dart-numbers-example",
         language: "dart",
-        label: "Lists, Sets, Maps & Records",
-        code: `// Lists
-List<String> fruits = ['apple', 'banana', 'mango'];
-fruits.add('cherry');
-fruits.where((f) => f.length > 4).toList();  // filter
-fruits.map((f) => f.toUpperCase()).toList();  // transform
-var combined = [...fruits, ...['melon']];     // spread
+        label: "Number Types & Parsing",
+        code: `int count = 42;
+double price = 19.99;
+num value = 3;    // can be int or double
 
-// Sets (no duplicates)
-Set<String> tags = {'flutter', 'dart', 'mobile'};
-a.intersection(b);  a.union(b);  a.difference(b);
-
-// Maps
-Map<String, int> scores = {'Alice': 95, 'Bob': 87};
-scores.keys.toList();
-scores.values.toList();
-
-// Records (Dart 3+)
-var point = (x: 10, y: 20);
-print(point.x); // 10
-var (name, age) = ('Mustafa', 25);`,
+// Parsing
+int.parse('42');
+double.parse('3.14');
+42.toString();`,
       },
     ],
     relatedWeeks: [1, 2],
-    tags: [
-      "list",
-      "set",
-      "map",
-      "record",
-      "collections",
-      "arrays",
-      "dart types",
-    ],
+    tags: ["numbers", "int", "double", "num", "parsing", "conversion"],
     difficulty: "beginner",
+    sourceUrl: "https://dart.dev",
+  },
+  {
+    id: "dart-strings",
+    title: "Strings",
+    category: "dart",
+    summary:
+      "Dart strings support interpolation, multi-line literals, and a rich set of built-in operations.",
+    content: `Dart strings support **interpolation** with \`$\`\`, **multi-line literals** with triple quotes, and common operations like \`toUpperCase()\`, \`trim()\`, \`split()\`, \`contains()\`, \`replaceAll()\`, and \`length\`.`,
+    codeSnippets: [
+      {
+        id: "dart-strings-operations",
+        language: "dart",
+        label: "String Operations",
+        code: `String name = 'Flutter';
+String message = "Hello, $name!";           // interpolation
+String multi = '''
+  Multi-line
+  string
+''';
+
+// Operations
+'hello'.toUpperCase();      // 'HELLO'
+'  hello  '.trim();         // 'hello'
+'hello world'.split(' ');   // ['hello', 'world']
+'hello'.contains('ell');    // true
+'hello'.replaceAll('l', 'r'); // 'herro'
+'hello'.length;             // 5`,
+      },
+    ],
+    relatedWeeks: [1, 2],
+    tags: ["strings", "interpolation", "multi-line", "operations", "toUpperCase", "trim"],
+    difficulty: "beginner",
+    sourceUrl: "https://dart.dev",
+  },
+  {
+    id: "dart-booleans",
+    title: "Booleans",
+    category: "dart",
+    summary:
+      "Dart booleans represent true/false values used in conditional logic.",
+    content: `Dart's \`bool\` type has two values: \`true\` and \`false\`. Boolean expressions are commonly used in conditional statements and assertions.`,
+    codeSnippets: [
+      {
+        id: "dart-booleans-example",
+        language: "dart",
+        label: "Boolean Values",
+        code: `bool isTrue = true;
+bool isFalse = false;
+
+// Conditional
+bool result = 5 > 3;        // true
+assert(result == true);`,
+      },
+    ],
+    relatedWeeks: [1, 2],
+    tags: ["booleans", "bool", "true", "false", "conditional", "assert"],
+    difficulty: "beginner",
+    sourceUrl: "https://dart.dev",
+  },
+  {
+    id: "dart-lists",
+    title: "Lists (Arrays)",
+    category: "dart",
+    summary:
+      "Ordered collections with rich operations: add, filter, map, sort, spread, and generate.",
+    content: `Dart lists are **ordered collections** that can hold duplicate values. They support operations like \`add()\`, \`addAll()\`, \`remove()\`, \`where()\` (filter), \`map()\` (transform), \`fold()\` (reduce), \`sort()\`, and the **spread operator** (\`...\`) for combining lists.`,
+    codeSnippets: [
+      {
+        id: "dart-lists-operations",
+        language: "dart",
+        label: "List Operations",
+        code: `// Fixed type list
+List<String> fruits = ['apple', 'banana', 'mango'];
+
+// Dynamic list
+var numbers = [1, 2, 3, 4, 5];
+
+// Operations
+fruits.add('cherry');
+fruits.addAll(['grape', 'kiwi']);
+fruits.remove('banana');
+fruits.removeAt(0);
+fruits.length;          // count
+fruits.isEmpty;         // false
+fruits.contains('mango');
+fruits.indexOf('mango');
+fruits.sort();
+fruits.reversed.toList();
+fruits.where((f) => f.length > 4).toList();  // filter
+fruits.map((f) => f.toUpperCase()).toList();  // transform
+fruits.fold(0, (sum, f) => sum + f.length);  // reduce
+
+// Spread operator
+var combined = [...fruits, ...['melon']];
+
+// List.generate
+var squares = List.generate(5, (i) => i * i);`,
+      },
+    ],
+    relatedWeeks: [1, 2],
+    tags: ["lists", "arrays", "collection", "spread", "filter", "map", "fold", "generate"],
+    difficulty: "beginner",
+    sourceUrl: "https://dart.dev",
+  },
+  {
+    id: "dart-sets",
+    title: "Sets",
+    category: "dart",
+    summary:
+      "Unordered collections of unique values with set operations like intersection, union, and difference.",
+    content: `Dart sets are **unordered collections of unique values**. They automatically prevent duplicates and provide mathematical set operations like \`intersection()\`, \`union()\`, and \`difference()\`.`,
+    codeSnippets: [
+      {
+        id: "dart-sets-operations",
+        language: "dart",
+        label: "Set Operations",
+        code: `Set<String> tags = {'flutter', 'dart', 'mobile'};
+tags.add('web');
+tags.contains('dart');   // true
+// No duplicates!
+tags.add('flutter');     // ignored, already exists
+
+Set<String> a = {'a', 'b', 'c'};
+Set<String> b = {'b', 'c', 'd'};
+a.intersection(b);       // {'b', 'c'}
+a.union(b);              // {'a', 'b', 'c', 'd'}
+a.difference(b);         // {'a'}`,
+      },
+    ],
+    relatedWeeks: [1, 2],
+    tags: ["sets", "unique", "intersection", "union", "difference", "no duplicates"],
+    difficulty: "beginner",
+    sourceUrl: "https://dart.dev",
+  },
+  {
+    id: "dart-maps",
+    title: "Maps (Dictionaries)",
+    category: "dart",
+    summary:
+      "Key-value pair collections with rich lookup, iteration, and creation methods.",
+    content: `Dart maps store **key-value pairs** where each key is unique. They support lookup by key, adding/removing entries, checking for keys/values, and iteration over keys, values, or entries.`,
+    codeSnippets: [
+      {
+        id: "dart-maps-operations",
+        language: "dart",
+        label: "Map Operations",
+        code: `Map<String, int> scores = {
+  'Alice': 95,
+  'Bob': 87,
+  'Charlie': 91,
+};
+
+scores['Alice'];          // 95
+scores['Unknown'];        // null
+scores['Diana'] = 88;     // add entry
+scores.remove('Bob');
+scores.containsKey('Alice');
+scores.containsValue(95);
+scores.keys.toList();
+scores.values.toList();
+scores.entries.forEach((e) => print('\${e.key}: \${e.value}'));
+
+// Map.fromIterable
+var map = Map.fromIterable(
+  [1, 2, 3],
+  key: (e) => 'key\$e',
+  value: (e) => e * e,
+);`,
+      },
+    ],
+    relatedWeeks: [1, 2],
+    tags: ["maps", "dictionaries", "key-value", "entries", "fromIterable"],
+    difficulty: "beginner",
+    sourceUrl: "https://dart.dev",
+  },
+  {
+    id: "dart-records",
+    title: "Records (Dart 3+)",
+    category: "dart",
+    summary:
+      "Anonymous immutable value types introduced in Dart 3 for returning multiple values.",
+    content: `Dart 3 introduced **Records** — anonymous immutable value types that can hold named or positional fields. They're useful for returning multiple values from functions and destructuring data.`,
+    codeSnippets: [
+      {
+        id: "dart-records-example",
+        language: "dart",
+        label: "Records & Destructuring",
+        code: `// Records — anonymous immutable value types
+var point = (x: 10, y: 20);
+print(point.x); // 10
+print(point.y); // 20
+
+// Positional records
+var rgb = (255, 128, 0);
+print(rgb.\$1); // 255
+
+// Function returning multiple values
+(String, int) getUserInfo() => ('Mustafa', 25);
+var (name, age) = getUserInfo();`,
+      },
+    ],
+    relatedWeeks: [1, 2],
+    tags: ["records", "named", "positional", "destructuring", "dart 3", "multiple values"],
+    difficulty: "beginner",
+    sourceUrl: "https://dart.dev",
   },
   {
     id: "dart-operators",
@@ -91,12 +321,25 @@ var (name, age) = ('Mustafa', 25);`,
     category: "dart",
     summary:
       "Arithmetic, comparison, logical, null-aware, cascade, and spread operators.",
-    content: `Dart supports standard arithmetic, comparison, logical, and assignment operators. Key features include **null-aware operators** (\`??\`, \`?.\`, \`??=\`), the **cascade** operator (\`..\`) for chained method calls, and the **spread** operator (\`...\`) for expanding collections.`,
+    content: `Dart supports standard arithmetic, comparison, logical, and assignment operators. Key features include **null-aware operators** (\`??\`, \`?.\`, \`??=\`), the **cascade** operator (\`..\`) for chained method calls, the **spread** operator (\`...\`) for expanding collections, and **type test** operators (\`is\`, \`is!\`, \`as\`).`,
     codeSnippets: [
       {
+        id: "dart-operators-all",
         language: "dart",
-        label: "Null-aware & Cascade Operators",
-        code: `// Null-aware
+        label: "All Operator Types",
+        code: `// Arithmetic
++  -  *  /  ~/  %    // ~/ is integer division
+
+// Comparison
+==  !=  <  >  <=  >=
+
+// Logical
+&&  ||  !
+
+// Assignment
+=  +=  -=  *=  /=  ~/=  %=
+
+// Null-aware
 int? value = null;
 value ??= 42;           // assign if null
 value ?? 'default';     // fallback if null
@@ -108,22 +351,151 @@ final paint = Paint()
   ..strokeWidth = 2.0
   ..style = PaintingStyle.stroke;
 
+// Spread
+var list = [1, ...otherList, 2];
+
 // Type test
 if (obj is String) { ... }    // true if obj is String
 if (obj is! int) { ... }      // true if NOT int
-obj as String;                // type cast`,
+obj as String;                // type cast (throws if wrong type)`,
       },
     ],
     relatedWeeks: [1, 2],
-    tags: [
-      "null-aware",
-      "cascade",
-      "spread",
-      "operators",
-      "type cast",
-      "null safety",
-    ],
+    tags: ["arithmetic", "comparison", "logical", "null-aware", "cascade", "spread", "type test"],
     difficulty: "beginner",
+    sourceUrl: "https://dart.dev",
+  },
+  {
+    id: "dart-if-else",
+    title: "If / Else",
+    category: "dart",
+    summary:
+      "Conditional statements for branching logic including ternary expressions.",
+    content: `Dart supports standard \`if\`/\`else if\`/\`else\` chains for conditional branching, along with the **ternary operator** (\`?\`) for concise single-expression conditionals.`,
+    codeSnippets: [
+      {
+        id: "dart-if-else-example",
+        language: "dart",
+        label: "If / Else & Ternary",
+        code: `if (score >= 90) {
+  print('A');
+} else if (score >= 80) {
+  print('B');
+} else {
+  print('C');
+}
+
+// Ternary
+String grade = score >= 60 ? 'Pass' : 'Fail';`,
+      },
+    ],
+    relatedWeeks: [1, 2],
+    tags: ["if", "else", "ternary", "conditional", "branching"],
+    difficulty: "beginner",
+    sourceUrl: "https://dart.dev",
+  },
+  {
+    id: "dart-loops",
+    title: "Loops",
+    category: "dart",
+    summary:
+      "for, for-in, forEach, while, do-while loops with break and continue control.",
+    content: `Dart provides multiple loop constructs: \`for\` loops with counters, \`for-in\` for iterating over iterables, \`forEach\` for functional iteration, \`while\` and \`do-while\` for conditional repetition, and \`break\`/\`continue\` for flow control.`,
+    codeSnippets: [
+      {
+        id: "dart-loops-all",
+        language: "dart",
+        label: "All Loop Types",
+        code: `// for loop
+for (int i = 0; i < 5; i++) {
+  print(i);
+}
+
+// for-in
+for (final fruit in fruits) {
+  print(fruit);
+}
+
+// forEach
+fruits.forEach(print);
+
+// while
+int i = 0;
+while (i < 3) {
+  print(i++);
+}
+
+// do-while
+do {
+  print('At least once');
+} while (false);
+
+// break & continue
+for (var i = 0; i < 10; i++) {
+  if (i == 5) break;
+  if (i % 2 == 0) continue;
+  print(i);
+}`,
+      },
+    ],
+    relatedWeeks: [1, 2],
+    tags: ["for", "for-in", "forEach", "while", "do-while", "break", "continue"],
+    difficulty: "beginner",
+    sourceUrl: "https://dart.dev",
+  },
+  {
+    id: "dart-switch-patterns",
+    title: "Switch / Patterns (Dart 3+)",
+    category: "dart",
+    summary:
+      "Classic switch statements, enhanced switch expressions, and pattern matching for destructuring.",
+    content: `Dart 3 introduced **enhanced switch expressions** that can return values, and **pattern matching** that enables destructuring complex types directly in switch cases.`,
+    codeSnippets: [
+      {
+        id: "dart-switch-classic",
+        language: "dart",
+        label: "Classic Switch",
+        code: `// Classic switch
+switch (command) {
+  case 'start':
+    startEngine();
+    break;
+  case 'stop':
+    stopEngine();
+    break;
+  default:
+    print('Unknown command');
+}`,
+      },
+      {
+        id: "dart-switch-enhanced",
+        language: "dart",
+        label: "Enhanced Switch Expression (Dart 3)",
+        code: `// Enhanced switch (Dart 3 — expression)
+String label = switch (status) {
+  200 => 'OK',
+  404 => 'Not Found',
+  500 => 'Server Error',
+  _ => 'Unknown',
+};`,
+      },
+      {
+        id: "dart-switch-pattern-match",
+        language: "dart",
+        label: "Pattern Matching",
+        code: `// Pattern matching
+switch (shape) {
+  case Circle(radius: var r):
+    print('Circle with radius \$r');
+  case Rectangle(width: var w, height: var h):
+    print('Rectangle \$w x \$h');
+}`,
+      },
+    ],
+    relatedWeeks: [1, 2],
+    tags: ["switch", "pattern matching", "expression", "destructuring", "dart 3"],
+    difficulty: "intermediate",
+    sourceUrl: "https://dart.dev",
   },
   {
     id: "dart-functions",
@@ -134,6 +506,7 @@ obj as String;                // type cast`,
     content: `Dart functions support **named parameters**, **optional positional parameters**, **closures**, and **higher-order functions** (functions as first-class citizens). Use \`=>\` for concise single-expression bodies.`,
     codeSnippets: [
       {
+        id: "dart-functions-patterns",
         language: "dart",
         label: "Function Patterns",
         code: `// Named function
@@ -152,11 +525,16 @@ void createUser({
 }) {
   print('\$name, \$age');
 }
+createUser(name: 'Mustafa', age: 25);
 
 // First-class functions
 var square = (int x) => x * x;
 List<int> nums = [1, 2, 3, 4];
 nums.map(square).toList(); // [1, 4, 9, 16]
+
+// Higher-order functions
+void runCallback(void Function() cb) => cb();
+runCallback(() => print('callback!'));
 
 // Closures
 Function multiplier(int factor) {
@@ -170,69 +548,242 @@ triple(5); // 15`,
     tags: [
       "functions",
       "named parameters",
+      "optional positional",
       "closures",
       "higher-order",
       "arrow functions",
     ],
     difficulty: "beginner",
+    sourceUrl: "https://dart.dev",
   },
   {
     id: "dart-classes-oop",
     title: "Classes & OOP",
     category: "dart",
     summary:
-      "Classes, inheritance, abstract classes, interfaces, mixins, and extension methods.",
-    content: `Dart supports **classes** with constructors (named, factory), **inheritance** (\`extends\`), **abstract classes**, **interfaces** (\`implements\`), **mixins** (\`mixin\`), **enhanced enums** (Dart 2.17+), and **extension methods** for adding functionality to existing types.`,
+      "Classes with constructors, methods, getters/setters, and static members.",
+    content: `Dart supports **classes** with named constructors, methods, getters/setters, static members, and the \`toString()\` override. Use \`required\` for mandatory named parameters and \`this\` for constructor parameter forwarding.`,
     codeSnippets: [
       {
+        id: "dart-classes-example",
         language: "dart",
-        label: "Classes, Inheritance & Mixins",
+        label: "Class Definition & Usage",
         code: `class Animal {
   String name;
   int age;
+
+  // Constructor
   Animal({required this.name, required this.age});
+
+  // Named constructor
   Animal.unnamed() : name = 'Unknown', age = 0;
-  void speak() => print('\\$name makes a sound');
-  String get info => '\\$name (\\$age years)';
-}
 
-class Dog extends Animal {
-  String breed;
-  Dog({required super.name, required super.age, required this.breed});
+  // Method
+  void speak() => print('\$name makes a sound');
+
+  // Getter / Setter
+  String get info => '\$name (\$age years)';
+  set petName(String n) => name = n;
+
+  // Static
+  static String species = 'Animal';
+  static String classify() => 'Living being';
+
+  // toString override
   @override
-  void speak() => print('\\$name barks!');
+  String toString() => 'Animal(\$name, \$age)';
 }
 
-// Abstract class
-abstract class Shape {
+// Usage
+final dog = Animal(name: 'Rex', age: 3);
+dog.speak();
+print(dog.info);`,
+      },
+    ],
+    relatedWeeks: [2, 3],
+    tags: ["classes", "constructors", "methods", "getters", "setters", "static", "OOP"],
+    difficulty: "intermediate",
+    sourceUrl: "https://dart.dev",
+  },
+  {
+    id: "dart-inheritance",
+    title: "Inheritance",
+    category: "dart",
+    summary:
+      "Extending classes with super, overriding methods, and adding new functionality.",
+    content: `Dart supports single inheritance with \`extends\`. Use \`@override\` to override parent methods and \`super\` to access parent constructors and methods.`,
+    codeSnippets: [
+      {
+        id: "dart-inheritance-example",
+        language: "dart",
+        label: "Inheritance with extends",
+        code: `class Dog extends Animal {
+  String breed;
+
+  Dog({required super.name, required super.age, required this.breed});
+
+  @override
+  void speak() => print('\$name barks!');
+
+  void fetch() => print('\$name fetches the ball!');
+}
+
+final labrador = Dog(name: 'Buddy', age: 2, breed: 'Labrador');
+labrador.speak();   // overridden
+labrador.fetch();   // own method`,
+      },
+    ],
+    relatedWeeks: [2, 3],
+    tags: ["inheritance", "extends", "override", "super", "subclass"],
+    difficulty: "intermediate",
+    sourceUrl: "https://dart.dev",
+  },
+  {
+    id: "dart-abstract-interfaces",
+    title: "Abstract Classes & Interfaces",
+    category: "dart",
+    summary:
+      "Abstract classes define contracts; every class implicitly defines an interface via implements.",
+    content: `Dart uses **abstract classes** to define contracts that must be implemented by subclasses. Every class in Dart implicitly defines an **interface**, so you can use \`implements\` on any class — not just those marked \`abstract\`.`,
+    codeSnippets: [
+      {
+        id: "dart-abstract-class",
+        language: "dart",
+        label: "Abstract Class",
+        code: `abstract class Shape {
   double get area;
+  double get perimeter;
   void draw();
 }
 
-// Mixins
-mixin Swimmer { void swim() => print('Swimming!'); }
-mixin Runner { void run() => print('Running!'); }
-class Triathlete extends Person with Swimmer, Runner {}
+class Circle extends Shape {
+  final double radius;
+  Circle(this.radius);
 
-// Extension Methods
-extension StringExtensions on String {
-  String get capitalize =>
-      isEmpty ? this : '\${this[0].toUpperCase()}\${substring(1)}';
-  bool get isEmail => contains('@') && contains('.');
+  @override
+  double get area => 3.14159 * radius * radius;
+
+  @override
+  double get perimeter => 2 * 3.14159 * radius;
+
+  @override
+  void draw() => print('Drawing circle with radius \$radius');
+}`,
+      },
+      {
+        id: "dart-interface-implements",
+        language: "dart",
+        label: "Interface with implements",
+        code: `// Interface (implements, not extends)
+class Printable {
+  void printInfo() {}
+}
+
+class Dog extends Animal implements Printable {
+  @override
+  void printInfo() => print('Dog: \$name');
 }`,
       },
     ],
     relatedWeeks: [2, 3],
-    tags: [
-      "classes",
-      "inheritance",
-      "abstract",
-      "mixins",
-      "interfaces",
-      "extension methods",
-      "OOP",
-    ],
+    tags: ["abstract", "interfaces", "implements", "contracts", "Shape"],
     difficulty: "intermediate",
+    sourceUrl: "https://dart.dev",
+  },
+  {
+    id: "dart-mixins",
+    title: "Mixins",
+    category: "dart",
+    summary:
+      "Reusable behavior composition using the mixin keyword and with clause.",
+    content: `Dart **mixins** allow you to add reusable behavior to classes without using inheritance. Define behavior with \`mixin\` and apply it with \`with\`. A class can use multiple mixins.`,
+    codeSnippets: [
+      {
+        id: "dart-mixins-example",
+        language: "dart",
+        label: "Mixin Definition & Usage",
+        code: `mixin Swimmer {
+  void swim() => print('Swimming!');
+}
+
+mixin Runner {
+  void run() => print('Running!');
+}
+
+class Triathlete extends Person with Swimmer, Runner {
+  // now has swim() and run()
+}`,
+      },
+    ],
+    relatedWeeks: [2, 3],
+    tags: ["mixins", "with", "reusable", "composition", "behavior"],
+    difficulty: "intermediate",
+    sourceUrl: "https://dart.dev",
+  },
+  {
+    id: "dart-enums",
+    title: "Enums (Enhanced — Dart 2.17+)",
+    category: "dart",
+    summary:
+      "Enhanced enums with fields, constructors, methods, and getters.",
+    content: `Dart 2.17 introduced **enhanced enums** that can have fields, constructors, methods, and getters — just like regular classes. Basic enums remain simple value lists.`,
+    codeSnippets: [
+      {
+        id: "dart-enums-basic",
+        language: "dart",
+        label: "Basic & Enhanced Enums",
+        code: `enum Direction { north, south, east, west }
+
+// Enhanced enum
+enum Planet {
+  mercury(mass: 3.3e23, radius: 2.44e6),
+  earth(mass: 5.97e24, radius: 6.37e6);
+
+  const Planet({required this.mass, required this.radius});
+
+  final double mass;
+  final double radius;
+
+  double get gravity => 6.67e-11 * mass / (radius * radius);
+}
+
+// Usage
+print(Planet.earth.gravity);`,
+      },
+    ],
+    relatedWeeks: [2, 3],
+    tags: ["enums", "enhanced", "properties", "methods", "dart 2.17", "Planet"],
+    difficulty: "intermediate",
+    sourceUrl: "https://dart.dev",
+  },
+  {
+    id: "dart-extension-methods",
+    title: "Extension Methods",
+    category: "dart",
+    summary:
+      "Add methods to existing types without modifying their source code.",
+    content: `Dart **extension methods** let you add functionality to existing types without modifying their source code. Define them with the \`extension\` keyword on a target type.`,
+    codeSnippets: [
+      {
+        id: "dart-extension-methods-example",
+        language: "dart",
+        label: "String Extension Methods",
+        code: `extension StringExtensions on String {
+  String get capitalize =>
+      isEmpty ? this : '\${this[0].toUpperCase()}\${substring(1)}';
+
+  bool get isEmail => contains('@') && contains('.');
+}
+
+// Usage
+'hello'.capitalize;       // 'Hello'
+'test@email.com'.isEmail; // true`,
+      },
+    ],
+    relatedWeeks: [2, 3],
+    tags: ["extension methods", "String", "capitalize", "isEmail", "existing types"],
+    difficulty: "intermediate",
+    sourceUrl: "https://dart.dev",
   },
   {
     id: "dart-null-safety",
@@ -243,6 +794,7 @@ extension StringExtensions on String {
     content: `Dart's **null safety** system distinguishes between nullable (\`String?\`) and non-nullable (\`String\`) types. Use the **null-aware operators** (\`??\`, \`?.\`, \`??=\`) for safe operations and the **null assertion** operator (\`!\`) only when you're certain a value isn't null.`,
     codeSnippets: [
       {
+        id: "dart-null-safety-patterns",
         language: "dart",
         label: "Null Safety Patterns",
         code: `// Nullable types
@@ -271,32 +823,73 @@ String forced = nullableName!;  // throws if null`,
       "null safety",
       "nullable",
       "null-aware",
-      "optional",
-      "late",
+      "assertion",
       "type system",
+      "optional",
     ],
     difficulty: "beginner",
+    sourceUrl: "https://dart.dev",
   },
   {
-    id: "dart-async",
-    title: "Asynchronous Programming",
+    id: "dart-futures",
+    title: "Futures",
     category: "dart",
-    summary: "Futures, Streams, async/await, and Isolates for concurrency.",
-    content: `Dart provides **Futures** (single async values), **Streams** (sequences of async data), and **Isolates** (true concurrency without shared memory). Use \`async\`/\`await\` for clean asynchronous code and \`Isolate.run()\` or \`compute()\` for heavy computations.`,
+    summary:
+      "async/await, Future chaining, and waiting for multiple concurrent operations.",
+    content: `Dart **Futures** represent a potential value or error that will be available at some time in the future. Use \`async\`/\`await\` for clean asynchronous code, or chain with \`.then()\`, \`.catchError()\`, and \`.whenComplete()\`. Use \`Future.wait()\` to run multiple futures concurrently.`,
     codeSnippets: [
       {
+        id: "dart-futures-async-await",
         language: "dart",
-        label: "Futures & Streams",
+        label: "async/await",
         code: `// async / await
 Future<String> fetchData() async {
   final response = await http.get(Uri.parse('https://api.example.com/data'));
   return response.body;
 }
 
-// Wait for multiple futures
-final results = await Future.wait([fetchA(), fetchB(), fetchC()]);
+// Calling async functions
+void main() async {
+  try {
+    final data = await fetchData();
+    print(data);
+  } catch (e) {
+    print('Error: \$e');
+  }
+}`,
+      },
+      {
+        id: "dart-futures-chaining",
+        language: "dart",
+        label: "Future Chaining & Multiple Futures",
+        code: `// Future chaining
+fetchData()
+  .then((data) => processData(data))
+  .catchError((e) => handleError(e))
+  .whenComplete(() => hideLoader());
 
-// Stream
+// Wait for multiple futures
+final results = await Future.wait([fetchA(), fetchB(), fetchC()]);`,
+      },
+    ],
+    relatedWeeks: [3, 4],
+    tags: ["futures", "async", "await", "Future.wait", "chaining", "then", "catchError"],
+    difficulty: "intermediate",
+    sourceUrl: "https://dart.dev",
+  },
+  {
+    id: "dart-streams",
+    title: "Streams",
+    category: "dart",
+    summary:
+      "Async generators, StreamController, and broadcast streams for handling sequences of data.",
+    content: `Dart **Streams** provide a sequence of asynchronous data events. Create them with **async generators** (\`async*\`/ \`yield\`), consume with \`await for\`, or use **StreamController** for manual event management. **Broadcast streams** allow multiple listeners.`,
+    codeSnippets: [
+      {
+        id: "dart-streams-async-generator",
+        language: "dart",
+        label: "Async Generator & Consumer",
+        code: `// Creating a stream
 Stream<int> countStream(int max) async* {
   for (int i = 0; i < max; i++) {
     await Future.delayed(const Duration(seconds: 1));
@@ -304,26 +897,60 @@ Stream<int> countStream(int max) async* {
   }
 }
 
-// Consume a stream
-await for (final value in countStream(5)) {
-  print(value); // 0, 1, 2, 3, 4
+// Consuming a stream
+void main() async {
+  await for (final value in countStream(5)) {
+    print(value); // 0, 1, 2, 3, 4 (one per second)
+  }
+}`,
+      },
+      {
+        id: "dart-streams-controller",
+        language: "dart",
+        label: "StreamController & Broadcast",
+        code: `// StreamController
+final controller = StreamController<String>();
+controller.stream.listen((event) => print('Received: \$event'));
+controller.sink.add('Hello');
+controller.close();
+
+// broadcast stream
+final broadcast = StreamController<String>.broadcast();`,
+      },
+    ],
+    relatedWeeks: [3, 4],
+    tags: ["streams", "StreamController", "broadcast", "async*", "yield", "await for"],
+    difficulty: "intermediate",
+    sourceUrl: "https://dart.dev",
+  },
+  {
+    id: "dart-isolates",
+    title: "Isolates (Concurrency)",
+    category: "dart",
+    summary:
+      "True concurrency without shared memory using Isolate.run() and Flutter's compute().",
+    content: `Dart **Isolates** provide true concurrency without shared memory. Each isolate has its own memory heap and communicates via message passing. Use \`Isolate.run()\` for raw Dart or \`compute()\` from Flutter's foundation for convenient isolate usage.`,
+    codeSnippets: [
+      {
+        id: "dart-isolates-example",
+        language: "dart",
+        label: "Isolate & compute()",
+        code: `import 'dart:isolate';
+
+// Run heavy work in a separate isolate
+Future<int> computeHeavyWork(int input) async {
+  return await Isolate.run(() => heavyComputation(input));
 }
 
-// Isolate (heavy computation)
+// Compute (Flutter's built-in)
+import 'package:flutter/foundation.dart';
 final result = await compute(heavyComputation, inputData);`,
       },
     ],
     relatedWeeks: [3, 4],
-    tags: [
-      "async",
-      "await",
-      "future",
-      "stream",
-      "isolate",
-      "concurrency",
-      "async programming",
-    ],
-    difficulty: "intermediate",
+    tags: ["isolates", "concurrency", "compute", "Isolate.run", "parallel", "message passing"],
+    difficulty: "advanced",
+    sourceUrl: "https://dart.dev",
   },
   {
     id: "dart-error-handling",
@@ -334,9 +961,11 @@ final result = await compute(heavyComputation, inputData);`,
     content: `Dart uses **try-catch-finally** for exception handling with typed catch clauses (\`on FormatException\`). You can create **custom exceptions** by implementing the \`Exception\` interface and throw them with the \`throw\` keyword.`,
     codeSnippets: [
       {
+        id: "dart-error-handling-try-catch",
         language: "dart",
-        label: "Exception Handling",
-        code: `try {
+        label: "try-catch-finally",
+        code: `// try-catch-finally
+try {
   final result = int.parse(userInput);
   print(result);
 } on FormatException catch (e) {
@@ -348,17 +977,26 @@ final result = await compute(heavyComputation, inputData);`,
   print('Unknown error: \$e');
 } finally {
   print('Always runs');
-}
-
-// Custom exceptions
+}`,
+      },
+      {
+        id: "dart-error-handling-custom",
+        language: "dart",
+        label: "Custom Exceptions",
+        code: `// Custom exceptions
 class NetworkException implements Exception {
   final String message;
   final int statusCode;
+
   const NetworkException(this.message, this.statusCode);
+
   @override
   String toString() => 'NetworkException(\$statusCode): \$message';
 }
-throw NetworkException('Not found', 404);`,
+
+// Throwing
+throw NetworkException('Not found', 404);
+throw AssertionError('Value must be positive');`,
       },
     ],
     relatedWeeks: [3, 4],
@@ -368,8 +1006,10 @@ throw NetworkException('Not found', 404);`,
       "try-catch",
       "custom exceptions",
       "throw",
+      "finally",
     ],
     difficulty: "intermediate",
+    sourceUrl: "https://dart.dev",
   },
   {
     id: "dart-generics",
@@ -377,15 +1017,17 @@ throw NetworkException('Not found', 404);`,
     category: "dart",
     summary:
       "Type-safe reusable code with generic classes, functions, and bounded types.",
-    content: `Generics enable you to write **reusable, type-safe** code. Define generic classes (\`Box<T>\`), generic functions (\`T first<T>(List<T>)\`), and use **bounded generics** (\`<T extends num>\`) to constrain type parameters.`,
+    content: `Generics enable you to write **reusable, type-safe** code. Define generic classes (\`Box<T>\`), generic functions (\`T first<T>(List<T>)\`), and use **bounded generics** (\`<T extends num>\`) to constrain type parameters. Dart 3 patterns work with generic types.`,
     codeSnippets: [
       {
+        id: "dart-generics-class-function",
         language: "dart",
         label: "Generic Classes & Functions",
         code: `// Generic class
 class Box<T> {
   T value;
   Box(this.value);
+
   T getValue() => value;
 }
 
@@ -412,61 +1054,60 @@ switch (obj) {
       },
     ],
     relatedWeeks: [3, 4],
-    tags: ["generics", "type parameters", "bounded", "reusable", "type safety"],
+    tags: ["generics", "type parameters", "bounded", "patterns", "reusable", "type safety"],
     difficulty: "intermediate",
-  },
-  {
-    id: "dart-control-flow",
-    title: "Control Flow",
-    category: "dart",
-    summary:
-      "if/else, loops, enhanced switch expressions, and Dart 3 pattern matching.",
-    content: `Dart supports standard **if/else**, **loops** (for, for-in, while, do-while), and Dart 3+ **enhanced switch** with expression syntax and **pattern matching** for destructuring complex types.`,
-    codeSnippets: [
-      {
-        language: "dart",
-        label: "Enhanced Switch & Pattern Matching",
-        code: `// Enhanced switch (Dart 3 — expression)
-String label = switch (status) {
-  200 => 'OK',
-  404 => 'Not Found',
-  500 => 'Server Error',
-  _ => 'Unknown',
-};
-
-// Pattern matching
-switch (shape) {
-  case Circle(radius: var r):
-    print('Circle with radius \$r');
-  case Rectangle(width: var w, height: var h):
-    print('Rectangle \$w x \$h');
-}
-
-// Ternary
-String grade = score >= 60 ? 'Pass' : 'Fail';`,
-      },
-    ],
-    relatedWeeks: [1, 2],
-    tags: [
-      "control flow",
-      "switch",
-      "pattern matching",
-      "if-else",
-      "loops",
-      "for",
-      "while",
-    ],
-    difficulty: "beginner",
+    sourceUrl: "https://dart.dev",
   },
   {
     id: "dart-libraries",
     title: "Libraries & Packages",
     category: "dart",
     summary:
-      "Import patterns, pubspec.yaml, standard libraries, and package management.",
-    content: `Dart uses \`import\` to bring in standard libraries (\`dart:math\`, \`dart:convert\`, \`dart:async\`), pub packages (\`package:http\`), and local files. The \`pubspec.yaml\` file declares dependencies, assets, and fonts for your project.`,
+      "Import patterns for standard libraries, pub packages, and local files.",
+    content: `Dart uses \`import\` to bring in standard libraries (\`dart:math\`, \`dart:convert\`, \`dart:async\`, \`dart:io\`), pub packages (\`package:http\`, \`package:flutter\`), and local files. Use \`show\` to import specific names, \`hide\` to exclude names, and \`export\` to re-export libraries.`,
     codeSnippets: [
       {
+        id: "dart-libraries-imports",
+        language: "dart",
+        label: "Import Patterns",
+        code: `// Import standard library
+import 'dart:math';
+import 'dart:convert';
+import 'dart:async';
+import 'dart:io';
+
+// Import pub package
+import 'package:http/http.dart' as http;
+import 'package:flutter/material.dart';
+
+// Import own file
+import 'utils/helpers.dart';
+import 'models/user.dart';
+
+// Partial import
+import 'package:collection/collection.dart' show ListEquality;
+import 'dart:math' hide Random;  // exclude
+
+// Export
+export 'src/user.dart';
+export 'src/product.dart';`,
+      },
+    ],
+    relatedWeeks: [1, 2, 4],
+    tags: ["imports", "standard library", "pub packages", "show", "hide", "export"],
+    difficulty: "beginner",
+    sourceUrl: "https://dart.dev",
+  },
+  {
+    id: "dart-pubspec",
+    title: "pubspec.yaml",
+    category: "dart",
+    summary:
+      "Project configuration with dependencies, dev_dependencies, assets, and fonts.",
+    content: `The \`pubspec.yaml\` file is the central configuration for Dart/Flutter projects. It declares the project name, version, SDK constraints, **dependencies**, **dev_dependencies**, Flutter-specific settings like assets and fonts.`,
+    codeSnippets: [
+      {
+        id: "dart-pubspec-structure",
         language: "yaml",
         label: "pubspec.yaml Structure",
         code: `name: my_flutter_app
@@ -482,59 +1123,109 @@ dependencies:
     sdk: flutter
   http: ^1.2.0
   provider: ^6.1.0
+  shared_preferences: ^2.2.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_lints: ^4.0.0
   build_runner: ^2.4.0
   json_serializable: ^6.7.0
 
 flutter:
   uses-material-design: true
   assets:
-    - assets/images/`,
-      },
-      {
-        language: "dart",
-        label: "Import Patterns",
-        code: `// Standard library
-import 'dart:math';
-import 'dart:convert';
-import 'dart:async';
-
-// Pub package
-import 'package:http/http.dart' as http;
-import 'package:flutter/material.dart';
-
-// Own file
-import 'utils/helpers.dart';
-import 'models/user.dart';
-
-// Partial import
-import 'package:collection/collection.dart' show ListEquality;
-import 'dart:math' hide Random;`,
+    - assets/images/
+  fonts:
+    - family: Roboto
+      fonts:
+        - asset: fonts/Roboto-Regular.ttf`,
       },
     ],
     relatedWeeks: [1, 2, 4],
-    tags: [
-      "imports",
-      "pubspec",
-      "packages",
-      "dependencies",
-      "dart libraries",
-      "pub",
-    ],
+    tags: ["pubspec", "dependencies", "dev_dependencies", "flutter", "assets", "fonts"],
     difficulty: "beginner",
+    sourceUrl: "https://dart.dev",
   },
   {
     id: "dart-effective-dart",
-    title: "Effective Dart & CLI",
+    title: "Effective Dart Guidelines",
     category: "dart",
     summary:
-      "Coding conventions, naming rules, and essential Dart CLI commands.",
-    content: `Follow **Effective Dart** guidelines: use \`lowerCamelCase\` for variables/functions, \`UpperCamelCase\` for classes, single quotes for strings, and prefer \`final\`/\`const\` over \`var\`. Key CLI tools include \`dart analyze\`, \`dart format\`, \`dart test\`, and \`dart fix --apply\`.`,
+      "Coding conventions for style, usage, and design to write idiomatic Dart code.",
+    content: `Follow **Effective Dart** guidelines for consistent, readable code.
+
+### Style
+- Use \`lowerCamelCase\` for variables, functions, parameters
+- Use \`UpperCamelCase\` for classes, enums, typedefs
+- Use \`lowercase_with_underscores\` for file names and library names
+- Use \`SCREAMING_CAPS\` for constants (optional, \`lowerCamelCase\` also accepted)
+- Prefer single quotes for strings
+- Format code with \`dart format\`
+
+### Usage
+- Prefer \`var\` when type is obvious from the right-hand side
+- Use \`final\` for variables that don't change
+- Use \`const\` for compile-time constants
+- Prefer \`??\` and \`?.\` over explicit null checks
+- Use \`is\` for type checks, avoid \`as\` casts when possible
+- Prefer \`async/await\` over raw Future chains
+- Always await futures — don't ignore them
+
+### Design
+- Prefer making fields and top-level variables \`final\`
+- Avoid exposing mutable state
+- Use named parameters for 3+ parameters
+- Document all public APIs`,
+    codeSnippets: [],
+    relatedWeeks: [1, 4],
+    tags: ["effective dart", "style", "naming", "conventions", "best practices", "formatting"],
+    difficulty: "beginner",
+    sourceUrl: "https://dart.dev",
+  },
+  {
+    id: "dart-core-libraries",
+    title: "Core Libraries",
+    category: "dart",
+    summary:
+      "Essential Dart libraries: core, async, math, convert, io, isolate, collection, and js_interop.",
+    content: `Dart provides a set of **core libraries** for common tasks:
+
+| Library | Purpose |
+|---------|---------|
+| \`dart:core\` | Built-in types (String, List, Map, DateTime, etc.) |
+| \`dart:async\` | Async programming (Future, Stream, StreamController) |
+| \`dart:math\` | Math functions (sqrt, pow, Random, pi, e) |
+| \`dart:convert\` | Encoding/decoding (jsonEncode, jsonDecode, utf8, base64) |
+| \`dart:io\` | File/socket/process I/O (non-web) |
+| \`dart:isolate\` | Isolates for true concurrency |
+| \`dart:collection\` | Additional collection types (Queue, LinkedHashMap) |
+| \`dart:js_interop\` | JavaScript interop for web |`,
+    codeSnippets: [],
+    relatedWeeks: [1, 2, 3, 4],
+    tags: [
+      "core libraries",
+      "dart:core",
+      "dart:async",
+      "dart:math",
+      "dart:convert",
+      "dart:io",
+      "dart:isolate",
+      "dart:collection",
+    ],
+    difficulty: "beginner",
+    sourceUrl: "https://dart.dev",
+  },
+  {
+    id: "dart-cli-tools",
+    title: "Dart CLI Tools",
+    category: "dart",
+    summary:
+      "Essential command-line tools for creating, running, analyzing, and publishing Dart projects.",
+    content: `Dart provides a comprehensive set of **CLI tools** for project management, code analysis, testing, and publishing.`,
     codeSnippets: [
       {
+        id: "dart-cli-commands",
         language: "bash",
         label: "Dart CLI Commands",
         code: `dart --version                   # Check Dart version
@@ -546,18 +1237,47 @@ dart format lib/                 # Auto-format code
 dart test                        # Run tests
 dart pub get                     # Install dependencies
 dart pub upgrade                 # Upgrade packages
+dart pub publish                 # Publish to pub.dev
+dart doc .                       # Generate API docs
 dart fix --apply                 # Auto-fix lint issues`,
       },
     ],
     relatedWeeks: [1, 4],
     tags: [
-      "effective dart",
-      "naming conventions",
       "CLI",
-      "linting",
-      "formatting",
-      "analysis",
+      "dart create",
+      "dart run",
+      "dart analyze",
+      "dart format",
+      "dart test",
+      "dart pub",
     ],
     difficulty: "beginner",
+    sourceUrl: "https://dart.dev",
+  },
+  {
+    id: "dart-key-links",
+    title: "Key Docs Links",
+    category: "dart",
+    summary:
+      "Official Dart documentation links for language, libraries, tools, and API reference.",
+    content: `Official **Dart documentation** links for reference:
+
+| Topic | URL |
+|-------|-----|
+| Language Intro | https://dart.dev/language |
+| Dart Overview | https://dart.dev/overview |
+| Core Libraries | https://dart.dev/libraries |
+| Async Programming | https://dart.dev/libraries/async/async-await |
+| Null Safety | https://dart.dev/null-safety |
+| Effective Dart | https://dart.dev/effective-dart |
+| Packages | https://dart.dev/tools/pub/packages |
+| API Reference | https://api.dart.dev |
+| DartPad (Online) | https://dartpad.dev |`,
+    codeSnippets: [],
+    relatedWeeks: [1, 2, 3, 4],
+    tags: ["documentation", "links", "dart.dev", "API reference", "DartPad", "overview"],
+    difficulty: "beginner",
+    sourceUrl: "https://dart.dev",
   },
 ];

@@ -11,9 +11,11 @@ export type DocCategoryType =
 export type Difficulty = "beginner" | "intermediate" | "advanced";
 
 export interface CodeSnippet {
-  language: string;
+  id: string;
+  language: "dart" | "yaml" | "bash" | "json" | "sql" | "css" | "javascript" | "properties" | "groovy";
   code: string;
-  label?: string;
+  label: string;
+  description?: string;
 }
 
 export interface DocEntry {
@@ -26,6 +28,7 @@ export interface DocEntry {
   relatedWeeks: number[];
   tags: string[];
   difficulty: Difficulty;
+  sourceUrl?: string;
 }
 
 export interface DocCategoryGroup {

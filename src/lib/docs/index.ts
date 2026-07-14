@@ -11,6 +11,8 @@ import type {
   DocCategoryType,
   DocCategoryGroup,
   DocEntry,
+  CodeSnippet,
+  Difficulty,
 } from "./types";
 
 export type { DocEntry, DocCategoryType, DocCategoryGroup, CodeSnippet, Difficulty } from "./types";
@@ -202,7 +204,7 @@ export function filterLoadedCategories(
           entry.codeSnippets.some(
             (snip) =>
               snip.code.toLowerCase().includes(q) ||
-              (snip.label ? snip.label.toLowerCase().includes(q) : false)
+              snip.label.toLowerCase().includes(q)
           )
       ),
     }))
