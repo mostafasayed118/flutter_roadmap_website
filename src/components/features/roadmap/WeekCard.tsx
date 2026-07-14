@@ -85,13 +85,13 @@ export function WeekCard({
     >
       <div className="p-4">
         <div id={`week-${order}`} className="mb-3 flex items-start justify-between gap-2">
-          <div className="flex items-start gap-1.5">
+          <div className="flex min-w-0 flex-1 items-start gap-1.5">
             <BookmarkButton
               weekId={weekId}
               topicIndex={-1}
               topicTitle={`Week ${order}: ${title}`}
             />
-            <h3 className="text-sm font-semibold">
+            <h3 className="min-w-0 flex-1 truncate text-sm font-semibold">
               <span className="text-muted-foreground">Week {order}:</span>{" "}
               {title}
             </h3>
@@ -111,7 +111,7 @@ export function WeekCard({
               className={`text-xs font-normal ${
                 isWeekComplete
                   ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-400"
-                  : "border-white/10 text-muted-foreground"
+                  : "border-border text-muted-foreground"
               }`}
             >
               {estimatedHours}
@@ -143,7 +143,7 @@ export function WeekCard({
 
           {projects.length > 0 && (
             <>
-              <Separator className="bg-white/5" />
+              <Separator className="bg-muted/50" />
               <section>
                 <h4 className="mb-1.5 text-xs font-semibold uppercase tracking-wider text-zinc-400">
                   Practice Projects
@@ -170,7 +170,7 @@ export function WeekCard({
 
           {integratedCourses && integratedCourses.length > 0 && (
             <>
-              <Separator className="bg-white/5" />
+              <Separator className="bg-muted/50" />
               <section>
                 <h4 className="mb-1.5 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-zinc-400">
                   <PlayCircle className="size-3 text-violet-400" />
@@ -187,7 +187,7 @@ export function WeekCard({
                     >
                       <Button
                         variant="outline"
-                        className="w-full justify-between gap-2 h-auto border-white/5 bg-white/[0.02] py-2 text-left hover:border-white/10 hover:bg-white/[0.05]"
+                        className="w-full justify-between gap-2 h-auto border-border/50 bg-card/30 py-2 text-left hover:border-border hover:bg-card/50"
                       >
                         <div className="min-w-0">
                           <p className="truncate text-sm font-medium">

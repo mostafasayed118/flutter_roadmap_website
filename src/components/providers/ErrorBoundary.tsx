@@ -52,7 +52,7 @@ class ErrorBoundaryInner extends React.Component<ErrorBoundaryInnerProps, ErrorB
             <Button
               onClick={this.resetError}
               variant="outline"
-              className="border-white/10 bg-white/5 hover:bg-white/10"
+              className="border-border bg-muted hover:bg-muted/80"
             >
               <RefreshCw className="size-4 mr-2" />
               Try Again

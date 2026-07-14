@@ -21,7 +21,7 @@ export function StreakCard() {
             "flex size-9 shrink-0 items-center justify-center rounded-lg",
             currentStreak > 0
               ? "bg-orange-500/15 text-orange-400"
-              : "bg-white/5 text-muted-foreground"
+              : "bg-muted/50 text-muted-foreground"
           )}
           animate={
             currentStreak > 0

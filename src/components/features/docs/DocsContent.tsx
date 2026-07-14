@@ -65,7 +65,7 @@ export function DocsContent() {
   return (
     <div className="min-h-screen bg-background">
       {/* Mobile header bar */}
-      <div className="sticky top-0 z-30 flex h-12 items-center gap-3 border-b border-white/5 bg-background/80 px-4 backdrop-blur-xl lg:hidden">
+      <div className="sticky top-0 z-30 flex h-12 items-center gap-3 border-b border-border/50 bg-background/80 px-4 backdrop-blur-xl lg:hidden">
         <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
           <SheetTrigger
             render={
@@ -79,7 +79,7 @@ export function DocsContent() {
             <Menu className="size-4" />
           </SheetTrigger>
           <SheetContent side="left" className="w-72 p-0">
-            <SheetHeader className="border-b border-white/5 px-4 py-3">
+            <SheetHeader className="border-b border-border/50 px-4 py-3">
               <SheetTitle>Navigation</SheetTitle>
             </SheetHeader>
             <div className="overflow-y-auto p-3">
@@ -115,7 +115,7 @@ export function DocsContent() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search docs... (e.g. dio, go_router, sealed class)"
-              className="h-10 w-full rounded-lg border border-white/10 bg-white/[0.03] pl-10 pr-10 text-sm text-foreground placeholder:text-muted-foreground focus:border-violet-500/40 focus:outline-none focus:ring-1 focus:ring-violet-500/30"
+              className="h-10 w-full rounded-lg border border-border bg-background/50 pl-10 pr-10 text-sm text-foreground placeholder:text-muted-foreground focus:border-violet-500/40 focus:outline-none focus:ring-1 focus:ring-violet-500/30"
             />
             {searchQuery && (
               <button
@@ -148,7 +148,7 @@ export function DocsContent() {
           {/* Main content */}
           <main className="min-w-0 lg:col-span-3">
             {filteredData.length === 0 && searchQuery && (
-              <div className="flex flex-col items-center justify-center rounded-xl border border-white/5 bg-white/[0.02] py-20 text-center">
+              <div className="flex flex-col items-center justify-center rounded-xl border border-border/50 bg-card/30 py-20 text-center">
                 <SearchX className="mb-4 size-10 text-muted-foreground/30" />
                 <p className="text-lg font-medium text-foreground">
                   No matching topics found
@@ -212,7 +212,7 @@ function SectionCard({
   return (
     <article
       id={section.id}
-      className="mb-10 scroll-mt-24 rounded-xl border border-white/5 bg-white/[0.02] p-6"
+      className="mb-10 scroll-mt-24 rounded-xl border border-border/50 bg-card/30 p-6"
     >
       <h3 className="mb-3 text-lg font-semibold text-foreground">
         <HighlightedText text={section.title} query={query} />

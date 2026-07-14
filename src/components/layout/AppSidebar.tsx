@@ -40,12 +40,12 @@ export function AppSidebar() {
   const pathname = usePathname();
 
   return (
-    <Sidebar collapsible="icon" className="border-r border-white/5 bg-white/[0.02] backdrop-blur-xl">
+    <Sidebar collapsible="icon" className="border-r border-border bg-background/80 backdrop-blur-xl">
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" render={<Link href="/dashboard" />}>
-              <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-gradient-to-br from-violet-600 to-indigo-600 text-white shadow-lg shadow-violet-500/20">
+              <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-gradient-to-br from-violet-600 to-indigo-600 text-white shadow-lg shadow-violet-500/20 transition-transform duration-200 hover:scale-105">
                 <Flame className="size-4" />
               </div>
               <div className="grid flex-1 text-left text-sm leading-tight">
@@ -75,7 +75,11 @@ export function AppSidebar() {
                     isActive={isActive}
                     tooltip={item.label}
                     render={<Link href={item.href} />}
-                    className={isActive ? "bg-violet-500/10 text-violet-400 border border-violet-500/20" : ""}
+                    className={`transition-all duration-200 ${
+                      isActive
+                        ? "bg-violet-500/10 text-violet-400 border border-violet-500/20 shadow-sm shadow-violet-500/10"
+                        : "hover:bg-muted/50 hover:text-foreground"
+                    }`}
                   >
                     <Icon className="size-4" />
                     <span>{item.label}</span>

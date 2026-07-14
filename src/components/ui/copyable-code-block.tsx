@@ -36,9 +36,9 @@ export function CopyableCodeBlock({ code, language, label }: CopyableCodeBlockPr
   }, [code]);
 
   return (
-    <div className="group relative rounded-lg border border-white/10 bg-zinc-900/80 overflow-hidden">
+    <div className="group relative rounded-lg border border-border bg-popover/80 overflow-hidden">
       {(label || language) && (
-        <div className="flex items-center justify-between border-b border-white/5 px-3 py-1.5">
+        <div className="flex items-center justify-between border-b border-border/50 px-3 py-1.5">
           <span className="text-xs font-medium text-muted-foreground">
             {label ?? language}
           </span>
@@ -60,7 +60,7 @@ export function CopyableCodeBlock({ code, language, label }: CopyableCodeBlockPr
             "opacity-0 group-hover:opacity-100 focus:opacity-100",
             copied
               ? "bg-emerald-500/20 text-emerald-400 scale-100"
-              : "bg-white/10 text-muted-foreground hover:bg-white/20 hover:text-foreground hover:scale-105"
+              : "bg-muted text-muted-foreground hover:bg-muted/80 hover:text-foreground hover:scale-105"
           )}
           aria-label={copied ? "Copied" : "Copy to clipboard"}
         >

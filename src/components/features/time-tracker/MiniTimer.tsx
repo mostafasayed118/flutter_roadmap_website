@@ -51,7 +51,7 @@ export function MiniTimer({ onStop }: MiniTimerProps) {
             ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20"
             : hasTime
               ? "border-amber-500/30 bg-amber-500/10 text-amber-400 hover:bg-amber-500/20"
-              : "border-white/10 bg-white/5 text-muted-foreground hover:bg-white/10 hover:text-foreground"
+              : "border-border bg-muted/50 text-muted-foreground hover:bg-muted/80 hover:text-foreground"
         )}
         aria-label={`Timer: ${formatDisplay(time)}. Go to dashboard.`}
       >

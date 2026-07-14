@@ -50,7 +50,7 @@ export function SessionTagSelect({
                 "inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-xs font-medium transition-all",
                 isSelected
                   ? tagColors[tag] ?? "bg-violet-500/15 text-violet-400 border-violet-500/30"
-                  : "border-white/10 bg-white/[0.03] text-muted-foreground hover:bg-white/[0.06]"
+                  : "border-border bg-background/50 text-muted-foreground hover:bg-muted/50"
               )}
             >
               {tag}

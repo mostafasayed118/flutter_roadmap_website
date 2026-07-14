@@ -22,7 +22,7 @@ export function RoadmapCheckbox({
   iconUnchecked = "text-emerald-400",
 }: RoadmapCheckboxProps) {
   return (
-    <label className="flex cursor-pointer items-start gap-3 rounded-md px-2 py-1.5 group hover:bg-white/[0.03]">
+    <label className="flex min-w-0 cursor-pointer items-start gap-3 rounded-md px-2 py-1.5 group hover:bg-muted/30">
       <AnimatedCheckbox checked={isChecked} onToggle={onToggle} />
       {Icon && (
         <Icon
@@ -34,7 +34,7 @@ export function RoadmapCheckbox({
       )}
       <span
         className={cn(
-          "text-sm leading-relaxed transition-all duration-200",
+          "min-w-0 flex-1 text-sm leading-relaxed transition-all duration-200",
           isChecked
             ? "text-muted-foreground line-through decoration-emerald-500/50"
             : "text-foreground/80 group-hover:text-foreground"

@@ -184,7 +184,7 @@ export function DocsSidebarEnhanced({
 
             {/* Progress bar */}
             {progress > 0 && progress < 100 && (
-              <div className="mx-2.5 mt-1 h-1 overflow-hidden rounded-full bg-white/5">
+              <div className="mx-2.5 mt-1 h-1 overflow-hidden rounded-full bg-muted/50">
                 <div
                   className="h-full rounded-full bg-violet-500/40 transition-all duration-300"
                   style={{ width: `${progress}%` }}
@@ -193,7 +193,7 @@ export function DocsSidebarEnhanced({
             )}
 
             {isExpanded && (
-              <ul className="mt-1 ml-4 space-y-0.5 border-l border-white/5 pl-3">
+              <ul className="mt-1 ml-4 space-y-0.5 border-l border-border/50 pl-3">
                 {cat.entries.map((entry) => {
                   const isActive = active?.entryId === entry.id;
                   const isRead = readDocs.has(entry.id);

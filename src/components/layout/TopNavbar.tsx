@@ -21,9 +21,9 @@ export function TopNavbar() {
       <div className="relative z-10">
         <GradientProgress value={percentage} height="h-[3px]" />
       </div>
-      <header className="sticky top-0 z-50 flex h-14 shrink-0 items-center gap-2 border-b border-white/5 bg-white/[0.02] px-3 backdrop-blur-lg sm:gap-3 sm:px-4">
+      <header className="sticky top-0 z-50 flex h-14 shrink-0 items-center gap-2 border-b border-border bg-background/80 px-3 backdrop-blur-lg sm:gap-3 sm:px-4">
         <SidebarTrigger
-          className="text-muted-foreground hover:text-foreground"
+          className="text-muted-foreground hover:text-foreground transition-colors duration-200"
           aria-label="Toggle sidebar navigation"
         />
         <div className="flex flex-1 items-center gap-4">
@@ -34,7 +34,7 @@ export function TopNavbar() {
                 <motion.div
                   className="absolute inset-0"
                   animate={{ scale: [1, 1.2, 1], opacity: [0.5, 1, 0.5] }}
-                  transition={{ duration: 2, repeat: Infinity }}
+                  transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
                 >
                   <Flame className="size-4 text-violet-400" />
                 </motion.div>
@@ -53,7 +53,7 @@ export function TopNavbar() {
               key={percentage}
               initial={{ scale: 1.1 }}
               animate={{ scale: 1 }}
-              transition={{ duration: 0.5 }}
+              transition={{ duration: 0.5, type: "spring", stiffness: 300 }}
             >
               {percentage}%
             </motion.span>
@@ -72,6 +72,7 @@ export function TopNavbar() {
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
+            transition={{ type: "spring", stiffness: 300, damping: 20 }}
             className={`hidden items-center gap-1.5 rounded-full border px-2 py-1 lg:flex ${
               percentage === 100
                 ? "border-emerald-500/20 bg-emerald-500/10"
@@ -96,7 +97,7 @@ export function TopNavbar() {
           size="icon-sm"
           onClick={() => setHelpOpen(true)}
           aria-label="Keyboard shortcuts"
-          className="text-muted-foreground hover:text-foreground"
+          className="text-muted-foreground hover:text-foreground transition-colors duration-200"
         >
           <Keyboard className="size-4" />
         </Button>

@@ -19,7 +19,7 @@ export function DocsSection() {
           <a key={doc.name} href={doc.url} target="_blank" rel="noopener noreferrer">
             <Button
               variant="outline"
-              className="w-full justify-between gap-1 h-auto py-2 border-white/5 bg-white/[0.02] hover:bg-white/[0.05] hover:border-white/10"
+              className="w-full justify-between gap-1 h-auto py-2 border-border/50 bg-card/30 hover:bg-card/50 hover:border-border"
             >
               <span className="text-xs font-medium">{doc.name}</span>
               <ExternalLink className="size-3 shrink-0 text-muted-foreground" />

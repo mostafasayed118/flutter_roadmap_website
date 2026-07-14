@@ -22,7 +22,7 @@ export function CoursesSection() {
           <a key={course.title} href={course.url} target="_blank" rel="noopener noreferrer">
             <Button
               variant="outline"
-              className="w-full justify-between gap-2 h-auto py-3 text-left border-white/5 bg-white/[0.02] hover:bg-white/[0.05] hover:border-white/10"
+              className="w-full justify-between gap-2 h-auto py-3 text-left border-border/50 bg-card/30 hover:bg-card/50 hover:border-border"
             >
               <div className="min-w-0">
                 <p className="text-sm font-medium truncate">{course.title}</p>

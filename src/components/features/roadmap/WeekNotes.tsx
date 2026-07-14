@@ -59,7 +59,7 @@ export function WeekNotes({ weekId, className }: WeekNotesProps) {
             value={draft}
             onChange={(e) => setDraft(e.target.value)}
             placeholder="What did you learn this week?"
-            className="h-24 w-full resize-none rounded-md border border-white/10 bg-white/[0.03] p-2 text-sm text-foreground placeholder:text-muted-foreground/50 focus:border-violet-500/40 focus:outline-none focus:ring-1 focus:ring-violet-500/30"
+            className="h-24 w-full resize-none rounded-md border border-border bg-background/50 p-2 text-sm text-foreground placeholder:text-muted-foreground/50 focus:border-violet-500/40 focus:outline-none focus:ring-1 focus:ring-violet-500/30"
           />
         </div>
       </div>

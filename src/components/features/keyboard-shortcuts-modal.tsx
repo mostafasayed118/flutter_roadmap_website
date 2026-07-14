@@ -47,7 +47,7 @@ function KbdBadge({ keys }: { keys: string[] }) {
       {keys.map((key) => (
         <kbd
           key={key}
-          className="inline-flex h-6 min-w-[24px] items-center justify-center rounded-md border border-white/10 bg-white/5 px-1.5 font-mono text-xs text-muted-foreground"
+          className="inline-flex h-6 min-w-[24px] items-center justify-center rounded-md border border-border bg-muted px-1.5 font-mono text-xs text-muted-foreground"
         >
           {key}
         </kbd>
@@ -67,7 +67,7 @@ export function KeyboardShortcutsModal({
 }: KeyboardShortcutsModalProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md border-white/10 bg-[oklch(0.14_0.005_280)] backdrop-blur-xl">
+      <DialogContent className="sm:max-w-md backdrop-blur-xl">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-lg">
             <Keyboard className="size-5 text-violet-400" />
@@ -85,7 +85,7 @@ export function KeyboardShortcutsModal({
                 {section.shortcuts.map((shortcut) => (
                   <div
                     key={shortcut.label}
-                    className="flex items-center justify-between rounded-lg px-3 py-2 hover:bg-white/5"
+                    className="flex items-center justify-between rounded-lg px-3 py-2 hover:bg-muted/50"
                   >
                     <span className="text-sm text-foreground">
                       {shortcut.label}

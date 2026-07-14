@@ -147,7 +147,7 @@ export function SearchBar({
           onKeyDown={handleKeyDown}
           onFocus={() => query.length > 0 && setIsOpen(true)}
           placeholder="Search docs... (e.g. dio, go_router, sealed class)"
-          className="h-10 w-full rounded-lg border border-white/10 bg-white/[0.03] pl-10 pr-10 text-sm text-foreground placeholder:text-muted-foreground focus:border-violet-500/40 focus:outline-none focus:ring-1 focus:ring-violet-500/30"
+          className="h-10 w-full rounded-lg border border-border bg-background/50 pl-10 pr-10 text-sm text-foreground placeholder:text-muted-foreground focus:border-violet-500/40 focus:outline-none focus:ring-1 focus:ring-violet-500/30"
           aria-label="Search documentation"
           aria-expanded={isOpen && results.length > 0}
           aria-autocomplete="list"
@@ -165,7 +165,7 @@ export function SearchBar({
       </div>
 
       {query && results.length > 0 && (
-        <div className="absolute left-0 right-0 top-full z-50 mt-1 max-h-80 overflow-y-auto rounded-lg border border-white/10 bg-zinc-900/95 shadow-2xl backdrop-blur-xl">
+        <div className="absolute left-0 right-0 top-full z-50 mt-1 max-h-80 overflow-y-auto rounded-lg border border-border bg-popover shadow-2xl backdrop-blur-xl">
           <div className="p-1">
             {results.slice(0, 10).map((entry, i) => (
               <button
@@ -177,7 +177,7 @@ export function SearchBar({
                   "flex w-full items-start gap-3 rounded-md px-3 py-2.5 text-left transition-colors",
                   highlightIndex === i
                     ? "bg-violet-500/10 text-foreground"
-                    : "text-muted-foreground hover:bg-white/5 hover:text-foreground"
+                    : "text-muted-foreground hover:bg-muted/50 hover:text-foreground"
                 )}
               >
                 <FileText className="mt-0.5 size-4 shrink-0 text-muted-foreground/50" />
@@ -203,7 +203,7 @@ export function SearchBar({
             ))}
           </div>
           {results.length > 10 && (
-            <div className="border-t border-white/5 px-3 py-2 text-center text-xs text-muted-foreground">
+            <div className="border-t border-border/50 px-3 py-2 text-center text-xs text-muted-foreground">
               +{results.length - 10} more results
             </div>
           )}
@@ -211,7 +211,7 @@ export function SearchBar({
       )}
 
       {query && results.length === 0 && (
-        <div className="absolute left-0 right-0 top-full z-50 mt-1 rounded-lg border border-white/10 bg-zinc-900/95 p-6 text-center shadow-2xl backdrop-blur-xl">
+        <div className="absolute left-0 right-0 top-full z-50 mt-1 rounded-lg border border-border bg-popover p-6 text-center shadow-2xl backdrop-blur-xl">
           <p className="text-sm text-muted-foreground">
             No results for &ldquo;{query}&rdquo;
           </p>

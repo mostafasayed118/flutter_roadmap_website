@@ -71,7 +71,7 @@ export function QuickStatsGrid({
   ];
 
   return (
-    <div className="grid gap-4 sm:grid-cols-3">
+    <div className="grid gap-3 grid-cols-1 sm:grid-cols-3">
       {stats.map((stat, idx) => {
         const Icon = stat.icon;
         return (
@@ -81,16 +81,16 @@ export function QuickStatsGrid({
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: 0.1 + idx * 0.08, ease: "easeOut" }}
           >
-            <GlassCard hover className="p-4">
-              <div className="flex items-start gap-3">
-                <div className={`rounded-lg p-2 ${stat.bg} border ${stat.border} shadow-lg ${stat.glow}`}>
-                  <Icon className={`size-5 ${stat.color}`} />
+            <GlassCard hover className="p-3">
+              <div className="flex items-center gap-2">
+                <div className={`shrink-0 rounded-lg p-1.5 ${stat.bg} border ${stat.border} shadow-lg ${stat.glow}`}>
+                  <Icon className={`size-4 ${stat.color}`} />
                 </div>
-                <div className="min-w-0 flex-1">
-                  <p className="text-xs font-medium text-muted-foreground mb-1">
+                <div className="min-w-0">
+                  <p className="text-[10px] font-medium text-muted-foreground leading-tight">
                     {stat.title}
                   </p>
-                  <p className="text-lg font-bold tabular-nums truncate">{stat.value}</p>
+                  <p className="text-sm font-bold tabular-nums whitespace-nowrap">{stat.value}</p>
                 </div>
               </div>
             </GlassCard>

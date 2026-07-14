@@ -42,7 +42,7 @@ export function DocEntryCard({ entry, query = "" }: DocEntryCardProps) {
   return (
     <article
       id={entry.id}
-      className="mb-10 scroll-mt-24 rounded-xl border border-white/5 bg-white/[0.02] p-6"
+      className="mb-10 scroll-mt-24 rounded-xl border border-border/50 bg-card/30 p-6"
     >
       <div className="mb-3 flex items-start justify-between gap-3">
         <h3 className="text-lg font-semibold text-foreground">
@@ -60,7 +60,7 @@ export function DocEntryCard({ entry, query = "" }: DocEntryCardProps) {
           {entry.tags.slice(0, 6).map((tag) => (
             <span
               key={tag}
-              className="rounded-md bg-white/5 px-2 py-0.5 text-[11px] text-muted-foreground/70"
+              className="rounded-md bg-muted/50 px-2 py-0.5 text-[11px] text-muted-foreground/70"
             >
               {tag}
             </span>

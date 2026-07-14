@@ -18,14 +18,14 @@ export function OverallProgressCard({ percentage }: OverallProgressCardProps) {
     <GlassCard hover glow glowColor="violet" className="p-6">
       <div className="flex flex-col items-center gap-4">
         <h2 className="text-sm font-medium text-muted-foreground">Overall Progress</h2>
-        <div className="relative size-40">
+        <div className="relative size-32 sm:size-40">
           <svg viewBox="0 0 160 160" className="size-full -rotate-90">
             <circle
               cx="80"
               cy="80"
               r={radius}
               fill="none"
-              stroke="oklch(0.2 0 0)"
+              stroke="hsl(var(--muted-foreground) / 0.2)"
               strokeWidth="8"
             />
             <motion.circle
@@ -51,10 +51,10 @@ export function OverallProgressCard({ percentage }: OverallProgressCardProps) {
           </svg>
           <div className="absolute inset-0 flex flex-col items-center justify-center">
             <motion.span
-              className="text-4xl font-bold bg-gradient-to-r from-violet-400 to-cyan-400 bg-clip-text text-transparent"
+              className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-violet-400 to-cyan-400 bg-clip-text text-transparent"
               initial={{ opacity: 0, scale: 0.5 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5, delay: 0.4 }}
+              transition={{ duration: 0.5, delay: 0.4, type: "spring", stiffness: 200 }}
             >
               {percentage}%
             </motion.span>
@@ -70,7 +70,7 @@ export function OverallProgressCard({ percentage }: OverallProgressCardProps) {
                   "0 0 20px rgba(139,92,246,0.1)",
                 ],
               }}
-              transition={{ duration: 3, repeat: Infinity }}
+              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
             />
           )}
         </div>

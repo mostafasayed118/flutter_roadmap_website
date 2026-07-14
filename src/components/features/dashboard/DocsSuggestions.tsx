@@ -53,7 +53,7 @@ export function DocsSuggestions({ currentWeek }: DocsSuggestionsProps) {
           <Link
             key={entry.id}
             href={`/docs#${entry.id}`}
-            className="group flex items-start gap-3 rounded-lg border border-white/5 bg-white/[0.02] p-3 transition-colors hover:border-white/10 hover:bg-white/[0.04]"
+            className="group flex items-start gap-3 rounded-lg border border-border/50 bg-card/30 p-3 transition-colors hover:border-border hover:bg-card/50"
           >
             <span className="mt-0.5 text-base">
               {categoryIcons[entry.category] ?? "📄"}
@@ -73,7 +73,7 @@ export function DocsSuggestions({ currentWeek }: DocsSuggestionsProps) {
 
       <Link
         href="/docs"
-        className="mt-3 flex items-center justify-center gap-1.5 rounded-lg border border-white/5 bg-white/[0.02] py-2 text-xs font-medium text-muted-foreground transition-colors hover:border-white/10 hover:text-foreground"
+        className="mt-3 flex items-center justify-center gap-1.5 rounded-lg border border-border/50 bg-card/30 py-2 text-xs font-medium text-muted-foreground transition-colors hover:border-border hover:text-foreground"
       >
         <BookOpen className="size-3" />
         Browse all docs

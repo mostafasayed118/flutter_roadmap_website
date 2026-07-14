@@ -54,7 +54,7 @@ export function StudyTimeCard() {
           ) : (
             <div className="flex items-baseline gap-1">
               <motion.span
-                className="bg-gradient-to-r from-violet-400 to-cyan-400 bg-clip-text text-2xl font-bold text-transparent"
+                className="bg-gradient-to-r from-violet-400 to-cyan-400 bg-clip-text text-xl sm:text-2xl font-bold text-transparent"
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.4 }}

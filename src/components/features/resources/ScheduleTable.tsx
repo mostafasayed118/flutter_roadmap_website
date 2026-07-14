@@ -26,51 +26,55 @@ export function ScheduleTable() {
   return (
     <div className="grid gap-4 sm:grid-cols-2">
       <GlassCard className="overflow-hidden">
-        <div className="border-b border-white/5 px-4 py-3">
+        <div className="border-b border-border/50 px-4 py-3">
           <Badge className="bg-gradient-to-r from-violet-600 to-indigo-600">
             Weekdays — 3–4 hours/day
           </Badge>
         </div>
+        <div className="overflow-x-auto">
         <Table>
           <TableHeader>
-            <TableRow className="border-white/5 hover:bg-transparent">
-              <TableHead className="w-[140px] text-muted-foreground">Time</TableHead>
+            <TableRow className="border-border/50 hover:bg-transparent">
+              <TableHead className="w-[100px] sm:w-[140px] text-muted-foreground">Time</TableHead>
               <TableHead className="text-muted-foreground">Activity</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {weekdaySchedule.map((row) => (
-              <TableRow key={row.time} className="border-white/5">
-                <TableCell className="font-mono text-xs text-muted-foreground">{row.time}</TableCell>
+              <TableRow key={row.time} className="border-border/50">
+                <TableCell className="font-mono text-xs text-muted-foreground whitespace-nowrap">{row.time}</TableCell>
                 <TableCell className="text-sm">{row.activity}</TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
+        </div>
       </GlassCard>
 
       <GlassCard className="overflow-hidden">
-        <div className="border-b border-white/5 px-4 py-3">
+        <div className="border-b border-border/50 px-4 py-3">
           <Badge variant="outline" className="border-emerald-500/30 text-emerald-400">
             Weekends — 5–6 hours/day
           </Badge>
         </div>
+        <div className="overflow-x-auto">
         <Table>
           <TableHeader>
-            <TableRow className="border-white/5 hover:bg-transparent">
-              <TableHead className="w-[140px] text-muted-foreground">Time</TableHead>
+            <TableRow className="border-border/50 hover:bg-transparent">
+              <TableHead className="w-[100px] sm:w-[140px] text-muted-foreground">Time</TableHead>
               <TableHead className="text-muted-foreground">Activity</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {weekendSchedule.map((row) => (
-              <TableRow key={row.time} className="border-white/5">
-                <TableCell className="font-mono text-xs text-muted-foreground">{row.time}</TableCell>
+              <TableRow key={row.time} className="border-border/50">
+                <TableCell className="font-mono text-xs text-muted-foreground whitespace-nowrap">{row.time}</TableCell>
                 <TableCell className="text-sm">{row.activity}</TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
+        </div>
       </GlassCard>
     </div>
   );

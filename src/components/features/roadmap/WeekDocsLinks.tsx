@@ -51,7 +51,7 @@ export function WeekDocsLinks({ weekNumber, className }: WeekDocsLinksProps) {
             href={`/docs#${entry.id}`}
             className={cn(
               "inline-flex items-center rounded-md border px-1.5 py-0.5 text-[10px] font-medium transition-colors hover:opacity-80",
-              categoryColors[entry.category] ?? "bg-white/5 text-muted-foreground border-white/10"
+              categoryColors[entry.category] ?? "bg-muted/50 text-muted-foreground border-border"
             )}
           >
             {entry.title}
@@ -60,7 +60,7 @@ export function WeekDocsLinks({ weekNumber, className }: WeekDocsLinksProps) {
         {entries.length > 4 && (
           <Link
             href="/docs"
-            className="inline-flex items-center rounded-md border border-white/10 bg-white/5 px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground hover:text-foreground transition-colors"
+            className="inline-flex items-center rounded-md border border-border bg-muted/50 px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground hover:text-foreground transition-colors"
           >
             +{entries.length - 4} more
           </Link>

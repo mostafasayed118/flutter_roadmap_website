@@ -26,15 +26,15 @@ function DocsSkeleton() {
   return (
     <div className="space-y-6">
       <div>
-        <Skeleton className="h-8 w-72 rounded-md bg-white/5" />
-        <Skeleton className="mt-1 h-4 w-96 rounded-md bg-white/5" />
+        <Skeleton className="h-8 w-72 rounded-md bg-muted/50" />
+        <Skeleton className="mt-1 h-4 w-96 rounded-md bg-muted/50" />
       </div>
-      <Skeleton className="h-10 w-full max-w-xl rounded-lg bg-white/5" />
+      <Skeleton className="h-10 w-full max-w-xl rounded-lg bg-muted/50" />
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-4">
         <div className="hidden lg:block">
           <div className="space-y-3">
             {[1, 2, 3, 4, 5, 6].map((i) => (
-              <Skeleton key={i} className="h-8 w-full rounded-lg bg-white/5" />
+              <Skeleton key={i} className="h-8 w-full rounded-lg bg-muted/50" />
             ))}
           </div>
         </div>
@@ -42,12 +42,12 @@ function DocsSkeleton() {
           {[1, 2, 3].map((i) => (
             <div
               key={i}
-              className="rounded-xl border border-white/5 bg-white/[0.02] p-6"
+              className="rounded-xl border border-border/50 bg-card/30 p-6"
             >
-              <Skeleton className="mb-3 h-5 w-48 rounded-md bg-white/5" />
-              <Skeleton className="mb-2 h-4 w-full rounded-md bg-white/5" />
-              <Skeleton className="mb-4 h-4 w-3/4 rounded-md bg-white/5" />
-              <Skeleton className="h-32 w-full rounded-lg bg-white/5" />
+              <Skeleton className="mb-3 h-5 w-48 rounded-md bg-muted/50" />
+              <Skeleton className="mb-2 h-4 w-full rounded-md bg-muted/50" />
+              <Skeleton className="mb-4 h-4 w-3/4 rounded-md bg-muted/50" />
+              <Skeleton className="h-32 w-full rounded-lg bg-muted/50" />
             </div>
           ))}
         </div>
@@ -118,7 +118,7 @@ export function DocsContentEnhanced() {
   return (
     <div className="min-h-screen bg-background">
       {/* Mobile header bar */}
-      <div className="sticky top-0 z-30 flex h-12 items-center gap-3 border-b border-white/5 bg-background/80 px-4 backdrop-blur-xl lg:hidden">
+      <div className="sticky top-0 z-30 flex h-12 items-center gap-3 border-b border-border/50 bg-background/80 px-4 backdrop-blur-xl lg:hidden">
         <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
           <SheetTrigger
             render={
@@ -132,7 +132,7 @@ export function DocsContentEnhanced() {
             <Menu className="size-4" />
           </SheetTrigger>
           <SheetContent side="left" className="w-72 p-0">
-            <SheetHeader className="border-b border-white/5 px-4 py-3">
+            <SheetHeader className="border-b border-border/50 px-4 py-3">
               <SheetTitle>Navigation</SheetTitle>
             </SheetHeader>
             <div className="overflow-y-auto p-3">
@@ -184,7 +184,7 @@ export function DocsContentEnhanced() {
         {/* Selected entry banner */}
         {selectedEntry && (
           <div className="mb-6">
-            <div className="flex items-center gap-3 rounded-xl border border-white/5 bg-white/[0.02] p-4">
+            <div className="flex items-center gap-3 rounded-xl border border-border/50 bg-card/30 p-4">
               <div className="flex-1">
                 <div className="flex items-center gap-2">
                   <span className="text-sm font-medium text-foreground">
@@ -221,7 +221,7 @@ export function DocsContentEnhanced() {
           {/* Main content */}
           <main className="min-w-0 lg:col-span-3">
             {filteredCategories.length === 0 && searchQuery && (
-              <div className="flex flex-col items-center justify-center rounded-xl border border-white/5 bg-white/[0.02] py-20 text-center">
+              <div className="flex flex-col items-center justify-center rounded-xl border border-border/50 bg-card/30 py-20 text-center">
                 <SearchX className="mb-4 size-10 text-muted-foreground/30" />
                 <p className="text-lg font-medium text-foreground">
                   No matching topics found

@@ -56,7 +56,7 @@ export function GoalSettingDialog({
               "flex size-9 shrink-0 items-center justify-center rounded-lg",
               goalMet
                 ? "bg-emerald-500/15 text-emerald-400"
-                : "bg-white/5 text-muted-foreground"
+                : "bg-muted/50 text-muted-foreground"
             )}
           >
             <Target className="size-5" />
@@ -66,7 +66,7 @@ export function GoalSettingDialog({
             {goal ? (
               <div className="mt-1 space-y-1.5">
                 <div className="flex items-center gap-2 text-sm">
-                  <div className="h-1.5 w-16 overflow-hidden rounded-full bg-white/5">
+                  <div className="h-1.5 w-16 overflow-hidden rounded-full bg-muted/50">
                     <div
                       className="h-full rounded-full bg-violet-500/60 transition-all"
                       style={{ width: `${hoursProgress}%` }}
@@ -77,7 +77,7 @@ export function GoalSettingDialog({
                   </span>
                 </div>
                 <div className="flex items-center gap-2 text-sm">
-                  <div className="h-1.5 w-16 overflow-hidden rounded-full bg-white/5">
+                  <div className="h-1.5 w-16 overflow-hidden rounded-full bg-muted/50">
                     <div
                       className="h-full rounded-full bg-cyan-500/60 transition-all"
                       style={{ width: `${topicsProgress}%` }}
@@ -117,7 +117,7 @@ export function GoalSettingDialog({
                   max={40}
                   value={targetHours}
                   onChange={(e) => setTargetHours(Number(e.target.value))}
-                  className="mt-1 h-9 w-full rounded-lg border border-white/10 bg-white/[0.03] px-3 text-sm text-foreground focus:border-violet-500/40 focus:outline-none focus:ring-1 focus:ring-violet-500/30"
+                  className="mt-1 h-9 w-full rounded-lg border border-border bg-background/50 px-3 text-sm text-foreground focus:border-violet-500/40 focus:outline-none focus:ring-1 focus:ring-violet-500/30"
                 />
               </div>
               <div>
@@ -128,7 +128,7 @@ export function GoalSettingDialog({
                   max={20}
                   value={targetTopics}
                   onChange={(e) => setTargetTopics(Number(e.target.value))}
-                  className="mt-1 h-9 w-full rounded-lg border border-white/10 bg-white/[0.03] px-3 text-sm text-foreground focus:border-violet-500/40 focus:outline-none focus:ring-1 focus:ring-violet-500/30"
+                  className="mt-1 h-9 w-full rounded-lg border border-border bg-background/50 px-3 text-sm text-foreground focus:border-violet-500/40 focus:outline-none focus:ring-1 focus:ring-violet-500/30"
                 />
               </div>
               <Button

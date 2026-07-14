@@ -18,7 +18,7 @@ export function NextStepsCard({ items, isLoading = false }: NextStepsCardProps) 
         <h2 className="text-lg font-semibold mb-4">Next Steps</h2>
         <div className="space-y-3">
           {[1, 2, 3].map((i) => (
-            <div key={i} className="flex items-start gap-3 rounded-lg border border-white/5 bg-white/[0.02] p-3">
+            <div key={i} className="flex items-start gap-3 rounded-lg border border-border/50 bg-card/30 p-3">
               <Skeleton className="size-4 mt-0.5 shrink-0 rounded" />
               <div className="flex-1 space-y-2">
                 <Skeleton className="h-4 w-3/4 rounded-md" />
@@ -53,7 +53,7 @@ export function NextStepsCard({ items, isLoading = false }: NextStepsCardProps) 
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.3, delay: idx * 0.1, ease: "easeOut" }}
-              className="group flex items-start gap-3 rounded-lg border border-white/5 bg-white/[0.02] p-3 transition-all duration-200 hover:bg-white/[0.04] hover:border-white/10 hover:shadow-md hover:shadow-black/10 cursor-pointer"
+              className="group flex items-start gap-3 rounded-lg border border-border/50 bg-card/30 p-3 transition-all duration-200 hover:bg-card/50 hover:border-border hover:shadow-md hover:shadow-black/5 cursor-pointer"
             >
               <div className="mt-0.5">
                 {item.type === "topic" ? (

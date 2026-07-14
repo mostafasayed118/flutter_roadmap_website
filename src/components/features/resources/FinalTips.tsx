@@ -21,7 +21,7 @@ export function FinalTips() {
         {tips.map((tip) => (
           <div
             key={tip.title}
-            className="flex items-start gap-3 rounded-lg border border-white/5 bg-white/[0.02] p-3 hover:bg-white/[0.05] hover:border-white/10 transition-all"
+            className="flex items-start gap-3 rounded-lg border border-border/50 bg-card/30 p-3 hover:bg-card/50 hover:border-border transition-all"
           >
             <span className="text-lg shrink-0">{tip.icon}</span>
             <div>

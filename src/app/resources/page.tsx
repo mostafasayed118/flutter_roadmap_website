@@ -21,12 +21,12 @@ export default function ResourcesPage() {
           </p>
         </div>
 
-        <div className="grid gap-6 lg:grid-cols-2">
+        <div className="grid gap-4 sm:gap-6 grid-cols-1 lg:grid-cols-2">
           <YoutubeSection />
           <CoursesSection />
         </div>
 
-        <div className="grid gap-6 lg:grid-cols-2">
+        <div className="grid gap-4 sm:gap-6 grid-cols-1 lg:grid-cols-2">
           <DocsSection />
           <ToolsSection />
         </div>

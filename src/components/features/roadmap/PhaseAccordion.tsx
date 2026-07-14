@@ -71,7 +71,7 @@ export function PhaseAccordion({
       className={`rounded-xl border px-4 ${
         isPhaseComplete
           ? "border-emerald-500/20 bg-emerald-500/[0.02]"
-          : "border-white/5 bg-white/[0.02]"
+          : "border-border/50 bg-card/30"
       }`}
     >
       <AccordionTrigger className="hover:no-underline py-4">
@@ -80,7 +80,7 @@ export function PhaseAccordion({
             {isPhaseComplete ? (
               <CheckCircle2 className="size-5 text-emerald-400 shrink-0" />
             ) : (
-              <div className="flex items-center justify-center size-5 rounded-full border border-white/10 text-xs text-muted-foreground shrink-0 font-mono">
+              <div className="flex items-center justify-center size-5 rounded-full border border-border text-xs text-muted-foreground shrink-0 font-mono">
                 {phaseOrder}
               </div>
             )}
@@ -102,7 +102,7 @@ export function PhaseAccordion({
               className={`text-xs font-mono ${
                 isPhaseComplete
                   ? "border-emerald-500/30 text-emerald-400 bg-emerald-500/10"
-                  : "border-white/10 text-muted-foreground"
+                  : "border-border text-muted-foreground"
               }`}
             >
               {phaseProgress}%

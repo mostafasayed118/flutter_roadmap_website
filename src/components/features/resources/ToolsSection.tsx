@@ -27,7 +27,7 @@ export function ToolsSection() {
           return (
             <div
               key={tool.name}
-              className="flex flex-col items-center gap-2 rounded-lg border border-white/5 bg-white/[0.02] p-3 text-center hover:bg-white/[0.05] hover:border-white/10 transition-all"
+              className="flex flex-col items-center gap-2 rounded-lg border border-border/50 bg-card/30 p-3 text-center hover:bg-card/50 hover:border-border transition-all"
             >
               <Icon className="size-5 text-violet-400" />
               <span className="text-xs font-medium leading-tight">{tool.name}</span>

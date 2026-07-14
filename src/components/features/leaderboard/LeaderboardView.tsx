@@ -24,20 +24,22 @@ export function LeaderboardView() {
 
         {userRank && userRank.rank && (
           <GlassCard glow glowColor="violet" className="p-5">
-            <div className="flex items-center gap-4">
-              <div className="flex size-12 items-center justify-center rounded-xl bg-violet-500/15">
-                <Medal className="size-6 text-violet-400" />
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-4">
+              <div className="flex items-center gap-4">
+                <div className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-violet-500/15">
+                  <Medal className="size-6 text-violet-400" />
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground">Your Rank</p>
+                  <p className="text-3xl font-bold">
+                    #{userRank.rank}
+                    <span className="ml-2 text-sm font-normal text-muted-foreground">
+                      of {userRank.total}
+                    </span>
+                  </p>
+                </div>
               </div>
-              <div>
-                <p className="text-sm text-muted-foreground">Your Rank</p>
-                <p className="text-3xl font-bold">
-                  #{userRank.rank}
-                  <span className="ml-2 text-sm font-normal text-muted-foreground">
-                    of {userRank.total}
-                  </span>
-                </p>
-              </div>
-              <div className="ml-auto text-right">
+              <div className="sm:ml-auto sm:text-right">
                 <p className="text-sm text-muted-foreground">Progress</p>
                 <p className="text-2xl font-bold text-violet-400">
                   {userRank.progress}%
@@ -62,7 +64,7 @@ export function LeaderboardView() {
               {entries.map((entry, i) => (
                 <div
                   key={entry.userId}
-                  className="flex items-center gap-3 rounded-lg border border-white/5 bg-white/[0.02] p-3"
+                  className="flex items-center gap-3 rounded-lg border border-border/50 bg-card/30 p-3"
                 >
                   <span
                     className={`flex size-8 shrink-0 items-center justify-center rounded-full text-sm font-bold ${
@@ -72,7 +74,7 @@ export function LeaderboardView() {
                           ? "bg-gray-300/15 text-gray-300"
                           : i === 2
                             ? "bg-orange-500/15 text-orange-400"
-                            : "bg-white/5 text-muted-foreground"
+                            : "bg-muted/50 text-muted-foreground"
                     }`}
                   >
                     {i + 1}
@@ -92,7 +94,7 @@ export function LeaderboardView() {
                       </span>
                     </div>
                   </div>
-                  <div className="h-1.5 w-20 overflow-hidden rounded-full bg-white/5">
+                  <div className="h-1.5 w-16 shrink-0 overflow-hidden rounded-full bg-muted/50 sm:w-20">
                     <div
                       className="h-full rounded-full bg-violet-500/60"
                       style={{ width: `${entry.progress}%` }}

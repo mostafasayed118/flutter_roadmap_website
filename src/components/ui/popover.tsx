@@ -39,7 +39,7 @@ function PopoverPopup({
     <PopoverPrimitive.Popup
       data-slot="popover-popup"
       className={cn(
-        "w-64 rounded-xl border border-white/10 bg-[hsl(240,10%,6%)] p-3 text-sm text-popover-foreground shadow-xl outline-none",
+        "w-64 rounded-xl border border-border bg-popover p-3 text-sm text-popover-foreground shadow-xl outline-none",
         "data-[open]:animate-in data-[open]:fade-in-0 data-[open]:zoom-in-95",
         "data-[closing]:animate-out data-[closing]:fade-out-0 data-[closing]:zoom-out-95",
         className

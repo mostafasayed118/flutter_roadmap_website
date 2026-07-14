@@ -44,7 +44,7 @@ export function ProjectShowcase() {
   return (
     <AnimatedPage>
       <div className="space-y-6">
-        <div className="flex items-start justify-between gap-4">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
           <div>
             <h1 className="text-2xl font-bold tracking-tight">
               <span className="bg-gradient-to-r from-violet-400 via-indigo-400 to-cyan-400 bg-clip-text text-transparent">
@@ -93,7 +93,7 @@ export function ProjectShowcase() {
                     {project.technologies.map((tech) => (
                       <span
                         key={tech}
-                        className="rounded-md bg-white/5 px-1.5 py-0.5 text-[10px] text-muted-foreground"
+                        className="rounded-md bg-muted/50 px-1.5 py-0.5 text-[10px] text-muted-foreground"
                       >
                         {tech}
                       </span>
@@ -106,7 +106,7 @@ export function ProjectShowcase() {
                       href={project.githubUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-1 rounded-md border border-white/10 px-2 py-1 text-xs text-muted-foreground hover:text-foreground"
+                      className="flex items-center gap-1 rounded-md border border-border px-2 py-1 text-xs text-muted-foreground hover:text-foreground"
                     >
                       <GitBranch className="size-3" />
                       Code
@@ -117,7 +117,7 @@ export function ProjectShowcase() {
                       href={project.liveUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-1 rounded-md border border-white/10 px-2 py-1 text-xs text-muted-foreground hover:text-foreground"
+                      className="flex items-center gap-1 rounded-md border border-border px-2 py-1 text-xs text-muted-foreground hover:text-foreground"
                     >
                       <ExternalLink className="size-3" />
                       Live
@@ -141,7 +141,7 @@ export function ProjectShowcase() {
                   value={form.title}
                   onChange={(e) => setForm({ ...form, title: e.target.value })}
                   placeholder="My Flutter App"
-                  className="mt-1 h-9 w-full rounded-lg border border-white/10 bg-white/[0.03] px-3 text-sm text-foreground focus:border-violet-500/40 focus:outline-none focus:ring-1 focus:ring-violet-500/30"
+                  className="mt-1 h-9 w-full rounded-lg border border-border bg-white/[0.03] px-3 text-sm text-foreground focus:border-violet-500/40 focus:outline-none focus:ring-1 focus:ring-violet-500/30"
                 />
               </div>
               <div>
@@ -152,7 +152,7 @@ export function ProjectShowcase() {
                     setForm({ ...form, description: e.target.value })
                   }
                   placeholder="A brief description of your project..."
-                  className="mt-1 h-20 w-full resize-none rounded-lg border border-white/10 bg-white/[0.03] px-3 py-2 text-sm text-foreground focus:border-violet-500/40 focus:outline-none focus:ring-1 focus:ring-violet-500/30"
+                  className="mt-1 h-20 w-full resize-none rounded-lg border border-border bg-white/[0.03] px-3 py-2 text-sm text-foreground focus:border-violet-500/40 focus:outline-none focus:ring-1 focus:ring-violet-500/30"
                 />
               </div>
               <div>
@@ -163,7 +163,7 @@ export function ProjectShowcase() {
                     setForm({ ...form, githubUrl: e.target.value })
                   }
                   placeholder="https://github.com/..."
-                  className="mt-1 h-9 w-full rounded-lg border border-white/10 bg-white/[0.03] px-3 text-sm text-foreground focus:border-violet-500/40 focus:outline-none focus:ring-1 focus:ring-violet-500/30"
+                  className="mt-1 h-9 w-full rounded-lg border border-border bg-white/[0.03] px-3 text-sm text-foreground focus:border-violet-500/40 focus:outline-none focus:ring-1 focus:ring-violet-500/30"
                 />
               </div>
               <div>
@@ -174,7 +174,7 @@ export function ProjectShowcase() {
                     setForm({ ...form, liveUrl: e.target.value })
                   }
                   placeholder="https://..."
-                  className="mt-1 h-9 w-full rounded-lg border border-white/10 bg-white/[0.03] px-3 text-sm text-foreground focus:border-violet-500/40 focus:outline-none focus:ring-1 focus:ring-violet-500/30"
+                  className="mt-1 h-9 w-full rounded-lg border border-border bg-white/[0.03] px-3 text-sm text-foreground focus:border-violet-500/40 focus:outline-none focus:ring-1 focus:ring-violet-500/30"
                 />
               </div>
               <div>
@@ -187,7 +187,7 @@ export function ProjectShowcase() {
                     setForm({ ...form, technologies: e.target.value })
                   }
                   placeholder="Flutter, Dart, Firebase"
-                  className="mt-1 h-9 w-full rounded-lg border border-white/10 bg-white/[0.03] px-3 text-sm text-foreground focus:border-violet-500/40 focus:outline-none focus:ring-1 focus:ring-violet-500/30"
+                  className="mt-1 h-9 w-full rounded-lg border border-border bg-white/[0.03] px-3 text-sm text-foreground focus:border-violet-500/40 focus:outline-none focus:ring-1 focus:ring-violet-500/30"
                 />
               </div>
               <Button

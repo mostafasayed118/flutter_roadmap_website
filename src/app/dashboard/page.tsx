@@ -55,7 +55,7 @@ export default function DashboardPage() {
           <Skeleton className="h-8 w-48 rounded-md" />
           <Skeleton className="mt-1 h-4 w-64 rounded-md" />
         </div>
-        <div className="grid gap-6 sm:grid-cols-3">
+        <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-3">
           <GlassCard className="p-6">
             <div className="flex flex-col items-center gap-4">
               <Skeleton className="h-4 w-28 rounded-md" />
@@ -83,7 +83,7 @@ export default function DashboardPage() {
             {[1, 2, 3].map((i) => (
               <div
                 key={i}
-                className="flex items-start gap-3 rounded-lg border border-white/5 bg-white/[0.02] p-3"
+                className="flex items-start gap-3 rounded-lg border border-border/50 bg-card/30 p-3"
               >
                 <Skeleton className="mt-0.5 size-4 shrink-0 rounded" />
                 <div className="flex-1 space-y-2">
@@ -95,7 +95,7 @@ export default function DashboardPage() {
             ))}
           </div>
         </GlassCard>
-        <div className="grid gap-6 lg:grid-cols-2">
+        <div className="grid gap-4 sm:gap-6 grid-cols-1 lg:grid-cols-2">
           <GlassCard className="p-5">
             <Skeleton className="mb-4 h-5 w-36 rounded-md" />
             <Skeleton className="h-40 w-full rounded-lg" />
@@ -106,7 +106,7 @@ export default function DashboardPage() {
               {[1, 2, 3].map((i) => (
                 <div
                   key={i}
-                  className="flex items-center gap-3 rounded-lg border border-white/5 bg-white/[0.02] p-3"
+                  className="flex items-center gap-3 rounded-lg border border-border/50 bg-card/30 p-3"
                 >
                   <Skeleton className="size-9 shrink-0 rounded-lg" />
                   <div className="flex-1 space-y-2">
@@ -130,7 +130,7 @@ export default function DashboardPage() {
   return (
     <AnimatedPage>
       <div className="space-y-6">
-        <div className="flex items-start justify-between">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
           <div>
             <h1 className="text-2xl font-bold tracking-tight">
               <span className="bg-gradient-to-r from-violet-400 via-indigo-400 to-cyan-400 bg-clip-text text-transparent">
@@ -147,7 +147,7 @@ export default function DashboardPage() {
           <ExportProgress />
         </div>
 
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
           <OverallProgressCard percentage={stats.overallPercentage} />
           <StreakCard />
           <GoalSettingDialog
@@ -166,7 +166,7 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        <div className="grid gap-6 lg:grid-cols-3">
+        <div className="grid gap-4 sm:gap-6 grid-cols-1 lg:grid-cols-3">
           <div className="lg:col-span-1">
             <StudyTimer onStop={interceptedStop} />
           </div>
@@ -175,7 +175,7 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        <div className="grid gap-6 lg:grid-cols-3">
+        <div className="grid gap-4 sm:gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
           <StudyTimeCard />
           <SessionList />
           <DocsSuggestions currentWeek={stats.currentWeekNumber} />

@@ -133,7 +133,7 @@ export function DocsSidebar({ categories, className, onNavigate }: DocsSidebarPr
             </button>
 
             {isExpanded && (
-              <ul className="mt-1 ml-4 space-y-0.5 border-l border-white/5 pl-3">
+              <ul className="mt-1 ml-4 space-y-0.5 border-l border-border/50 pl-3">
                 {cat.sections.map((sec) => {
                   const isActive = active?.sectionId === sec.id;
                   return (

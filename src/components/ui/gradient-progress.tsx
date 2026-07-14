@@ -17,7 +17,7 @@ export function GradientProgress({
   return (
     <div
       className={cn(
-        "relative w-full overflow-hidden rounded-full bg-white/5",
+        "relative w-full overflow-hidden rounded-full bg-muted",
         height,
         className
       )}
@@ -34,6 +34,14 @@ export function GradientProgress({
       {value > 0 && (
         <motion.div
           className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-violet-600 via-indigo-500 to-cyan-400 opacity-50 blur-sm"
+          initial={{ width: 0 }}
+          animate={{ width: `${value}%` }}
+          transition={{ duration: 0.8, ease: "easeOut", delay: 0.1 }}
+        />
+      )}
+      {value > 0 && value < 100 && (
+        <motion.div
+          className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-transparent via-white/20 to-transparent"
           initial={{ width: 0 }}
           animate={{ width: `${value}%` }}
           transition={{ duration: 0.8, ease: "easeOut", delay: 0.1 }}

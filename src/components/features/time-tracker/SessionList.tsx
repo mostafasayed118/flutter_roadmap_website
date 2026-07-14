@@ -39,7 +39,7 @@ export function SessionList() {
           {[1, 2, 3].map((i) => (
             <div
               key={i}
-              className="flex items-center gap-3 rounded-lg border border-white/5 bg-white/[0.02] p-3"
+              className="flex items-center gap-3 rounded-lg border border-border/50 bg-card/30 p-3"
             >
               <Skeleton className="size-9 shrink-0 rounded-lg" />
               <div className="flex-1 space-y-2">
@@ -91,7 +91,7 @@ export function SessionList() {
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.2, delay: idx * 0.03 }}
-              className="flex items-center gap-3 rounded-lg border border-white/5 bg-white/[0.02] p-3 transition-colors hover:bg-white/[0.04]"
+              className="flex items-center gap-3 rounded-lg border border-border/50 bg-card/30 p-3 transition-colors hover:bg-card/50"
             >
               <div className="shrink-0 rounded-lg border border-violet-500/20 bg-violet-500/10 p-2">
                 <Clock className="size-4 text-violet-400" />

@@ -110,7 +110,7 @@ export function EditSessionDialog({
           </Button>
         }
       />
-      <DialogContent className="sm:max-w-md border-white/10 bg-[oklch(0.14_0.005_280)] backdrop-blur-xl">
+      <DialogContent className="sm:max-w-md backdrop-blur-xl">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-lg">
             <Pencil className="size-5 text-violet-400" />
@@ -134,7 +134,7 @@ export function EditSessionDialog({
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
                 max={new Date().toISOString().split("T")[0]}
-                className="border-white/10 bg-white/5 font-mono text-sm [color-scheme:dark]"
+                className="border-border bg-muted/50 font-mono text-sm [color-scheme:dark]"
               />
               <Calendar className="pointer-events-none absolute right-2 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
             </div>
@@ -155,7 +155,7 @@ export function EditSessionDialog({
                       const v = e.target.value;
                       if (v === "" || /^\d*$/.test(v)) setHours(v);
                     }}
-                    className="border-white/10 bg-white/5 text-center font-mono text-lg"
+                    className="border-border bg-muted/50 text-center font-mono text-lg"
                   />
                   <span className="text-sm text-muted-foreground">h</span>
                 </div>
@@ -171,7 +171,7 @@ export function EditSessionDialog({
                       const v = e.target.value;
                       if (v === "" || /^\d*$/.test(v)) setMinutes(v);
                     }}
-                    className="border-white/10 bg-white/5 text-center font-mono text-lg"
+                    className="border-border bg-muted/50 text-center font-mono text-lg"
                   />
                   <span className="text-sm text-muted-foreground">m</span>
                 </div>
@@ -202,7 +202,7 @@ export function EditSessionDialog({
                   setNotes(e.target.value);
               }}
               placeholder="What did you study?"
-              className="h-20 resize-none border-white/10 bg-white/5"
+              className="h-20 resize-none border-border bg-muted/50"
             />
           </div>
 

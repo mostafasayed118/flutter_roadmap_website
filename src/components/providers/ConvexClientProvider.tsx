@@ -18,17 +18,17 @@ export function ConvexClientProvider({ children }: { children: ReactNode }) {
 
   if (!client) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-[oklch(0.1_0.005_280)] p-4">
+      <div className="flex min-h-screen items-center justify-center bg-background p-4">
         <div className="max-w-md w-full rounded-xl border border-red-500/20 bg-red-500/5 p-6 text-center space-y-3">
           <AlertTriangle className="size-10 text-red-400 mx-auto" />
           <h2 className="text-lg font-semibold text-red-300">Convex Configuration Missing</h2>
           <p className="text-sm text-muted-foreground">
-            The <code className="rounded bg-white/10 px-1.5 py-0.5 font-mono text-xs">NEXT_PUBLIC_CONVEX_URL</code> environment
+            The <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">NEXT_PUBLIC_CONVEX_URL</code> environment
             variable is not set or is invalid. The app cannot connect to the backend.
           </p>
           <p className="text-xs text-muted-foreground/80">
-            Run <code className="rounded bg-white/10 px-1.5 py-0.5 font-mono text-xs">npx convex dev</code> to generate it, or set
-            it manually in your <code className="rounded bg-white/10 px-1.5 py-0.5 font-mono text-xs">.env.local</code> file.
+            Run <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">npx convex dev</code> to generate it, or set
+            it manually in your <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">.env.local</code> file.
           </p>
         </div>
       </div>

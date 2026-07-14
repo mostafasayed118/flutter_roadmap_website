@@ -87,7 +87,7 @@ export default function RoadmapPage() {
               and projects
             </p>
           </div>
-          <GlassCard className="p-12">
+          <GlassCard className="p-6 sm:p-12">
             <EmptyState
               icon={Database}
               title="No roadmap data yet"
@@ -106,7 +106,7 @@ export default function RoadmapPage() {
                         repeat: Infinity,
                         ease: "linear",
                       }}
-                      className="size-4 rounded-full border-2 border-white/30 border-t-white"
+                      className="size-4 rounded-full border-2 border-border border-t-foreground"
                     />
                   ) : (
                     <>
@@ -126,7 +126,7 @@ export default function RoadmapPage() {
   return (
     <AnimatedPage>
       <div className="space-y-6">
-        <div className="flex items-start justify-between gap-4">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
           <div>
             <h1 className="text-2xl font-bold tracking-tight">
               <span className="bg-gradient-to-r from-violet-400 via-indigo-400 to-cyan-400 bg-clip-text text-transparent">

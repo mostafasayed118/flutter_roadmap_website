@@ -208,7 +208,7 @@ export function LogSessionDialog({ defaultWeekId }: LogSessionDialogProps) {
           </Button>
         }
       />
-      <DialogContent className="sm:max-w-md border-white/10 bg-[oklch(0.14_0.005_280)] backdrop-blur-xl">
+      <DialogContent className="sm:max-w-md backdrop-blur-xl">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-lg">
             <Clock className="size-5 text-violet-400" />
@@ -230,7 +230,7 @@ export function LogSessionDialog({ defaultWeekId }: LogSessionDialogProps) {
               <select
                 value={weekId}
                 onChange={(e) => setWeekId(e.target.value)}
-                className="w-full appearance-none rounded-lg border border-white/10 bg-white/5 px-3 py-2 pr-8 text-sm text-foreground outline-none focus:border-violet-500/50 focus:ring-2 focus:ring-violet-500/20"
+                className="w-full appearance-none rounded-lg border border-border bg-muted/50 px-3 py-2 pr-8 text-sm text-foreground outline-none focus:border-violet-500/50 focus:ring-2 focus:ring-violet-500/20"
               >
                 <option value="general">General Study Time</option>
                 {allWeeks.map((w) => (
@@ -253,7 +253,7 @@ export function LogSessionDialog({ defaultWeekId }: LogSessionDialogProps) {
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
                 max={`${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, "0")}-${String(new Date().getDate()).padStart(2, "0")}`}
-                className="border-white/10 bg-white/5 font-mono text-sm [color-scheme:dark]"
+                className="border-border bg-muted/50 font-mono text-sm [color-scheme:dark]"
               />
               <Calendar className="pointer-events-none absolute right-2 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
             </div>
@@ -275,7 +275,7 @@ export function LogSessionDialog({ defaultWeekId }: LogSessionDialogProps) {
                       setTouched((prev) => ({ ...prev, hours: true }))
                     }
                     className={cn(
-                      "border-white/10 bg-white/5 text-center font-mono text-lg",
+                      "border-border bg-muted/50 text-center font-mono text-lg",
                       showHoursError &&
                         "border-red-500/50 focus-visible:ring-red-500/50"
                     )}
@@ -296,7 +296,7 @@ export function LogSessionDialog({ defaultWeekId }: LogSessionDialogProps) {
                       setTouched((prev) => ({ ...prev, minutes: true }))
                     }
                     className={cn(
-                      "border-white/10 bg-white/5 text-center font-mono text-lg",
+                      "border-border bg-muted/50 text-center font-mono text-lg",
                       showMinutesError &&
                         "border-red-500/50 focus-visible:ring-red-500/50"
                     )}
@@ -374,7 +374,7 @@ export function LogSessionDialog({ defaultWeekId }: LogSessionDialogProps) {
               }
               placeholder="What did you study?"
               className={cn(
-                "h-20 resize-none border-white/10 bg-white/5",
+                "h-20 resize-none border-border bg-muted/50",
                 showNotesError &&
                   "border-red-500/50 focus-visible:ring-red-500/50"
               )}

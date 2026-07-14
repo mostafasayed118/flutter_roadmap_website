@@ -21,30 +21,31 @@ export function WeeklyBarChart({ data }: WeeklyBarChartProps) {
         <BarChart data={data} margin={{ top: 0, right: 0, bottom: 0, left: -20 }}>
           <XAxis
             dataKey="name"
-            tick={{ fontSize: 10, fill: "oklch(0.6 0 0)" }}
+            tick={{ fontSize: 10, fill: "hsl(var(--muted-foreground))" }}
             axisLine={false}
             tickLine={false}
           />
           <YAxis
-            tick={{ fontSize: 10, fill: "oklch(0.6 0 0)" }}
+            tick={{ fontSize: 10, fill: "hsl(var(--muted-foreground))" }}
             axisLine={false}
             tickLine={false}
             tickFormatter={(v: number) => `${Math.round(v / 60)}h`}
           />
           <Tooltip
             contentStyle={{
-              background: "oklch(0.14 0.005 280)",
-              border: "1px solid oklch(0.22 0.005 280)",
+              background: "hsl(var(--popover))",
+              border: "1px solid hsl(var(--border))",
               borderRadius: "8px",
               fontSize: "12px",
+              color: "hsl(var(--popover-foreground))",
             }}
             formatter={(value) => [formatMinutes(Number(value)), "Time"]}
           />
-          <Bar dataKey="minutes" radius={[4, 4, 0, 0]}>
+          <Bar dataKey="minutes" radius={[4, 4, 0, 0]} barSize={48} maxBarSize={64}>
             {data.map((d, idx) => (
               <Cell
                 key={idx}
-                fill={`oklch(0.65 0.22 285 / ${0.4 + (maxMinutes > 0 ? d.minutes / maxMinutes : 0) * 0.6})`}
+                fill={`hsl(263 70% ${50 + (maxMinutes > 0 ? d.minutes / maxMinutes : 0) * 20}%)`}
               />
             ))}
           </Bar>

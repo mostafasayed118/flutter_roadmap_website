@@ -57,7 +57,7 @@ export function DeleteSessionDialog({
           </Button>
         }
       />
-      <DialogContent className="sm:max-w-sm border-white/10 bg-[oklch(0.14_0.005_280)] backdrop-blur-xl">
+      <DialogContent className="sm:max-w-sm backdrop-blur-xl">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-lg">
             <AlertTriangle className="size-5 text-red-400" />
@@ -80,7 +80,7 @@ export function DeleteSessionDialog({
             <Button
               variant="outline"
               onClick={() => setOpen(false)}
-              className="flex-1 border-white/10 bg-white/5 hover:bg-white/10"
+              className="flex-1 border-border bg-muted/50 hover:bg-muted/80"
             >
               Cancel
             </Button>

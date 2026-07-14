@@ -199,7 +199,7 @@ function PresetToggle({
             "rounded-full px-3 py-1 text-xs font-medium transition-all duration-200",
             activeMode === preset.mode
               ? "bg-violet-500/20 text-violet-300 ring-1 ring-violet-500/30"
-              : "bg-white/5 text-muted-foreground hover:bg-white/10 hover:text-foreground",
+              : "bg-muted/50 text-muted-foreground hover:bg-muted/80 hover:text-foreground",
             disabled && "opacity-50 cursor-not-allowed"
           )}
         >
@@ -218,7 +218,7 @@ function PresetToggle({
           "rounded-full px-3 py-1 text-xs font-medium transition-all duration-200",
           activeMode === "custom"
             ? "bg-violet-500/20 text-violet-300 ring-1 ring-violet-500/30"
-            : "bg-white/5 text-muted-foreground hover:bg-white/10 hover:text-foreground",
+            : "bg-muted/50 text-muted-foreground hover:bg-muted/80 hover:text-foreground",
           disabled && "opacity-50 cursor-not-allowed"
         )}
       >
@@ -241,7 +241,7 @@ function CountdownDisplay({
 
   return (
     <div className="mt-3 text-center">
-      <div className="mx-auto mb-2 h-1 w-full max-w-[200px] overflow-hidden rounded-full bg-white/5">
+      <div className="mx-auto mb-2 h-1 w-full max-w-[200px] overflow-hidden rounded-full bg-muted/50">
         <motion.div
           className="h-full rounded-full bg-gradient-to-r from-violet-500 to-cyan-500"
           initial={false}

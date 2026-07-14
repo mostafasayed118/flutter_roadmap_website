@@ -98,7 +98,7 @@ export function SaveSessionDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md border-white/10 bg-[oklch(0.14_0.005_280)] backdrop-blur-xl">
+      <DialogContent className="sm:max-w-md backdrop-blur-xl">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-lg">
             <Clock className="size-5 text-violet-400" />
@@ -134,7 +134,7 @@ export function SaveSessionDialog({
               <select
                 value={weekId}
                 onChange={(e) => setWeekId(e.target.value)}
-                className="w-full appearance-none rounded-lg border border-white/10 bg-white/5 px-3 py-2 pr-8 text-sm text-foreground outline-none focus:border-violet-500/50 focus:ring-2 focus:ring-violet-500/20"
+                className="w-full appearance-none rounded-lg border border-border bg-muted/50 px-3 py-2 pr-8 text-sm text-foreground outline-none focus:border-violet-500/50 focus:ring-2 focus:ring-violet-500/20"
               >
                 <option value="general">General Study Time</option>
                 {allWeeks.map((w) => (
@@ -171,7 +171,7 @@ export function SaveSessionDialog({
                   setNotes(e.target.value);
               }}
               placeholder="What did you study?"
-              className="h-20 resize-none border-white/10 bg-white/5"
+              className="h-20 resize-none border-border bg-muted/50"
             />
           </div>
 
@@ -180,7 +180,7 @@ export function SaveSessionDialog({
             <Button
               variant="outline"
               onClick={() => onOpenChange(false)}
-              className="flex-1 border-white/10 bg-white/5 hover:bg-white/10"
+              className="flex-1 border-border bg-muted/50 hover:bg-muted/80"
             >
               Discard
             </Button>
@@ -190,7 +190,7 @@ export function SaveSessionDialog({
               className="flex-1 bg-gradient-to-r from-violet-600 to-indigo-600 text-white hover:from-violet-500 hover:to-indigo-500 hover:scale-[1.02] transition-all duration-200"
             >
               {isSaving ? (
-                <span className="size-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
+                <span className="size-4 animate-spin rounded-full border-2 border-border border-t-background" />
               ) : (
                 <Save className="size-4 mr-1.5" />
               )}

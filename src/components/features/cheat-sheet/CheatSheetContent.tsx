@@ -63,7 +63,7 @@ export function CheatSheetContent() {
 
         <Tabs defaultValue="dart" className="w-full">
           <div className="-mx-1 overflow-x-auto px-1">
-            <TabsList className="w-full min-w-max border border-white/10 bg-white/5">
+            <TabsList className="w-full min-w-max border border-border bg-muted/50">
               {cheatCategories.map((cat) => {
                 const Icon = iconMap[cat.iconKey];
                 return (

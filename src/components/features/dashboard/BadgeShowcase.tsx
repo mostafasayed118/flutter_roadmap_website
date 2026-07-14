@@ -66,7 +66,7 @@ export function BadgeShowcase() {
                 "group relative flex flex-col items-center gap-1 rounded-lg border p-3 text-center transition-all duration-200",
                 badge.unlocked
                   ? "border-amber-500/20 bg-amber-500/5 hover:bg-amber-500/10"
-                  : "border-white/5 bg-white/[0.02] opacity-50"
+                  : "border-border/50 bg-card/30 opacity-50"
               )}
             >
               <Icon
