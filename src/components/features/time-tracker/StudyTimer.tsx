@@ -28,6 +28,8 @@ import {
 } from "@/components/ui/popover";
 import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
+import { formatTimerDisplay } from "@/lib/format-time";
+import { TIMER } from "@/lib/constants";
 import {
   type SoundType,
   getNotificationPermission,
@@ -47,21 +49,13 @@ interface PomodoroPreset {
 // ── Constants ──────────────────────────────────────────────────
 
 const POMODORO_PRESETS: PomodoroPreset[] = [
-  { label: "25min Focus", mode: "focus", durationMs: 25 * 60 * 1000 },
-  { label: "5min Break", mode: "break", durationMs: 5 * 60 * 1000 },
+  { label: "25min Focus", mode: "focus", durationMs: TIMER.POMODORO_FOCUS_MS },
+  { label: "5min Break", mode: "break", durationMs: TIMER.POMODORO_BREAK_MS },
 ];
 
 const STORAGE_KEY_MODE = "flutter-roadmap-timer-mode";
 
 // ── Helpers ────────────────────────────────────────────────────
-
-function formatDisplay(ms: number): string {
-  const totalSeconds = Math.floor(ms / 1000);
-  const h = Math.floor(totalSeconds / 3600);
-  const m = Math.floor((totalSeconds % 3600) / 60);
-  const s = totalSeconds % 60;
-  return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
-}
 
 function loadMode(): TimerMode {
   if (typeof window === "undefined") return "custom";
@@ -117,7 +111,7 @@ function TimerDisplay({
   time: number;
   isRunning: boolean;
 }) {
-  const display = formatDisplay(time);
+  const display = formatTimerDisplay(time);
   const digits = display.split("");
 
   return (
@@ -250,7 +244,7 @@ function CountdownDisplay({
         />
       </div>
       <p className="text-xs text-muted-foreground">
-        {formatDisplay(remainingMs)} remaining
+        {formatTimerDisplay(remainingMs)} remaining
       </p>
     </div>
   );

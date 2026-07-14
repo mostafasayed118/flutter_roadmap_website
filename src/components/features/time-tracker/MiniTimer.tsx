@@ -4,14 +4,7 @@ import Link from "next/link";
 import { Play, Pause, Square } from "lucide-react";
 import { useStudyTimerContext } from "./StudyTimerProvider";
 import { cn } from "@/lib/utils";
-
-function formatDisplay(ms: number): string {
-  const totalSeconds = Math.floor(ms / 1000);
-  const h = Math.floor(totalSeconds / 3600);
-  const m = Math.floor((totalSeconds % 3600) / 60);
-  const s = totalSeconds % 60;
-  return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
-}
+import { formatTimerDisplay } from "@/lib/format-time";
 
 interface MiniTimerProps {
   onStop?: () => void;
@@ -53,7 +46,7 @@ export function MiniTimer({ onStop }: MiniTimerProps) {
               ? "border-amber-500/30 bg-amber-500/10 text-amber-400 hover:bg-amber-500/20"
               : "border-border bg-muted/50 text-muted-foreground hover:bg-muted/80 hover:text-foreground"
         )}
-        aria-label={`Timer: ${formatDisplay(time)}. Go to dashboard.`}
+        aria-label={`Timer: ${formatTimerDisplay(time)}. Go to dashboard.`}
       >
         {/* Pulsing dot */}
         <span className="relative flex size-1.5">
@@ -71,7 +64,7 @@ export function MiniTimer({ onStop }: MiniTimerProps) {
             )}
           />
         </span>
-        {formatDisplay(time)}
+        {formatTimerDisplay(time)}
       </Link>
 
       {hasTime && (

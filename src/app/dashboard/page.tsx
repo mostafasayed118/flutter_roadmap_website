@@ -9,6 +9,7 @@ import { OverallProgressCard } from "@/components/features/dashboard/OverallProg
 import { QuickStatsGrid } from "@/components/features/dashboard/QuickStatsGrid";
 import { NextStepsCard } from "@/components/features/dashboard/NextStepsCard";
 import { StreakCard } from "@/components/features/dashboard/StreakCard";
+import { ShareProgress } from "@/components/features/dashboard/ShareProgress";
 import { AnimatedPage } from "@/components/layout/AnimatedPage";
 import { GlassCard } from "@/components/ui/glass-card";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -76,11 +77,14 @@ export default function DashboardPage() {
   return (
     <AnimatedPage>
       <div className="space-y-6">
-        <h1 className="text-2xl font-bold tracking-tight">
-          <span className="bg-gradient-to-r from-violet-400 via-indigo-400 to-cyan-400 bg-clip-text text-transparent">
-            Dashboard
-          </span>
-        </h1>
+        <div className="flex items-center justify-between">
+          <h1 className="text-2xl font-bold tracking-tight">
+            <span className="bg-gradient-to-r from-violet-400 via-indigo-400 to-cyan-400 bg-clip-text text-transparent">
+              Dashboard
+            </span>
+          </h1>
+          <ShareProgress />
+        </div>
 
         <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
           <OverallProgressCard percentage={stats.overallPercentage} />

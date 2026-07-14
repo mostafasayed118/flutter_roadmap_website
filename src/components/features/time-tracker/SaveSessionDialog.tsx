@@ -18,8 +18,7 @@ import { Save, Clock, ChevronDown } from "lucide-react";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
-
-const MAX_NOTES_LENGTH = 200;
+import { SESSION } from "@/lib/constants";
 
 interface SaveSessionDialogProps {
   open: boolean;
@@ -156,18 +155,18 @@ export function SaveSessionDialog({
               <span
                 className={cn(
                   "text-xs tabular-nums",
-                  notes.length > MAX_NOTES_LENGTH * 0.9
+                  notes.length > SESSION.MAX_NOTES_LENGTH * 0.9
                     ? "text-red-400"
                     : "text-muted-foreground"
                 )}
               >
-                {notes.length}/{MAX_NOTES_LENGTH}
+                {notes.length}/{SESSION.MAX_NOTES_LENGTH}
               </span>
             </div>
             <Textarea
               value={notes}
               onChange={(e) => {
-                if (e.target.value.length <= MAX_NOTES_LENGTH)
+                if (e.target.value.length <= SESSION.MAX_NOTES_LENGTH)
                   setNotes(e.target.value);
               }}
               placeholder="What did you study?"

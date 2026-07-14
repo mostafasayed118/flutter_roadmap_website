@@ -19,11 +19,7 @@ import { ChevronDown, Plus, Clock, Loader2, AlertCircle, Calendar } from "lucide
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
-
-const MAX_HOURS = 24;
-const MAX_MINUTES = 59;
-const MAX_NOTES_LENGTH = 200;
-const MIN_SESSION_MINUTES = 5;
+import { SESSION } from "@/lib/constants";
 
 interface ValidationErrors {
   hours?: string;
@@ -61,24 +57,24 @@ export function LogSessionDialog({ defaultWeekId }: LogSessionDialogProps) {
   const validate = useCallback((): ValidationErrors => {
     const newErrors: ValidationErrors = {};
 
-    if (hours !== "" && (parsedHours < 0 || parsedHours > MAX_HOURS)) {
-      newErrors.hours = `Hours must be 0–${MAX_HOURS}`;
+    if (hours !== "" && (parsedHours < 0 || parsedHours > SESSION.MAX_HOURS)) {
+      newErrors.hours = `Hours must be 0–${SESSION.MAX_HOURS}`;
     }
 
-    if (minutes !== "" && (parsedMinutes < 0 || parsedMinutes > MAX_MINUTES)) {
-      newErrors.minutes = `Minutes must be 0–${MAX_MINUTES}`;
+    if (minutes !== "" && (parsedMinutes < 0 || parsedMinutes > SESSION.MAX_MINUTES)) {
+      newErrors.minutes = `Minutes must be 0–${SESSION.MAX_MINUTES}`;
     }
 
-    if (totalMinutes > 0 && totalMinutes < MIN_SESSION_MINUTES) {
-      newErrors.duration = `Minimum session is ${MIN_SESSION_MINUTES} minutes`;
+    if (totalMinutes > 0 && totalMinutes < SESSION.MIN_DURATION_MINUTES) {
+      newErrors.duration = `Minimum session is ${SESSION.MIN_DURATION_MINUTES} minutes`;
     }
 
-    if (totalMinutes > MAX_HOURS * 60) {
-      newErrors.duration = `Maximum session is ${MAX_HOURS} hours`;
+    if (totalMinutes > SESSION.MAX_HOURS * 60) {
+      newErrors.duration = `Maximum session is ${SESSION.MAX_HOURS} hours`;
     }
 
-    if (notes.length > MAX_NOTES_LENGTH) {
-      newErrors.notes = `Notes must be ${MAX_NOTES_LENGTH} characters or less`;
+    if (notes.length > SESSION.MAX_NOTES_LENGTH) {
+      newErrors.notes = `Notes must be ${SESSION.MAX_NOTES_LENGTH} characters or less`;
     }
 
     return newErrors;
@@ -99,7 +95,7 @@ export function LogSessionDialog({ defaultWeekId }: LogSessionDialogProps) {
   };
 
   const handleNotesChange = (value: string) => {
-    if (value.length <= MAX_NOTES_LENGTH) {
+    if (value.length <= SESSION.MAX_NOTES_LENGTH) {
       setNotes(value);
       setTouched((prev) => ({ ...prev, notes: true }));
     }
@@ -175,12 +171,12 @@ export function LogSessionDialog({ defaultWeekId }: LogSessionDialogProps) {
   );
 
   const hasErrors = useMemo(() => {
-    if (hours !== "" && (parsedHours < 0 || parsedHours > MAX_HOURS)) return true;
-    if (minutes !== "" && (parsedMinutes < 0 || parsedMinutes > MAX_MINUTES))
+    if (hours !== "" && (parsedHours < 0 || parsedHours > SESSION.MAX_HOURS)) return true;
+    if (minutes !== "" && (parsedMinutes < 0 || parsedMinutes > SESSION.MAX_MINUTES))
       return true;
-    if (totalMinutes > 0 && totalMinutes < MIN_SESSION_MINUTES) return true;
-    if (totalMinutes > MAX_HOURS * 60) return true;
-    if (notes.length > MAX_NOTES_LENGTH) return true;
+    if (totalMinutes > 0 && totalMinutes < SESSION.MIN_DURATION_MINUTES) return true;
+    if (totalMinutes > SESSION.MAX_HOURS * 60) return true;
+    if (notes.length > SESSION.MAX_NOTES_LENGTH) return true;
     return false;
   }, [hours, minutes, parsedHours, parsedMinutes, totalMinutes, notes]);
 
@@ -358,12 +354,12 @@ export function LogSessionDialog({ defaultWeekId }: LogSessionDialogProps) {
               <span
                 className={cn(
                   "text-xs tabular-nums",
-                  notes.length > MAX_NOTES_LENGTH * 0.9
+                  notes.length > SESSION.MAX_NOTES_LENGTH * 0.9
                     ? "text-red-400"
                     : "text-muted-foreground"
                 )}
               >
-                {notes.length}/{MAX_NOTES_LENGTH}
+                {notes.length}/{SESSION.MAX_NOTES_LENGTH}
               </span>
             </div>
             <Textarea

@@ -17,10 +17,7 @@ import { Pencil, Loader2, Calendar } from "lucide-react";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
-
-const MAX_NOTES_LENGTH = 200;
-const MAX_HOURS = 24;
-const MAX_MINUTES = 59;
+import { SESSION } from "@/lib/constants";
 
 interface EditSessionDialogProps {
   sessionId: Id<"studySessions">;
@@ -155,7 +152,7 @@ export function EditSessionDialog({
                     value={hours}
                     onChange={(e) => {
                       const v = e.target.value;
-                      if (v === "" || (/^\d*$/.test(v) && parseInt(v) <= MAX_HOURS)) setHours(v);
+                      if (v === "" || (/^\d*$/.test(v) && parseInt(v) <= SESSION.MAX_HOURS)) setHours(v);
                     }}
                     className="border-border bg-muted/50 text-center font-mono text-lg"
                     placeholder="0"
@@ -172,7 +169,7 @@ export function EditSessionDialog({
                     value={minutes}
                     onChange={(e) => {
                       const v = e.target.value;
-                      if (v === "" || (/^\d*$/.test(v) && parseInt(v) <= MAX_MINUTES)) setMinutes(v);
+                      if (v === "" || (/^\d*$/.test(v) && parseInt(v) <= SESSION.MAX_MINUTES)) setMinutes(v);
                     }}
                     className="border-border bg-muted/50 text-center font-mono text-lg"
                     placeholder="0"
@@ -191,18 +188,18 @@ export function EditSessionDialog({
               <span
                 className={cn(
                   "text-xs tabular-nums",
-                  notes.length > MAX_NOTES_LENGTH * 0.9
+                  notes.length > SESSION.MAX_NOTES_LENGTH * 0.9
                     ? "text-red-400"
                     : "text-muted-foreground"
                 )}
               >
-                {notes.length}/{MAX_NOTES_LENGTH}
+                {notes.length}/{SESSION.MAX_NOTES_LENGTH}
               </span>
             </div>
             <Textarea
               value={notes}
               onChange={(e) => {
-                if (e.target.value.length <= MAX_NOTES_LENGTH)
+                if (e.target.value.length <= SESSION.MAX_NOTES_LENGTH)
                   setNotes(e.target.value);
               }}
               placeholder="What did you study?"

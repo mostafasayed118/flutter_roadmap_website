@@ -3,30 +3,8 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { ChevronRight, CheckCircle2 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { getReadDocs, toggleReadDoc } from "@/lib/docs-helpers";
 import type { DocCategoryGroup } from "@/lib/docs/types";
-
-const STORAGE_KEY = "flutterpath-docs-read";
-
-function getReadDocs(): Set<string> {
-  if (typeof window === "undefined") return new Set();
-  try {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    return stored ? new Set(JSON.parse(stored)) : new Set();
-  } catch {
-    return new Set();
-  }
-}
-
-function toggleReadDoc(id: string): Set<string> {
-  const readDocs = getReadDocs();
-  if (readDocs.has(id)) {
-    readDocs.delete(id);
-  } else {
-    readDocs.add(id);
-  }
-  localStorage.setItem(STORAGE_KEY, JSON.stringify([...readDocs]));
-  return readDocs;
-}
 
 interface DocsSidebarEnhancedProps {
   categories: DocCategoryGroup[];

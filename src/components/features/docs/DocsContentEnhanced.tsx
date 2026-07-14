@@ -7,6 +7,7 @@ import {
   filterLoadedCategories,
 } from "@/lib/docs";
 import type { DocCategoryGroup, DocEntry } from "@/lib/docs/types";
+import { getReadDocs, markDocAsRead } from "@/lib/docs-helpers";
 import { DocsSidebar } from "./DocsSidebar";
 import { DocContentRenderer } from "./DocContentRenderer";
 import { SearchBar } from "./SearchBar";
@@ -21,25 +22,6 @@ import {
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-
-const STORAGE_KEY = "flutterpath-docs-read";
-
-function getReadDocs(): Set<string> {
-  if (typeof window === "undefined") return new Set();
-  try {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    return stored ? new Set(JSON.parse(stored)) : new Set();
-  } catch {
-    return new Set();
-  }
-}
-
-function markAsRead(id: string): Set<string> {
-  const readDocs = getReadDocs();
-  readDocs.add(id);
-  localStorage.setItem(STORAGE_KEY, JSON.stringify([...readDocs]));
-  return readDocs;
-}
 
 function DocsSkeleton() {
   return (
@@ -154,7 +136,7 @@ export function DocsContentEnhanced() {
   }, []);
 
   const handleMarkRead = useCallback((entryId: string) => {
-    setReadDocs(markAsRead(entryId));
+    setReadDocs(markDocAsRead(entryId));
   }, []);
 
   if (isLoading) {

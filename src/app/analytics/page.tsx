@@ -4,6 +4,9 @@ import { useState, useMemo } from "react";
 import { useProgress, useRoadmap } from "@/hooks/use-progress";
 import { useSessions } from "@/hooks/use-sessions";
 import { StudyTimeCard } from "@/components/features/dashboard/StudyTimeCard";
+import { WeeklyReview } from "@/components/features/dashboard/WeeklyReview";
+import { StudyReminders } from "@/components/features/dashboard/StudyReminders";
+import { DailyChallenges } from "@/components/features/dashboard/DailyChallenges";
 import { SessionList } from "@/components/features/time-tracker/SessionList";
 import { DocsSuggestions } from "@/components/features/dashboard/DocsSuggestions";
 import { GoalSettingDialog } from "@/components/features/dashboard/GoalSettingDialog";
@@ -11,6 +14,7 @@ import { BadgeShowcase } from "@/components/features/dashboard/BadgeShowcase";
 import { ProgressChart } from "@/components/features/dashboard/ProgressChart";
 import { StudyHeatmap } from "@/components/features/dashboard/StudyHeatmap";
 import { ExportProgress } from "@/components/features/dashboard/ExportProgress";
+import { ExportPDF } from "@/components/features/dashboard/ExportPDF";
 import { AnimatedPage } from "@/components/layout/AnimatedPage";
 import { GlassCard } from "@/components/ui/glass-card";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -72,7 +76,10 @@ export default function AnalyticsPage() {
               Analytics
             </span>
           </h1>
-          <ExportProgress />
+          <div className="flex items-center gap-2">
+            <ExportPDF />
+            <ExportProgress />
+          </div>
         </div>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
@@ -101,11 +108,16 @@ export default function AnalyticsPage() {
 
           <TabsContent value="overview" className="mt-6">
             <div className="space-y-4">
-              <StudyHeatmap sessions={heatmapSessions} />
+              <WeeklyReview />
+              <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
+                <StudyHeatmap sessions={heatmapSessions} />
+                <DailyChallenges />
+              </div>
               <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
                 <StudyTimeCard />
-                <DocsSuggestions currentWeek={stats.currentWeekNumber} />
+                <StudyReminders />
               </div>
+              <DocsSuggestions currentWeek={stats.currentWeekNumber} />
             </div>
           </TabsContent>
 

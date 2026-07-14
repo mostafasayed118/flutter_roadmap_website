@@ -2,16 +2,16 @@
 
 import { ReactNode } from "react";
 import { ThemeProvider } from "next-themes";
-import { ErrorBoundary } from "./ErrorBoundary";
+import { SentryErrorBoundary } from "./SentryErrorBoundary";
 import { ConvexClientProvider } from "./ConvexClientProvider";
 import { StudyTimerProvider } from "@/components/features/time-tracker/StudyTimerProvider";
 import { FocusMode } from "@/components/features/time-tracker/FocusMode";
 import { KeyboardShortcutsProvider } from "./KeyboardShortcutsProvider";
-import { ShortcutsDialog } from "@/components/features/keyboard-shortcuts/ShortcutsDialog";
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/layout/AppSidebar";
 import { TopNavbar } from "@/components/layout/TopNavbar";
 import { MobileNav } from "@/components/layout/MobileNav";
+import { SrAnnouncer } from "@/components/ui/sr-announcer";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Toaster } from "@/components/ui/sonner";
 
@@ -22,7 +22,7 @@ export function ClientProviders({ children }: { children: ReactNode }) {
         <StudyTimerProvider>
           <KeyboardShortcutsProvider>
             <TooltipProvider>
-              <ErrorBoundary>
+              <SentryErrorBoundary>
                 <SidebarProvider>
                   <AppSidebar />
                   <SidebarInset className="flex flex-col min-w-0">
@@ -35,10 +35,10 @@ export function ClientProviders({ children }: { children: ReactNode }) {
                   </SidebarInset>
                   <MobileNav />
                 </SidebarProvider>
-                <ShortcutsDialog />
                 <FocusMode />
+                <SrAnnouncer />
                 <Toaster />
-              </ErrorBoundary>
+              </SentryErrorBoundary>
             </TooltipProvider>
           </KeyboardShortcutsProvider>
         </StudyTimerProvider>
