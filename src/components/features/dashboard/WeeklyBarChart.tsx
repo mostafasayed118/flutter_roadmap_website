@@ -13,6 +13,8 @@ interface WeeklyBarChartProps {
 }
 
 export function WeeklyBarChart({ data }: WeeklyBarChartProps) {
+  if (data.length === 0) return null;
+
   const maxMinutes = data.reduce((max, d) => Math.max(max, d.minutes), 1);
 
   return (

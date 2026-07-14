@@ -151,6 +151,9 @@ export function SearchBar({
           aria-label="Search documentation"
           aria-expanded={isOpen && results.length > 0}
           aria-autocomplete="list"
+          aria-activedescendant={
+            highlightIndex >= 0 ? `search-result-${highlightIndex}` : undefined
+          }
           role="combobox"
         />
         {query && (

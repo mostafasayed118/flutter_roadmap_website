@@ -29,12 +29,18 @@ export const addSession = mutation({
       if (!week) throw new Error(`Referenced week not found: ${args.weekId}`);
     }
 
+    // Cap notes to 2000 characters to prevent oversized payloads
+    const MAX_NOTES = 2000;
+    const notes = args.notes && args.notes.length > MAX_NOTES
+      ? args.notes.slice(0, MAX_NOTES)
+      : args.notes;
+
     return await ctx.db.insert("studySessions", {
       userId: args.userId,
       weekId: args.weekId,
       durationMinutes: args.durationMinutes,
       date: args.date,
-      notes: args.notes,
+      notes,
       tags: args.tags,
     });
   },
@@ -78,7 +84,8 @@ export const updateSession = mutation({
     }
 
     if (args.notes !== undefined) {
-      patch.notes = args.notes;
+      const MAX_NOTES = 2000;
+      patch.notes = args.notes.length > MAX_NOTES ? args.notes.slice(0, MAX_NOTES) : args.notes;
     }
 
     if (args.tags !== undefined) {

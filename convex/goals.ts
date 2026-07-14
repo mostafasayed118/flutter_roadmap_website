@@ -29,6 +29,10 @@ export const setGoal = mutation({
     year: v.number(),
   },
   handler: async (ctx, args) => {
+    // Clamp targets to valid ranges
+    const targetHours = Math.max(1, Math.min(168, Math.round(args.targetHours)));
+    const targetTopics = Math.max(1, Math.min(50, Math.round(args.targetTopics)));
+
     const existing = await ctx.db
       .query("userGoals")
       .withIndex("by_user_week", (q) =>
@@ -41,8 +45,8 @@ export const setGoal = mutation({
 
     if (existing) {
       await ctx.db.patch(existing._id, {
-        targetHours: args.targetHours,
-        targetTopics: args.targetTopics,
+        targetHours,
+        targetTopics,
       });
       return existing._id;
     }
@@ -50,8 +54,8 @@ export const setGoal = mutation({
     return await ctx.db.insert("userGoals", {
       userId: args.userId,
       weekNumber: args.weekNumber,
-      targetHours: args.targetHours,
-      targetTopics: args.targetTopics,
+      targetHours,
+      targetTopics,
       year: args.year,
     });
   },

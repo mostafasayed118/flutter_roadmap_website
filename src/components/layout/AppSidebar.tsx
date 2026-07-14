@@ -67,7 +67,8 @@ export function AppSidebar() {
           </SidebarGroupLabel>
           <SidebarMenu>
             {navItems.map((item) => {
-              const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
+              const normalizedPath = pathname.replace(/\/+$/, "") || "/";
+              const isActive = normalizedPath === item.href || normalizedPath.startsWith(item.href + "/");
               const Icon = item.icon;
               return (
                 <SidebarMenuItem key={item.href}>

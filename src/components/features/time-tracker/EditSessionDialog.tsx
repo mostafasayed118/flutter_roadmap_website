@@ -19,6 +19,8 @@ import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
 const MAX_NOTES_LENGTH = 200;
+const MAX_HOURS = 24;
+const MAX_MINUTES = 59;
 
 interface EditSessionDialogProps {
   sessionId: Id<"studySessions">;
@@ -153,9 +155,10 @@ export function EditSessionDialog({
                     value={hours}
                     onChange={(e) => {
                       const v = e.target.value;
-                      if (v === "" || /^\d*$/.test(v)) setHours(v);
+                      if (v === "" || (/^\d*$/.test(v) && parseInt(v) <= MAX_HOURS)) setHours(v);
                     }}
                     className="border-border bg-muted/50 text-center font-mono text-lg"
+                    placeholder="0"
                   />
                   <span className="text-sm text-muted-foreground">h</span>
                 </div>
@@ -169,9 +172,10 @@ export function EditSessionDialog({
                     value={minutes}
                     onChange={(e) => {
                       const v = e.target.value;
-                      if (v === "" || /^\d*$/.test(v)) setMinutes(v);
+                      if (v === "" || (/^\d*$/.test(v) && parseInt(v) <= MAX_MINUTES)) setMinutes(v);
                     }}
                     className="border-border bg-muted/50 text-center font-mono text-lg"
+                    placeholder="0"
                   />
                   <span className="text-sm text-muted-foreground">m</span>
                 </div>

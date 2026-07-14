@@ -23,14 +23,17 @@ export const addProject = mutation({
     technologies: v.array(v.string()),
   },
   handler: async (ctx, args) => {
+    const MAX_TITLE = 200;
+    const MAX_DESC = 2000;
+    const MAX_URL = 2000;
     return await ctx.db.insert("projectShowcase", {
       userId: args.userId,
-      title: args.title,
-      description: args.description,
-      githubUrl: args.githubUrl,
-      liveUrl: args.liveUrl,
-      imageUrl: args.imageUrl,
-      technologies: args.technologies,
+      title: args.title.slice(0, MAX_TITLE),
+      description: args.description.slice(0, MAX_DESC),
+      githubUrl: args.githubUrl?.slice(0, MAX_URL),
+      liveUrl: args.liveUrl?.slice(0, MAX_URL),
+      imageUrl: args.imageUrl?.slice(0, MAX_URL),
+      technologies: args.technologies.slice(0, 20),
       createdAt: Date.now(),
     });
   },

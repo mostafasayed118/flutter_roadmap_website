@@ -384,23 +384,36 @@ interface StudyTimerProps {
 export function StudyTimer({ onStop }: StudyTimerProps) {
   const timer = useStudyTimerContext();
   const [mode, setMode] = useState<TimerMode>(loadMode);
-  const [countdownTarget, setCountdownTarget] = useState<number | null>(null);
-  const countdownStartRef = useRef<number>(0);
+  const [countdownRemaining, setCountdownRemaining] = useState<number | null>(null);
   const countdownDurationRef = useRef<number>(0);
+  const countdownIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const hasNotifiedRef = useRef(false);
 
-  // Derive countdown remaining from the main timer's tick (no separate interval)
-  const countdownRemaining =
-    countdownTarget !== null
-      ? Math.max(0, countdownTarget - Date.now())
-      : 0;
-
-  // Auto-stop when countdown expires — fire notification ONCE
+  // Clear countdown interval on unmount
   useEffect(() => {
-    if (countdownTarget === null || countdownRemaining > 0) return;
+    return () => {
+      if (countdownIntervalRef.current) clearInterval(countdownIntervalRef.current);
+    };
+  }, []);
+
+  // Stop countdown interval when timer stops or pauses
+  useEffect(() => {
+    if (!timer.isRunning && countdownIntervalRef.current) {
+      clearInterval(countdownIntervalRef.current);
+      countdownIntervalRef.current = null;
+    }
+  }, [timer.isRunning]);
+
+  // Auto-stop when countdown reaches zero — fire notification ONCE
+  useEffect(() => {
+    if (countdownRemaining === null || countdownRemaining > 0) return;
 
     // Countdown expired — clear it regardless of running state
-    setCountdownTarget(null);
+    setCountdownRemaining(null);
+    if (countdownIntervalRef.current) {
+      clearInterval(countdownIntervalRef.current);
+      countdownIntervalRef.current = null;
+    }
 
     if (timer.isRunning) {
       if (!hasNotifiedRef.current) {
@@ -410,7 +423,32 @@ export function StudyTimer({ onStop }: StudyTimerProps) {
       }
       timer.stop();
     }
-  }, [countdownTarget, countdownRemaining, timer.isRunning, timer.stop, timer.triggerNotification, mode]);
+  }, [countdownRemaining, timer.isRunning, timer.stop, timer.triggerNotification, mode]);
+
+  const startCountdown = useCallback((durationMs: number) => {
+    if (countdownIntervalRef.current) clearInterval(countdownIntervalRef.current);
+    const durationSec = Math.ceil(durationMs / 1000);
+    setCountdownRemaining(durationSec);
+    countdownDurationRef.current = durationSec;
+    countdownIntervalRef.current = setInterval(() => {
+      setCountdownRemaining((prev) => {
+        if (prev === null || prev <= 0) {
+          if (countdownIntervalRef.current) clearInterval(countdownIntervalRef.current);
+          countdownIntervalRef.current = null;
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+  }, []);
+
+  const clearCountdown = useCallback(() => {
+    if (countdownIntervalRef.current) {
+      clearInterval(countdownIntervalRef.current);
+      countdownIntervalRef.current = null;
+    }
+    setCountdownRemaining(null);
+  }, []);
 
   const handlePresetSelect = useCallback(
     (presetMode: TimerMode, durationMs: number) => {
@@ -419,15 +457,13 @@ export function StudyTimer({ onStop }: StudyTimerProps) {
       hasNotifiedRef.current = false;
       if (timer.isRunning) timer.stop();
       if (timer.isPaused) timer.reset();
+      clearCountdown();
       if (durationMs > 0) {
-        const target = Date.now() + durationMs;
-        setCountdownTarget(target);
-        countdownStartRef.current = Date.now();
-        countdownDurationRef.current = durationMs;
+        startCountdown(durationMs);
         timer.start();
       }
     },
-    [timer]
+    [timer, startCountdown, clearCountdown]
   );
 
   const handleStart = useCallback(() => {
@@ -435,29 +471,26 @@ export function StudyTimer({ onStop }: StudyTimerProps) {
     if (mode !== "custom") {
       const preset = POMODORO_PRESETS.find((p) => p.mode === mode);
       if (preset) {
-        const target = Date.now() + preset.durationMs;
-        setCountdownTarget(target);
-        countdownStartRef.current = Date.now();
-        countdownDurationRef.current = preset.durationMs;
+        startCountdown(preset.durationMs);
       }
     }
     timer.start();
-  }, [timer, mode]);
+  }, [timer, mode, startCountdown]);
 
   const handleStop = useCallback(() => {
+    clearCountdown();
     if (onStop) {
       onStop();
     } else {
       timer.stop();
       toast.info("Timer stopped — save your session?");
     }
-    setCountdownTarget(null);
-  }, [timer, onStop]);
+  }, [timer, onStop, clearCountdown]);
 
   const handleReset = useCallback(() => {
     timer.reset();
-    setCountdownTarget(null);
-  }, [timer]);
+    clearCountdown();
+  }, [timer, clearCountdown]);
 
   const glowColor = timer.isRunning
     ? "emerald"
@@ -487,10 +520,10 @@ export function StudyTimer({ onStop }: StudyTimerProps) {
       </div>
 
       {/* Countdown Progress (Pomodoro only) */}
-      {countdownTarget !== null && countdownRemaining > 0 && (
+      {countdownRemaining !== null && countdownRemaining > 0 && (
         <CountdownDisplay
-          remainingMs={countdownRemaining}
-          totalMs={countdownDurationRef.current}
+          remainingMs={countdownRemaining * 1000}
+          totalMs={countdownDurationRef.current * 1000}
         />
       )}
 

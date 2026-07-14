@@ -3,6 +3,7 @@
 import { useQuery, useMutation } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import { useUserId } from "./use-user-id";
+import { Id } from "../../convex/_generated/dataModel";
 
 export function useBookmarks() {
   const userId = useUserId();
@@ -24,8 +25,8 @@ export function useBookmarks() {
     bookmarks: bookmarks ?? [],
     isBookmarked,
     toggleBookmark: userId
-      ? (weekId: string, topicIndex: number, topicTitle: string) =>
-          toggleBookmark({ userId, weekId: weekId as any, topicIndex, topicTitle })
+      ? (weekId: Id<"roadmapWeeks">, topicIndex: number, topicTitle: string) =>
+          toggleBookmark({ userId, weekId, topicIndex, topicTitle })
       : undefined,
     updateNote,
   };

@@ -20,6 +20,7 @@ import { AnimatedPage } from "@/components/layout/AnimatedPage";
 import { GlassCard } from "@/components/ui/glass-card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { fireBigCelebration } from "@/lib/confetti";
+import { useBadgeEvaluator } from "@/hooks/use-badge-evaluator";
 import { useEffect, useRef } from "react";
 
 export default function DashboardPage() {
@@ -28,6 +29,9 @@ export default function DashboardPage() {
   const [saveOpen, setSaveOpen] = useState(false);
   const [savedDuration, setSavedDuration] = useState(0);
   const timer = useStudyTimerContext();
+
+  // Auto-evaluate and unlock badges when data changes
+  useBadgeEvaluator();
 
   useEffect(() => {
     if (stats && stats.overallPercentage === 100 && wasRef.current < 100) {
@@ -47,6 +51,16 @@ export default function DashboardPage() {
       setSaveOpen(true);
     }
   }, [timer.time, originalStop]);
+
+  // Listen for keyboard shortcut save event
+  useEffect(() => {
+    const handleSaveEvent = () => {
+      interceptedStop();
+    };
+    window.addEventListener("flutter-path:save-session", handleSaveEvent);
+    return () =>
+      window.removeEventListener("flutter-path:save-session", handleSaveEvent);
+  }, [interceptedStop]);
 
   if (isLoading || !stats) {
     return (
@@ -181,6 +195,7 @@ export default function DashboardPage() {
           <DocsSuggestions currentWeek={stats.currentWeekNumber} />
         </div>
 
+        {/* TODO: Wire ProgressChart to per-week topic/project completion data */}
         <ProgressChart weeklyData={[]} />
 
         <BadgeShowcase />

@@ -51,6 +51,8 @@ export const updateBookmarkNote = mutation({
     note: v.string(),
   },
   handler: async (ctx, args) => {
-    await ctx.db.patch(args.bookmarkId, { note: args.note });
+    const MAX_NOTE = 1000;
+    const note = args.note.length > MAX_NOTE ? args.note.slice(0, MAX_NOTE) : args.note;
+    await ctx.db.patch(args.bookmarkId, { note });
   },
 });

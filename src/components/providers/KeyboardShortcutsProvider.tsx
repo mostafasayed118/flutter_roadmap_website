@@ -51,10 +51,9 @@ export function KeyboardShortcutsProvider({
   }, [timer]);
 
   const handleSaveSession = useCallback(() => {
-    // Save is handled by the page-level stop handler
-    // This shortcut just triggers stop if timer is running
+    // Dispatch a custom event so pages can intercept the save flow
     if (timer.isRunning || timer.isPaused) {
-      timer.stop();
+      window.dispatchEvent(new CustomEvent("flutter-path:save-session"));
     }
   }, [timer]);
 

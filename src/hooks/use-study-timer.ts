@@ -10,6 +10,9 @@ import {
   resumeAudioContext,
   triggerTimerAlert,
 } from "@/lib/timer-notifications";
+import { formatTimerDisplay } from "@/lib/format-time";
+
+export { formatTimerDisplay };
 
 export interface TimerState {
   isRunning: boolean;
@@ -189,18 +192,30 @@ export function useStudyTimer(): StudyTimerApi {
     if (!saved) return;
 
     const now = Date.now();
+    const MAX_RESTORED_MS = 24 * 60 * 60 * 1000; // 24 hours
 
     if (saved.isRunning && saved.startTimestamp !== null) {
       const elapsed = saved.accumulatedMs + (now - saved.startTimestamp);
-      const next: TimerState = {
-        isRunning: true,
-        accumulatedMs: saved.accumulatedMs,
-        startTimestamp: now,
-        displayMs: elapsed,
-      };
-      setState(next);
-      persist(next);
-      startTick();
+      // If elapsed time is unreasonably large (e.g. laptop sleep), cap it
+      if (elapsed > MAX_RESTORED_MS) {
+        const next: TimerState = {
+          isRunning: false,
+          accumulatedMs: saved.accumulatedMs,
+          startTimestamp: null,
+          displayMs: saved.accumulatedMs,
+        };
+        setState(next);
+      } else {
+        const next: TimerState = {
+          isRunning: true,
+          accumulatedMs: saved.accumulatedMs,
+          startTimestamp: now,
+          displayMs: elapsed,
+        };
+        setState(next);
+        persist(next);
+        startTick();
+      }
     } else if (saved.accumulatedMs > 0) {
       const next: TimerState = {
         isRunning: false,
@@ -274,12 +289,4 @@ export function useStudyTimer(): StudyTimerApi {
       updateNotificationSettings,
     ]
   );
-}
-
-export function formatTimerDisplay(ms: number): string {
-  const totalSeconds = Math.floor(ms / 1000);
-  const h = Math.floor(totalSeconds / 3600);
-  const m = Math.floor((totalSeconds % 3600) / 60);
-  const s = totalSeconds % 60;
-  return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
 }

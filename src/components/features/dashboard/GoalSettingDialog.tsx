@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Target, Pencil } from "lucide-react";
 import { GlassCard } from "@/components/ui/glass-card";
 import { Button } from "@/components/ui/button";
@@ -30,15 +30,23 @@ export function GoalSettingDialog({
   const [targetHours, setTargetHours] = useState(goal?.targetHours ?? 5);
   const [targetTopics, setTargetTopics] = useState(goal?.targetTopics ?? 3);
 
+  // Sync form state when dialog opens OR when goal data finishes loading
+  useEffect(() => {
+    if (open && goal) {
+      setTargetHours(goal.targetHours);
+      setTargetTopics(goal.targetTopics);
+    }
+  }, [open, goal]);
+
   const handleSave = () => {
     setGoal?.(targetHours, targetTopics);
     setOpen(false);
   };
 
-  const hoursProgress = goal
+  const hoursProgress = goal && goal.targetHours > 0
     ? Math.min(100, Math.round((completedHours / goal.targetHours) * 100))
     : 0;
-  const topicsProgress = goal
+  const topicsProgress = goal && goal.targetTopics > 0
     ? Math.min(100, Math.round((completedTopics / goal.targetTopics) * 100))
     : 0;
   const goalMet = !!(goal && hoursProgress >= 100 && topicsProgress >= 100);
@@ -116,7 +124,7 @@ export function GoalSettingDialog({
                   min={1}
                   max={40}
                   value={targetHours}
-                  onChange={(e) => setTargetHours(Number(e.target.value))}
+                  onChange={(e) => setTargetHours(Math.max(1, Number(e.target.value) || 1))}
                   className="mt-1 h-9 w-full rounded-lg border border-border bg-background/50 px-3 text-sm text-foreground focus:border-violet-500/40 focus:outline-none focus:ring-1 focus:ring-violet-500/30"
                 />
               </div>
@@ -127,7 +135,7 @@ export function GoalSettingDialog({
                   min={1}
                   max={20}
                   value={targetTopics}
-                  onChange={(e) => setTargetTopics(Number(e.target.value))}
+                  onChange={(e) => setTargetTopics(Math.max(1, Number(e.target.value) || 1))}
                   className="mt-1 h-9 w-full rounded-lg border border-border bg-background/50 px-3 text-sm text-foreground focus:border-violet-500/40 focus:outline-none focus:ring-1 focus:ring-violet-500/30"
                 />
               </div>

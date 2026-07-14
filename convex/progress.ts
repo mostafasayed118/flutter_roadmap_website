@@ -255,6 +255,10 @@ export const updateWeekNotes = mutation({
     notes: v.string(),
   },
   handler: async (ctx, args) => {
+    // Cap notes to 5000 characters to prevent oversized payloads
+    const MAX_NOTES = 5000;
+    const notes = args.notes.length > MAX_NOTES ? args.notes.slice(0, MAX_NOTES) : args.notes;
+
     const existing = await ctx.db
       .query("userProgress")
       .withIndex("by_user_week", (q) =>
@@ -263,14 +267,14 @@ export const updateWeekNotes = mutation({
       .first();
 
     if (existing) {
-      await ctx.db.patch(existing._id, { notes: args.notes });
+      await ctx.db.patch(existing._id, { notes });
     } else {
       await ctx.db.insert("userProgress", {
         userId: args.userId,
         weekId: args.weekId,
         completedTopics: [],
         completedProjects: [],
-        notes: args.notes,
+        notes,
       });
     }
   },
@@ -290,6 +294,115 @@ export const getWeekNotes = query({
       .first();
 
     return existing?.notes ?? "";
+  },
+});
+
+export interface BadgeProgressData {
+  /** Week order numbers (1-based) where all topics + projects are complete */
+  completedWeekOrders: number[];
+  /** Phase order numbers (1-based) where at least 1 topic or project is done */
+  startedPhaseOrders: number[];
+  /** Phase order numbers (1-based) where ALL topics + projects across ALL weeks are done */
+  completedPhaseOrders: number[];
+  /** Total weeks fully completed */
+  totalWeeksCompleted: number;
+}
+
+export const getBadgeProgressData = query({
+  args: { userId: v.string() },
+  handler: async (ctx, args): Promise<BadgeProgressData> => {
+    // 1. Fetch all phases (10 records) and all weeks (34 records) — lightweight
+    const phases = await ctx.db
+      .query("roadmapPhases")
+      .withIndex("by_order")
+      .collect();
+
+    const allWeeks = await ctx.db.query("roadmapWeeks").collect();
+
+    // 2. Build phaseId → phase order map
+    const phaseOrderMap = new Map<string, number>();
+    for (const phase of phases) {
+      phaseOrderMap.set(phase._id, phase.order);
+    }
+
+    // 3. Fetch all user progress for this user (uses by_user index)
+    const progressRecords = await ctx.db
+      .query("userProgress")
+      .withIndex("by_user", (q) => q.eq("userId", args.userId))
+      .collect();
+
+    const progressMap = new Map<string, Doc<"userProgress">>();
+    for (const p of progressRecords) {
+      progressMap.set(p.weekId, p);
+    }
+
+    // 4. Compute per-week and per-phase completion in a single pass
+    const completedWeekOrders: number[] = [];
+    const phaseStats = new Map<
+      number,
+      { totalTopics: number; totalProjects: number; doneTopics: number; doneProjects: number; hasAnyDone: boolean }
+    >();
+
+    for (const phase of phases) {
+      phaseStats.set(phase.order, {
+        totalTopics: 0,
+        totalProjects: 0,
+        doneTopics: 0,
+        doneProjects: 0,
+        hasAnyDone: false,
+      });
+    }
+
+    for (const week of allWeeks) {
+      const phaseOrder = phaseOrderMap.get(week.phaseId);
+      if (phaseOrder === undefined) continue;
+
+      const stats = phaseStats.get(phaseOrder)!;
+      stats.totalTopics += week.topics.length;
+      stats.totalProjects += week.projects.length;
+
+      const progress = progressMap.get(week._id);
+      if (progress) {
+        const doneTopics = progress.completedTopics.length;
+        const doneProjects = progress.completedProjects.length;
+        stats.doneTopics += doneTopics;
+        stats.doneProjects += doneProjects;
+
+        if (doneTopics > 0 || doneProjects > 0) {
+          stats.hasAnyDone = true;
+        }
+
+        // Week is complete if all topics and all projects are done
+        if (
+          doneTopics >= week.topics.length &&
+          doneProjects >= week.projects.length
+        ) {
+          completedWeekOrders.push(week.order);
+        }
+      }
+    }
+
+    // 5. Compute phase-level completion
+    const startedPhaseOrders: number[] = [];
+    const completedPhaseOrders: number[] = [];
+
+    for (const [phaseOrder, stats] of phaseStats) {
+      if (stats.hasAnyDone) {
+        startedPhaseOrders.push(phaseOrder);
+      }
+      const totalItems = stats.totalTopics + stats.totalProjects;
+      const doneItems = stats.doneTopics + stats.doneProjects;
+      if (totalItems > 0 && doneItems >= totalItems) {
+        completedPhaseOrders.push(phaseOrder);
+      }
+    }
+
+    return {
+      completedWeekOrders,
+      startedPhaseOrders,
+      completedPhaseOrders,
+      totalWeeksCompleted: completedWeekOrders.length,
+    };
   },
 });
 

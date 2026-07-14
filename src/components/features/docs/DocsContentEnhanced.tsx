@@ -59,6 +59,7 @@ function DocsSkeleton() {
 export function DocsContentEnhanced() {
   const [categories, setCategories] = useState<DocCategoryGroup[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [loadError, setLoadError] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<DocEntry[]>([]);
@@ -66,10 +67,15 @@ export function DocsContentEnhanced() {
 
   // Load categories lazily on mount
   useEffect(() => {
-    loadAllCategories().then((cats) => {
-      setCategories(cats);
-      setIsLoading(false);
-    });
+    loadAllCategories()
+      .then((cats) => {
+        setCategories(cats);
+        setIsLoading(false);
+      })
+      .catch(() => {
+        setLoadError(true);
+        setIsLoading(false);
+      });
   }, []);
 
   const filteredCategories = useMemo(
@@ -113,6 +119,26 @@ export function DocsContentEnhanced() {
 
   if (isLoading) {
     return <DocsSkeleton />;
+  }
+
+  if (loadError) {
+    return (
+      <div className="flex min-h-[400px] items-center justify-center p-4">
+        <div className="max-w-md w-full rounded-xl border border-red-500/20 bg-red-500/5 p-6 text-center space-y-4">
+          <p className="text-lg font-semibold text-red-300">Failed to load documentation</p>
+          <p className="text-sm text-muted-foreground">
+            Please refresh the page to try again.
+          </p>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => window.location.reload()}
+          >
+            Retry
+          </Button>
+        </div>
+      </div>
+    );
   }
 
   return (
