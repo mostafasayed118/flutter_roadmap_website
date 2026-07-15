@@ -18,6 +18,7 @@ import { ProgressChart } from "@/components/features/dashboard/ProgressChart";
 import { StudyHeatmap } from "@/components/features/dashboard/StudyHeatmap";
 import { ExportProgress } from "@/components/features/dashboard/ExportProgress";
 import { ExportPDF } from "@/components/features/dashboard/ExportPDF";
+import { ExportMD } from "@/components/features/dashboard/ExportMD";
 import { AnimatedPage } from "@/components/layout/AnimatedPage";
 import { GlassCard } from "@/components/ui/glass-card";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -87,6 +88,7 @@ export default function AnalyticsPage() {
           </h1>
           <div className="flex items-center gap-2">
             <ExportPDF />
+            <ExportMD />
             <ExportProgress />
           </div>
         </div>

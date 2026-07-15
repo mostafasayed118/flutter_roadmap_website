@@ -1,10 +1,6 @@
-# https://www.robotstxt.org/robotstxt.html
 User-agent: *
 Allow: /
-
-# Disallow private/authenticated routes
-Disallow: /dashboard
 Disallow: /api/
+Disallow: /convex/
 
-# Sitemap location
-Sitemap: https://flutter-roadmap-website.vercel.app/sitemap.xml
+Sitemap: https://flutterpath.app/sitemap.xml
