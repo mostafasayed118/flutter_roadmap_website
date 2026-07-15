@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useRef, useEffect } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 
 /**
  * Debounce function - delays execution until after wait period
@@ -53,8 +53,6 @@ export function useDebounce<T>(value: T, delay: number): T {
 
   return debouncedValue;
 }
-
-import { useState } from "react";
 
 /**
  * Hook for throttled callback

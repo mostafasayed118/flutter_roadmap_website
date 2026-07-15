@@ -1,15 +1,16 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { useSessions } from "@/hooks/use-sessions";
 import { useRoadmap } from "@/hooks/use-progress";
 import { GlassCard } from "@/components/ui/glass-card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { EmptyState } from "@/components/ui/empty-state";
+import { Button } from "@/components/ui/button";
 import { formatMinutes } from "@/lib/format-time";
 import { EditSessionDialog } from "./EditSessionDialog";
 import { DeleteSessionDialog } from "./DeleteSessionDialog";
-import { Calendar, Clock, FileText } from "lucide-react";
+import { Calendar, Clock, FileText, ChevronDown } from "lucide-react";
 import { motion } from "framer-motion";
 
 function buildWeekNameMap(
@@ -28,8 +29,11 @@ function buildWeekNameMap(
 export function SessionList() {
   const { sessions } = useSessions();
   const { roadmap } = useRoadmap();
+  const [showCount, setShowCount] = useState(10);
 
   const weekNameMap = useMemo(() => buildWeekNameMap(roadmap), [roadmap]);
+  const visibleSessions = useMemo(() => sessions?.slice(0, showCount) ?? [], [sessions, showCount]);
+  const hasMore = sessions ? sessions.length > showCount : false;
 
   if (!sessions) {
     return (
@@ -71,7 +75,7 @@ export function SessionList() {
     <GlassCard className="p-5">
       <h2 className="mb-3 text-lg font-semibold">Recent Sessions</h2>
       <div className="space-y-2">
-        {sessions.slice(0, 10).map((session, idx) => {
+        {visibleSessions.map((session, idx) => {
           const date = new Date(session.date);
           const dateStr = date.toLocaleDateString("en-US", {
             month: "short",
@@ -138,6 +142,18 @@ export function SessionList() {
           );
         })}
       </div>
+
+      {hasMore && (
+        <Button
+          variant="ghost"
+          size="sm"
+          className="mt-3 w-full"
+          onClick={() => setShowCount((prev) => prev + 10)}
+        >
+          <ChevronDown className="mr-2 size-4" />
+          Show More ({sessions!.length - showCount} remaining)
+        </Button>
+      )}
     </GlassCard>
   );
 }

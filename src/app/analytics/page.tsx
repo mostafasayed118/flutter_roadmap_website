@@ -57,6 +57,12 @@ export default function AnalyticsPage() {
     }));
   }, [sessions]);
 
+  const completedHours = useMemo(() => {
+    if (!sessions) return 0;
+    const totalMinutes = sessions.reduce((sum, s) => sum + s.durationMinutes, 0);
+    return totalMinutes / 60;
+  }, [sessions]);
+
   if (isLoading || !stats) {
     return (
       <div className="space-y-6">
@@ -139,7 +145,7 @@ export default function AnalyticsPage() {
               <GoalSettingDialog
                 weekNumber={stats.currentWeekNumber ?? 1}
                 completedTopics={stats.completedTopics}
-                completedHours={0}
+                completedHours={completedHours}
               />
             </GlassCard>
           </TabsContent>

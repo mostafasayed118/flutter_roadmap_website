@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { useWeekNotes } from "@/hooks/use-notes";
 import { Id } from "../../../../convex/_generated/dataModel";
 import { cn } from "@/lib/utils";
+import { SESSION } from "@/lib/constants";
 
 interface WeekNotesProps {
   weekId: Id<"roadmapWeeks">;
@@ -59,8 +60,12 @@ export function WeekNotes({ weekId, className }: WeekNotesProps) {
             value={draft}
             onChange={(e) => setDraft(e.target.value)}
             placeholder="What did you learn this week?"
+            maxLength={SESSION.MAX_NOTES_LENGTH}
             className="h-24 w-full resize-none rounded-md border border-border bg-background/50 p-2 text-sm text-foreground placeholder:text-muted-foreground/50 focus:border-violet-500/40 focus:outline-none focus:ring-1 focus:ring-violet-500/30"
           />
+          <div className="mt-1 text-right text-xs text-muted-foreground">
+            {draft.length}/{SESSION.MAX_NOTES_LENGTH}
+          </div>
         </div>
       </div>
     );
