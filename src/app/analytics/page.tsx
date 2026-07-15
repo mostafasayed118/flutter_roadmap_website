@@ -7,6 +7,9 @@ import { StudyTimeCard } from "@/components/features/dashboard/StudyTimeCard";
 import { WeeklyReview } from "@/components/features/dashboard/WeeklyReview";
 import { StudyReminders } from "@/components/features/dashboard/StudyReminders";
 import { DailyChallenges } from "@/components/features/dashboard/DailyChallenges";
+import { TimerHistory } from "@/components/features/dashboard/TimerHistory";
+import { ThemeCustomizer } from "@/components/features/dashboard/ThemeCustomizer";
+import { AchievementShowcase } from "@/components/features/dashboard/AchievementShowcase";
 import { SessionList } from "@/components/features/time-tracker/SessionList";
 import { DocsSuggestions } from "@/components/features/dashboard/DocsSuggestions";
 import { GoalSettingDialog } from "@/components/features/dashboard/GoalSettingDialog";
@@ -117,12 +120,18 @@ export default function AnalyticsPage() {
                 <StudyTimeCard />
                 <StudyReminders />
               </div>
-              <DocsSuggestions currentWeek={stats.currentWeekNumber} />
+              <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
+                <ThemeCustomizer />
+                <DocsSuggestions currentWeek={stats.currentWeekNumber} />
+              </div>
             </div>
           </TabsContent>
 
           <TabsContent value="sessions" className="mt-6">
-            <SessionList />
+            <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
+              <TimerHistory />
+              <SessionList />
+            </div>
           </TabsContent>
 
           <TabsContent value="goals" className="mt-6">
@@ -136,7 +145,10 @@ export default function AnalyticsPage() {
           </TabsContent>
 
           <TabsContent value="badges" className="mt-6">
-            <BadgeShowcase />
+            <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
+              <AchievementShowcase />
+              <BadgeShowcase />
+            </div>
           </TabsContent>
 
           <TabsContent value="progress" className="mt-6">

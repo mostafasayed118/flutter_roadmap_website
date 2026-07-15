@@ -12,6 +12,7 @@ import { AppSidebar } from "@/components/layout/AppSidebar";
 import { TopNavbar } from "@/components/layout/TopNavbar";
 import { MobileNav } from "@/components/layout/MobileNav";
 import { SrAnnouncer } from "@/components/ui/sr-announcer";
+import { OfflineIndicator } from "@/components/ui/offline-indicator";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Toaster } from "@/components/ui/sonner";
 
@@ -36,6 +37,7 @@ export function ClientProviders({ children }: { children: ReactNode }) {
                   <MobileNav />
                 </SidebarProvider>
                 <FocusMode />
+                <OfflineIndicator />
                 <SrAnnouncer />
                 <Toaster />
               </SentryErrorBoundary>

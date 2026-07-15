@@ -5,7 +5,7 @@
 
 // ── Types ──────────────────────────────────────────────────────
 
-export type SoundType = "focus-complete" | "break-complete";
+export type SoundType = "start" | "pause" | "resume" | "focus-complete" | "break-complete";
 
 export interface NotificationSettings {
   soundEnabled: boolean;
@@ -48,7 +48,7 @@ function getAudioContext(): AudioContext | null {
   if (typeof window === "undefined") return null;
   if (audioCtx) return audioCtx;
   try {
-    audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
+    audioCtx = new (window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext)();
     return audioCtx;
   } catch {
     return null;
@@ -82,6 +82,21 @@ interface ChimeNote {
   duration: number;
   gain: number;
 }
+
+const START_CHIME: ChimeNote[] = [
+  { frequency: 523.25, startOffset: 0, duration: 0.1, gain: 0.25 },      // C5
+  { frequency: 659.25, startOffset: 0.08, duration: 0.15, gain: 0.25 },  // E5
+];
+
+const PAUSE_CHIME: ChimeNote[] = [
+  { frequency: 659.25, startOffset: 0, duration: 0.1, gain: 0.25 },      // E5
+  { frequency: 523.25, startOffset: 0.08, duration: 0.15, gain: 0.25 },  // C5
+];
+
+const RESUME_CHIME: ChimeNote[] = [
+  { frequency: 523.25, startOffset: 0, duration: 0.1, gain: 0.25 },      // C5
+  { frequency: 659.25, startOffset: 0.08, duration: 0.15, gain: 0.25 },  // E5
+];
 
 const FOCUS_COMPLETE_CHIME: ChimeNote[] = [
   { frequency: 523.25, startOffset: 0, duration: 0.15, gain: 0.3 },   // C5
@@ -128,6 +143,15 @@ function playChime(notes: ChimeNote[]): void {
 
 export function playSound(type: SoundType): void {
   switch (type) {
+    case "start":
+      playChime(START_CHIME);
+      break;
+    case "pause":
+      playChime(PAUSE_CHIME);
+      break;
+    case "resume":
+      playChime(RESUME_CHIME);
+      break;
     case "focus-complete":
       playChime(FOCUS_COMPLETE_CHIME);
       break;
@@ -173,6 +197,18 @@ interface NotificationPayload {
 }
 
 const NOTIFICATION_MESSAGES: Record<SoundType, NotificationPayload> = {
+  start: {
+    title: "Timer started",
+    body: "Focus time!",
+  },
+  pause: {
+    title: "Timer paused",
+    body: "Take a break.",
+  },
+  resume: {
+    title: "Timer resumed",
+    body: "Back to work!",
+  },
   "focus-complete": {
     title: "Focus session complete!",
     body: "Time for a break.",
