@@ -419,20 +419,26 @@ export function StudyTimer({ onStop }: StudyTimerProps) {
     }
   }, [countdownRemaining, timer.isRunning, timer.stop, timer.triggerNotification, mode]);
 
+  // Timestamp-based countdown to survive background tabs
+  const countdownStartRef = useRef<number>(0);
+  const countdownDurationMsRef = useRef<number>(0);
+
   const startCountdown = useCallback((durationMs: number) => {
     if (countdownIntervalRef.current) clearInterval(countdownIntervalRef.current);
+    countdownStartRef.current = Date.now();
+    countdownDurationMsRef.current = durationMs;
     const durationSec = Math.ceil(durationMs / 1000);
     setCountdownRemaining(durationSec);
     countdownDurationRef.current = durationSec;
+
     countdownIntervalRef.current = setInterval(() => {
-      setCountdownRemaining((prev) => {
-        if (prev === null || prev <= 0) {
-          if (countdownIntervalRef.current) clearInterval(countdownIntervalRef.current);
-          countdownIntervalRef.current = null;
-          return 0;
-        }
-        return prev - 1;
-      });
+      const elapsed = Date.now() - countdownStartRef.current;
+      const remaining = Math.max(0, Math.ceil((countdownDurationMsRef.current - elapsed) / 1000));
+      setCountdownRemaining(remaining);
+      if (remaining <= 0 && countdownIntervalRef.current) {
+        clearInterval(countdownIntervalRef.current);
+        countdownIntervalRef.current = null;
+      }
     }, 1000);
   }, []);
 
