@@ -510,7 +510,14 @@ export function StudyTimer({ onStop }: StudyTimerProps) {
 
       {/* Timer Display */}
       <div className="mb-5">
-        <TimerDisplay time={timer.time} isRunning={timer.isRunning} />
+        <TimerDisplay
+          time={
+            countdownRemaining !== null && countdownRemaining > 0
+              ? countdownRemaining * 1000
+              : timer.time
+          }
+          isRunning={timer.isRunning}
+        />
       </div>
 
       {/* Countdown Progress (Pomodoro only) */}
