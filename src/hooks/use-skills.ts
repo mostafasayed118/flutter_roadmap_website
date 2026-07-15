@@ -18,7 +18,7 @@ export function useSkills() {
       initAttempted.current = true;
       initSkills({ userId }).catch((err) => {
         console.error("Failed to initialize skills:", err);
-        initAttempted.current = false;
+        // Don't reset initAttempted — prevents infinite retry loop on backend failure
       });
     }
   }, [skills, initSkills, userId]);
