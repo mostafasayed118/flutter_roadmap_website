@@ -10,7 +10,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Share2, Twitter, Linkedin, Facebook, Link2, Check } from "lucide-react";
+import { Share2, Link2, Check, ExternalLink } from "lucide-react";
 import { toast } from "sonner";
 
 export function ShareProgress() {
@@ -68,7 +68,7 @@ export function ShareProgress() {
                 rel="noopener noreferrer"
                 className="flex items-center gap-3 rounded-lg border border-border/50 bg-card/30 p-3 transition-colors hover:bg-card/50"
               >
-                <Twitter className="size-5 text-sky-500" />
+                <ExternalLink className="size-5 text-sky-500" />
                 <span className="text-sm font-medium">Share on Twitter</span>
               </a>
 
@@ -78,7 +78,7 @@ export function ShareProgress() {
                 rel="noopener noreferrer"
                 className="flex items-center gap-3 rounded-lg border border-border/50 bg-card/30 p-3 transition-colors hover:bg-card/50"
               >
-                <Linkedin className="size-5 text-blue-600" />
+                <ExternalLink className="size-5 text-blue-600" />
                 <span className="text-sm font-medium">Share on LinkedIn</span>
               </a>
 
@@ -88,7 +88,7 @@ export function ShareProgress() {
                 rel="noopener noreferrer"
                 className="flex items-center gap-3 rounded-lg border border-border/50 bg-card/30 p-3 transition-colors hover:bg-card/50"
               >
-                <Facebook className="size-5 text-blue-500" />
+                <ExternalLink className="size-5 text-blue-500" />
                 <span className="text-sm font-medium">Share on Facebook</span>
               </a>
 
