@@ -1,7 +1,7 @@
 "use client";
 
 import { useTheme } from "next-themes";
-import { Moon, Sun } from "lucide-react";
+import { Moon, Sun, Monitor } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 
@@ -19,16 +19,28 @@ export function ThemeToggle() {
     );
   }
 
-  const isDark = theme === "dark";
+  const cycleTheme = () => {
+    if (theme === "dark") {
+      setTheme("light");
+    } else if (theme === "light") {
+      setTheme("system");
+    } else {
+      setTheme("dark");
+    }
+  };
+
+  const Icon = theme === "dark" ? Moon : theme === "light" ? Sun : Monitor;
+  const label = theme === "dark" ? "Dark mode" : theme === "light" ? "Light mode" : "System theme";
 
   return (
     <Button
       variant="ghost"
       size="icon-sm"
-      onClick={() => setTheme(isDark ? "light" : "dark")}
-      aria-label={`Switch to ${isDark ? "light" : "dark"} mode`}
+      onClick={cycleTheme}
+      aria-label={label}
+      title={label}
     >
-      {isDark ? <Sun className="size-4" /> : <Moon className="size-4" />}
+      <Icon className="size-4" />
     </Button>
   );
 }
