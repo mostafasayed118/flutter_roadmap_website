@@ -1,3 +1,4 @@
+import { auth } from "@clerk/nextjs/server";
 import { AnimatedPage } from "@/components/layout/AnimatedPage";
 import { YoutubeSection } from "@/components/features/resources/YoutubeSection";
 import { CoursesSection } from "@/components/features/resources/CoursesSection";
@@ -6,7 +7,9 @@ import { ToolsSection } from "@/components/features/resources/ToolsSection";
 import { ScheduleTable } from "@/components/features/resources/ScheduleTable";
 import { FinalTips } from "@/components/features/resources/FinalTips";
 
-export default function ResourcesPage() {
+export default async function ResourcesPage() {
+  await auth.protect();
+
   return (
     <AnimatedPage>
       <div className="space-y-8">

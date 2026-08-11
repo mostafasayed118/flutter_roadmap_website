@@ -1,3 +1,4 @@
+import { auth } from "@clerk/nextjs/server";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -12,10 +13,12 @@ export const metadata: Metadata = {
   },
 };
 
-export default function LeaderboardLayout({
+export default async function LeaderboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  await auth.protect();
+
   return <>{children}</>;
 }

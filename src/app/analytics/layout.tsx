@@ -1,3 +1,4 @@
+import { auth } from "@clerk/nextjs/server";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -5,10 +6,12 @@ export const metadata: Metadata = {
   description: "View your study time, sessions, goals, badges, and progress charts.",
 };
 
-export default function AnalyticsLayout({
+export default async function AnalyticsLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  await auth.protect();
+
   return <>{children}</>;
 }

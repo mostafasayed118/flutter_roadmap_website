@@ -1,3 +1,4 @@
+import { auth } from "@clerk/nextjs/server";
 import dynamic from "next/dynamic";
 
 const CheatSheetContent = dynamic(
@@ -19,6 +20,8 @@ const CheatSheetContent = dynamic(
   }
 );
 
-export default function CheatSheetPage() {
+export default async function CheatSheetPage() {
+  await auth.protect();
+
   return <CheatSheetContent />;
 }

@@ -1,3 +1,4 @@
+import { auth } from "@clerk/nextjs/server";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -12,10 +13,12 @@ export const metadata: Metadata = {
   },
 };
 
-export default function ShowcaseLayout({
+export default async function ShowcaseLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  await auth.protect();
+
   return <>{children}</>;
 }

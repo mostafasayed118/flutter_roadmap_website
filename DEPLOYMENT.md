@@ -19,6 +19,9 @@ fixed dataset key (`test-user-123`, enforced in `convex/lib/auth.ts`).
 
 1. Create a Clerk application and copy its keys:
    - `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` and `CLERK_SECRET_KEY` into `.env.local`
+   - `NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in` into `.env.local` — server-side
+     `auth.protect()` (every route layout/page) redirects signed-out visitors
+     to this route
    - Your Clerk JWT issuer (e.g. `https://<your-app>.clerk.accounts.dev`) as
      `CLERK_JWT_ISSUER` in the **Convex deployment** environment:
      `npx convex env set CLERK_JWT_ISSUER https://<your-app>.clerk.accounts.dev`

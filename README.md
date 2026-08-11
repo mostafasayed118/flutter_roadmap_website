@@ -36,6 +36,7 @@ closed — and a server-side **allowlist** decides who may walk through it.
 | Claim | Reality |
 |---|---|
 | **Authentication** | ✅ [Clerk](https://clerk.com) via Convex auth (`convex/auth.config.ts`). Signed-out visitors see a sign-in screen and can't reach the app. |
+| **Route gating** | ✅ Every server layout/page calls `await auth.protect()` (`@clerk/nextjs/server`); client-component pages are covered by their server layouts. Unprotected resources under `src/app` **fail CI** (`@clerk/eslint-plugin` `require-auth-protection`). Signed-out visitors are redirected to `/sign-in`. |
 | **Single-user dataset** | ✅ Every handler scopes reads/writes to the constant `test-user-123` — no visitor, even a signed-in one, ever touches any other rows. |
 | **Allowlist** | ✅ Only Clerk users listed in `ALLOWED_USER_IDS` (Convex deployment env) may use the app at all. Fails closed if unset. |
 | **Authorization** | ✅ Every Convex query and mutation calls `requireUser(ctx)` (`convex/lib/auth.ts`): verified session → allowlist check → fixed dataset key. No client-supplied `userId` is trusted. |
@@ -48,6 +49,7 @@ closed — and a server-side **allowlist** decides who may walk through it.
 |---|---|---|
 | `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` | `.env.local` | Clerk client |
 | `CLERK_SECRET_KEY` | `.env.local` | Clerk server |
+| `NEXT_PUBLIC_CLERK_SIGN_IN_URL` | `.env.local` | Where `auth.protect()` redirects signed-out visitors (`/sign-in`) |
 | `CLERK_JWT_ISSUER` | Convex deployment env (`npx convex env set`) | Convex validates Clerk JWTs |
 | `ALLOWED_USER_IDS` | Convex deployment env (`npx convex env set`) | Comma-separated Clerk user IDs allowed to use the app |
 
