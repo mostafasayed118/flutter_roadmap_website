@@ -54,6 +54,23 @@ It reports a per-table count of re-keyed rows (`userProgress`, `skillsChecklist`
 closed if `ALLOWED_USER_IDS` is unset. Run it **before** the first real user
 starts writing new rows, so there's nothing to merge later.
 
+**5b. (If you went the other way) Merge intermediate per-user rows back:**
+
+If any rows were ever written under a real Clerk user ID instead of the fixed
+key (e.g. after running step 5, or while a build keyed rows by the
+authenticated subject), they're invisible to the app — the handlers only read
+`test-user-123`. Merge them back so nothing is orphaned:
+
+```bash
+npx convex run migrations/mergePerUserRows:mergePerUserRows
+```
+
+Rows without a duplicate are re-keyed in place; rows that collide with an
+existing `test-user-123` row are merged (progress/skills checklists are
+unioned, streaks take the best values, and bookmarks/badges/goals keep the
+existing row). It is **idempotent** — once no non-`test-user-123` rows remain,
+re-running it is a no-op (`alreadyMerged: true`).
+
 ---
 
 ## Overview

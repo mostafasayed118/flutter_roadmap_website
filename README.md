@@ -59,6 +59,8 @@ See [DEPLOYMENT.md](./DEPLOYMENT.md) for full setup.
 > under the legacy `test-user-123` key. Run the one-time re-assignment
 > migration once so it belongs to the first allowlisted user instead of being
 > orphaned — see [DEPLOYMENT.md](./DEPLOYMENT.md), "Before You Deploy" step 5.
+> If rows ever ended up under a real Clerk user ID instead, the
+> `mergePerUserRows` migration folds them back into `test-user-123` (step 5b).
 
 ---
 
