@@ -7,9 +7,18 @@ import { Id } from "@convex/_generated/dataModel";
 
 export function useSessions() {
   const userId = useUserId();
-  const sessions = useQuery(api.timeTracker.getUserSessions, { userId });
-  const totalTime = useQuery(api.timeTracker.getUserTotalTime, { userId });
-  const breakdown = useQuery(api.timeTracker.getWeeklyTimeBreakdown, { userId });
+  const sessions = useQuery(
+    api.timeTracker.getUserSessions,
+    userId ? undefined : "skip"
+  );
+  const totalTime = useQuery(
+    api.timeTracker.getUserTotalTime,
+    userId ? undefined : "skip"
+  );
+  const breakdown = useQuery(
+    api.timeTracker.getWeeklyTimeBreakdown,
+    userId ? undefined : "skip"
+  );
 
   return {
     sessions,
@@ -23,7 +32,7 @@ export function useWeekTime(weekId: Id<"roadmapWeeks"> | undefined) {
   const userId = useUserId();
   const weekTime = useQuery(
     api.timeTracker.getWeekTotalTime,
-    weekId ? { userId, weekId } : "skip"
+    weekId && userId ? { weekId } : "skip"
   );
 
   return {

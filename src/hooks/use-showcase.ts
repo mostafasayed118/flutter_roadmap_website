@@ -8,7 +8,7 @@ export function useShowcase() {
   const userId = useUserId();
   const projects = useQuery(
     api.showcase.getProjects,
-    userId ? { userId } : "skip"
+    userId ? undefined : "skip"
   );
   const addProject = useMutation(api.showcase.addProject);
   const updateProject = useMutation(api.showcase.updateProject);
@@ -24,7 +24,7 @@ export function useShowcase() {
           liveUrl?: string;
           imageUrl?: string;
           technologies: string[];
-        }) => addProject({ userId, ...data })
+        }) => addProject(data)
       : undefined,
     updateProject,
     deleteProject,

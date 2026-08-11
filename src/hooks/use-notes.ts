@@ -9,14 +9,14 @@ export function useWeekNotes(weekId: Id<"roadmapWeeks"> | undefined) {
   const userId = useUserId();
   const notes = useQuery(
     api.progress.getWeekNotes,
-    userId && weekId ? { userId, weekId } : "skip"
+    userId && weekId ? { weekId } : "skip"
   );
   const updateNotes = useMutation(api.progress.updateWeekNotes);
 
   return {
     notes: notes ?? "",
     updateNotes: userId && weekId
-      ? (notes: string) => updateNotes({ userId, weekId, notes })
+      ? (notes: string) => updateNotes({ weekId, notes })
       : undefined,
   };
 }

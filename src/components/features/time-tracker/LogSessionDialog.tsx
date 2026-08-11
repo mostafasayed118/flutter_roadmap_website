@@ -3,7 +3,6 @@
 import { useState, useCallback, useMemo } from "react";
 import { useSessionMutations } from "@/hooks/use-sessions";
 import { useRoadmap } from "@/hooks/use-progress";
-import { useUserId } from "@/hooks/use-user-id";
 import { Id } from "@convex/_generated/dataModel";
 import {
   Dialog,
@@ -33,7 +32,6 @@ interface LogSessionDialogProps {
 }
 
 export function LogSessionDialog({ defaultWeekId }: LogSessionDialogProps) {
-  const userId = useUserId();
   const [open, setOpen] = useState(false);
   const [hours, setHours] = useState("");
   const [minutes, setMinutes] = useState("");
@@ -130,7 +128,6 @@ export function LogSessionDialog({ defaultWeekId }: LogSessionDialogProps) {
       const dateTimestamp = Date.UTC(year, month - 1, day);
 
       await addSession({
-        userId,
         weekId: weekId === "general" ? undefined : (weekId as Id<"roadmapWeeks">),
         durationMinutes: totalMinutes,
         date: dateTimestamp,

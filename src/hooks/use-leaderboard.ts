@@ -6,10 +6,13 @@ import { useUserId } from "./use-user-id";
 
 export function useLeaderboard() {
   const userId = useUserId();
-  const leaderboard = useQuery(api.leaderboard.getLeaderboard, {});
+  const leaderboard = useQuery(
+    api.leaderboard.getLeaderboard,
+    userId ? undefined : "skip"
+  );
   const userRank = useQuery(
     api.leaderboard.getUserRank,
-    userId ? { userId } : "skip"
+    userId ? undefined : "skip"
   );
 
   return {

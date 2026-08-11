@@ -1,18 +1,19 @@
 import { v } from "convex/values";
 import { query, mutation } from "./_generated/server";
+import { requireUser } from "./lib/auth";
 
 export const getGoal = query({
   args: {
-    userId: v.string(),
     weekNumber: v.number(),
     year: v.number(),
   },
   handler: async (ctx, args) => {
+    const userId = await requireUser(ctx);
     return await ctx.db
       .query("userGoals")
       .withIndex("by_user_week", (q) =>
         q
-          .eq("userId", args.userId)
+          .eq("userId", userId)
           .eq("weekNumber", args.weekNumber)
           .eq("year", args.year)
       )
@@ -22,13 +23,13 @@ export const getGoal = query({
 
 export const setGoal = mutation({
   args: {
-    userId: v.string(),
     weekNumber: v.number(),
     targetHours: v.number(),
     targetTopics: v.number(),
     year: v.number(),
   },
   handler: async (ctx, args) => {
+    const userId = await requireUser(ctx);
     // Clamp targets to valid ranges
     const targetHours = Math.max(1, Math.min(168, Math.round(args.targetHours)));
     const targetTopics = Math.max(1, Math.min(50, Math.round(args.targetTopics)));
@@ -37,7 +38,7 @@ export const setGoal = mutation({
       .query("userGoals")
       .withIndex("by_user_week", (q) =>
         q
-          .eq("userId", args.userId)
+          .eq("userId", userId)
           .eq("weekNumber", args.weekNumber)
           .eq("year", args.year)
       )
@@ -52,7 +53,7 @@ export const setGoal = mutation({
     }
 
     return await ctx.db.insert("userGoals", {
-      userId: args.userId,
+      userId,
       weekNumber: args.weekNumber,
       targetHours,
       targetTopics,

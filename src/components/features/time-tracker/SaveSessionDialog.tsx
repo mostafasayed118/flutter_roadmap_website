@@ -3,7 +3,6 @@
 import { useState, useMemo } from "react";
 import { useSessionMutations } from "@/hooks/use-sessions";
 import { useRoadmap } from "@/hooks/use-progress";
-import { useUserId } from "@/hooks/use-user-id";
 import { Id } from "@convex/_generated/dataModel";
 import { formatMinutes, todayInputValue } from "@/lib/format-time";
 import {
@@ -33,7 +32,6 @@ export function SaveSessionDialog({
   durationMs,
   onSaved,
 }: SaveSessionDialogProps) {
-  const userId = useUserId();
   const { addSession } = useSessionMutations();
   const { roadmap } = useRoadmap();
 
@@ -70,7 +68,6 @@ export function SaveSessionDialog({
       );
 
       await addSession({
-        userId,
         weekId: weekId === "general" ? undefined : (weekId as Id<"roadmapWeeks">),
         durationMinutes,
         date: dateTimestamp,

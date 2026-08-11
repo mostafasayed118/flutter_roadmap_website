@@ -26,29 +26,37 @@ The Flutter ecosystem is vast — Dart, widgets, state management, architecture,
 
 ---
 
-## ⚠️ Security Model: Single-User, No Authentication
+## 🔐 Security Model: Single-User, Authenticated via Clerk
 
-**FlutterPath currently has no authentication or authorization. It is a single-user application by design — not a multi-tenant product.**
-
-Before deploying, understand what this means:
+FlutterPath is a **single-user application**: every handler operates on the one
+fixed dataset key (`test-user-123`, see `convex/lib/auth.ts`). Authentication
+via [Clerk](https://clerk.com) is the front door — it keeps the public API
+closed — and a server-side **allowlist** decides who may walk through it.
 
 | Claim | Reality |
 |---|---|
-| **Authentication** | ❌ None. There is no login, no session, no auth provider (no Clerk, no Convex auth config). |
-| **User identity** | The app identifies every visitor as the same hardcoded user. See `src/hooks/use-user-id.ts` — it returns the constant `"test-user-123"`. |
-| **Authorization** | ❌ None. Every Convex query/mutation accepts a `userId` supplied by the *client* and trusts it. There is no server-side check that the caller is who they claim to be. |
-| **Data isolation** | There is exactly one dataset. Any visitor to a deployed instance can read and write all progress, sessions, goals, badges, bookmarks, and showcase entries. |
-| **`useUserId()` is the identity** | Whatever string `useUserId()` returns is treated as "the current user" — anyone who can reach the Convex API can pass any `userId` and access or mutate that user's data. |
+| **Authentication** | ✅ [Clerk](https://clerk.com) via Convex auth (`convex/auth.config.ts`). Signed-out visitors see a sign-in screen and can't reach the app. |
+| **Single-user dataset** | ✅ Every handler scopes reads/writes to the constant `test-user-123` — no visitor, even a signed-in one, ever touches any other rows. |
+| **Allowlist** | ✅ Only Clerk users listed in `ALLOWED_USER_IDS` (Convex deployment env) may use the app at all. Fails closed if unset. |
+| **Authorization** | ✅ Every Convex query and mutation calls `requireUser(ctx)` (`convex/lib/auth.ts`): verified session → allowlist check → fixed dataset key. No client-supplied `userId` is trusted. |
+| **ID-based mutations** | Sessions, bookmarks, and showcase projects verify row ownership (must belong to the fixed dataset) before patching/deleting. |
+| **Leaderboard** | Aggregation is global across the single dataset, and reading it requires authentication. |
 
-**Why this is intentional:** FlutterPath is a personal learning companion (a local study tracker). Adding full auth would require an auth provider, login flows, and rewriting every Convex handler to derive identity from `ctx.auth.getUserIdentity()` instead of client arguments — significant complexity for a single-user tool.
+**Required environment variables:**
 
-**When to add auth (migration path):** If you ever deploy this for multiple real users or put personal data in production, you must:
+| Variable | Where | Purpose |
+|---|---|---|
+| `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` | `.env.local` | Clerk client |
+| `CLERK_SECRET_KEY` | `.env.local` | Clerk server |
+| `CLERK_JWT_ISSUER` | Convex deployment env (`npx convex env set`) | Convex validates Clerk JWTs |
+| `ALLOWED_USER_IDS` | Convex deployment env (`npx convex env set`) | Comma-separated Clerk user IDs allowed to use the app |
 
-1. Configure Convex auth (e.g., [Clerk](https://clerk.com) or Convex's built-in auth) and add `convex/auth.config.ts`.
-2. Replace `useUserId()` with the real authenticated identity from the client.
-3. Add `ctx.auth.getUserIdentity()` checks to **every** Convex handler and stop trusting the `userId` argument.
+See [DEPLOYMENT.md](./DEPLOYMENT.md) for full setup.
 
-> **Recommendation:** Run this locally or on a private/unlisted deployment only. Do **not** deploy it publicly with real user data until auth is implemented.
+> **Upgrading from the pre-auth app?** Your historical progress still lives
+> under the legacy `test-user-123` key. Run the one-time re-assignment
+> migration once so it belongs to the first allowlisted user instead of being
+> orphaned — see [DEPLOYMENT.md](./DEPLOYMENT.md), "Before You Deploy" step 5.
 
 ---
 
@@ -189,7 +197,9 @@ flutterpath/
 │   ├── streaks.ts                   # Streak tracking queries & mutations
 │   ├── bookmarks.ts                 # Topic bookmarks / favorites
 │   ├── showcase.ts                  # Project showcase CRUD
-│   └── leaderboard.ts              # Leaderboard & ranking queries
+│   ├── leaderboard.ts              # Leaderboard & ranking queries
+│   └── migrations/
+│       └── reassignLegacyUser.ts   # One-time: re-key test-user-123 rows to the first allowlisted user
 │
 ├── src/
 │   ├── app/                         # Next.js App Router (file-based routing)

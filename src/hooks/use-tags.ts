@@ -21,7 +21,7 @@ export function useTagBreakdown() {
   const userId = useUserId();
   const breakdown = useQuery(
     api.timeTracker.getTagBreakdown,
-    userId ? { userId } : "skip"
+    userId ? undefined : "skip"
   );
 
   return {

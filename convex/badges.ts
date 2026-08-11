@@ -1,5 +1,6 @@
 import { v } from "convex/values";
 import { query, mutation } from "./_generated/server";
+import { requireUser } from "./lib/auth";
 
 export interface BadgeDefinition {
   id: string;
@@ -139,11 +140,12 @@ export const ALL_BADGES: BadgeDefinition[] = [
 ];
 
 export const getBadges = query({
-  args: { userId: v.string() },
-  handler: async (ctx, args) => {
+  args: {},
+  handler: async (ctx) => {
+    const userId = await requireUser(ctx);
     const userBadges = await ctx.db
       .query("userBadges")
-      .withIndex("by_user", (q) => q.eq("userId", args.userId))
+      .withIndex("by_user", (q) => q.eq("userId", userId))
       .collect();
 
     const unlockedSet = new Set(userBadges.map((b) => b.badgeId));
@@ -158,21 +160,21 @@ export const getBadges = query({
 
 export const unlockBadge = mutation({
   args: {
-    userId: v.string(),
     badgeId: v.string(),
   },
   handler: async (ctx, args) => {
+    const userId = await requireUser(ctx);
     const existing = await ctx.db
       .query("userBadges")
       .withIndex("by_user_badge", (q) =>
-        q.eq("userId", args.userId).eq("badgeId", args.badgeId)
+        q.eq("userId", userId).eq("badgeId", args.badgeId)
       )
       .first();
 
     if (existing) return { alreadyUnlocked: true };
 
     await ctx.db.insert("userBadges", {
-      userId: args.userId,
+      userId,
       badgeId: args.badgeId,
       unlockedAt: Date.now(),
     });
@@ -182,11 +184,12 @@ export const unlockBadge = mutation({
 });
 
 export const getUnlockedCount = query({
-  args: { userId: v.string() },
-  handler: async (ctx, args) => {
+  args: {},
+  handler: async (ctx) => {
+    const userId = await requireUser(ctx);
     const userBadges = await ctx.db
       .query("userBadges")
-      .withIndex("by_user", (q) => q.eq("userId", args.userId))
+      .withIndex("by_user", (q) => q.eq("userId", userId))
       .collect();
     return {
       unlocked: userBadges.length,

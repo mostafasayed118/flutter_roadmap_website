@@ -8,7 +8,10 @@ import { Id } from "@convex/_generated/dataModel";
 
 export function useProgress() {
   const userId = useUserId();
-  const stats = useQuery(api.progress.getOverallStats, { userId });
+  const stats = useQuery(
+    api.progress.getOverallStats,
+    userId ? undefined : "skip"
+  );
 
   return {
     stats,
@@ -18,7 +21,10 @@ export function useProgress() {
 
 export function useRoadmap() {
   const userId = useUserId();
-  const roadmap = useQuery(api.progress.getRoadmapWithProgress, { userId });
+  const roadmap = useQuery(
+    api.progress.getRoadmapWithProgress,
+    userId ? undefined : "skip"
+  );
   const seedRoadmap = useMutation(api.seed.seedRoadmap);
 
   return {
@@ -32,7 +38,6 @@ export function useRoadmap() {
 const TOGGLE_DEBOUNCE_MS = 100;
 
 export function useWeekProgress() {
-  const userId = useUserId();
   const toggleItemMutation = useMutation(api.progress.toggleItem);
   const lastToggleRef = useRef<Map<string, number>>(new Map());
 
@@ -55,13 +60,12 @@ export function useWeekProgress() {
       }
 
       lastToggleRef.current.set(key, now);
-      await toggleItemMutation({ userId, weekId, type, index });
+      await toggleItemMutation({ weekId, type, index });
     },
-    [userId, toggleItemMutation]
+    [toggleItemMutation]
   );
 
   return {
-    userId,
     toggleItem,
   };
 }

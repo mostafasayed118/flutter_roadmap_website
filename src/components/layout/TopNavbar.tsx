@@ -1,5 +1,6 @@
 "use client";
 
+import { UserButton } from "@clerk/nextjs";
 import { useProgress } from "@/hooks/use-progress";
 import { useKeyboardShortcutsContext } from "@/components/providers/KeyboardShortcutsProvider";
 import { SidebarTrigger } from "@/components/ui/sidebar";
@@ -104,6 +105,7 @@ export function TopNavbar() {
         <div className="hidden sm:block">
           <LogSessionDialog />
         </div>
+        <UserButton />
       </header>
     </>
   );

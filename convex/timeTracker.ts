@@ -1,13 +1,13 @@
 import { v } from "convex/values";
 import { query, mutation } from "./_generated/server";
 import { Id } from "./_generated/dataModel";
+import { requireUser } from "./lib/auth";
 
 const MIN_DURATION = 1;
 const MAX_DURATION = 1440;
 
 export const addSession = mutation({
   args: {
-    userId: v.string(),
     weekId: v.optional(v.id("roadmapWeeks")),
     durationMinutes: v.number(),
     date: v.number(),
@@ -15,6 +15,7 @@ export const addSession = mutation({
     tags: v.optional(v.array(v.string())),
   },
   handler: async (ctx, args) => {
+    const userId = await requireUser(ctx);
     if (
       args.durationMinutes < MIN_DURATION ||
       args.durationMinutes > MAX_DURATION
@@ -36,7 +37,7 @@ export const addSession = mutation({
       : args.notes;
 
     return await ctx.db.insert("studySessions", {
-      userId: args.userId,
+      userId,
       weekId: args.weekId,
       durationMinutes: args.durationMinutes,
       date: args.date,
@@ -56,8 +57,12 @@ export const updateSession = mutation({
     tags: v.optional(v.array(v.string())),
   },
   handler: async (ctx, args) => {
+    const userId = await requireUser(ctx);
     const session = await ctx.db.get(args.sessionId);
     if (!session) throw new Error(`Session not found: ${args.sessionId}`);
+    if (session.userId !== userId) {
+      throw new Error("Not authorized to edit this session");
+    }
 
     const patch: {
       durationMinutes?: number;
@@ -108,29 +113,35 @@ export const updateSession = mutation({
 export const deleteSession = mutation({
   args: { sessionId: v.id("studySessions") },
   handler: async (ctx, args) => {
+    const userId = await requireUser(ctx);
     const session = await ctx.db.get(args.sessionId);
     if (!session) throw new Error(`Session not found: ${args.sessionId}`);
+    if (session.userId !== userId) {
+      throw new Error("Not authorized to delete this session");
+    }
     await ctx.db.delete(args.sessionId);
   },
 });
 
 export const getUserSessions = query({
-  args: { userId: v.string() },
-  handler: async (ctx, args) => {
+  args: {},
+  handler: async (ctx) => {
+    const userId = await requireUser(ctx);
     return await ctx.db
       .query("studySessions")
-      .withIndex("by_user", (q) => q.eq("userId", args.userId))
+      .withIndex("by_user", (q) => q.eq("userId", userId))
       .order("desc")
       .collect();
   },
 });
 
 export const getUserTotalTime = query({
-  args: { userId: v.string() },
-  handler: async (ctx, args) => {
+  args: {},
+  handler: async (ctx) => {
+    const userId = await requireUser(ctx);
     const sessions = await ctx.db
       .query("studySessions")
-      .withIndex("by_user", (q) => q.eq("userId", args.userId))
+      .withIndex("by_user", (q) => q.eq("userId", userId))
       .collect();
 
     const totalMinutes = sessions.reduce(
@@ -150,11 +161,12 @@ export const getUserTotalTime = query({
 });
 
 export const getWeeklyTimeBreakdown = query({
-  args: { userId: v.string() },
-  handler: async (ctx, args) => {
+  args: {},
+  handler: async (ctx) => {
+    const userId = await requireUser(ctx);
     const sessions = await ctx.db
       .query("studySessions")
-      .withIndex("by_user", (q) => q.eq("userId", args.userId))
+      .withIndex("by_user", (q) => q.eq("userId", userId))
       .collect();
 
     const weekIdSet = new Set<string>();
@@ -207,12 +219,13 @@ export const getWeeklyTimeBreakdown = query({
 });
 
 export const getWeekTotalTime = query({
-  args: { userId: v.string(), weekId: v.id("roadmapWeeks") },
+  args: { weekId: v.id("roadmapWeeks") },
   handler: async (ctx, args) => {
+    const userId = await requireUser(ctx);
     const sessions = await ctx.db
       .query("studySessions")
       .withIndex("by_user_week", (q) =>
-        q.eq("userId", args.userId).eq("weekId", args.weekId)
+        q.eq("userId", userId).eq("weekId", args.weekId)
       )
       .collect();
 
@@ -228,11 +241,12 @@ export const getWeekTotalTime = query({
 });
 
 export const getTagBreakdown = query({
-  args: { userId: v.string() },
-  handler: async (ctx, args) => {
+  args: {},
+  handler: async (ctx) => {
+    const userId = await requireUser(ctx);
     const sessions = await ctx.db
       .query("studySessions")
-      .withIndex("by_user", (q) => q.eq("userId", args.userId))
+      .withIndex("by_user", (q) => q.eq("userId", userId))
       .collect();
 
     const tagMap = new Map<string, number>();

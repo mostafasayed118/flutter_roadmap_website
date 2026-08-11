@@ -1,5 +1,5 @@
-import { v } from "convex/values";
 import { query, mutation } from "./_generated/server";
+import { requireUser } from "./lib/auth";
 
 function getStartOfDay(timestamp: number): number {
   const date = new Date(timestamp);
@@ -13,11 +13,12 @@ function getDaysBetween(a: number, b: number): number {
 }
 
 export const getStreak = query({
-  args: { userId: v.string() },
-  handler: async (ctx, args) => {
+  args: {},
+  handler: async (ctx) => {
+    const userId = await requireUser(ctx);
     const streak = await ctx.db
       .query("userStreaks")
-      .withIndex("by_user", (q) => q.eq("userId", args.userId))
+      .withIndex("by_user", (q) => q.eq("userId", userId))
       .first();
 
     if (!streak) {
@@ -46,19 +47,20 @@ export const getStreak = query({
 });
 
 export const recordStudyDay = mutation({
-  args: { userId: v.string() },
-  handler: async (ctx, args) => {
+  args: {},
+  handler: async (ctx) => {
+    const userId = await requireUser(ctx);
     const today = getStartOfDay(Date.now());
 
     const existing = await ctx.db
       .query("userStreaks")
-      .withIndex("by_user", (q) => q.eq("userId", args.userId))
+      .withIndex("by_user", (q) => q.eq("userId", userId))
       .first();
 
     if (!existing) {
       // First study day
       await ctx.db.insert("userStreaks", {
-        userId: args.userId,
+        userId,
         currentStreak: 1,
         longestStreak: 1,
         lastStudyDate: today,

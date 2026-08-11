@@ -1,12 +1,14 @@
 import { v } from "convex/values";
 import { query, mutation } from "./_generated/server";
+import { requireUser } from "./lib/auth";
 
 export const getProjects = query({
-  args: { userId: v.string() },
-  handler: async (ctx, args) => {
+  args: {},
+  handler: async (ctx) => {
+    const userId = await requireUser(ctx);
     return await ctx.db
       .query("projectShowcase")
-      .withIndex("by_user", (q) => q.eq("userId", args.userId))
+      .withIndex("by_user", (q) => q.eq("userId", userId))
       .order("desc")
       .collect();
   },
@@ -14,7 +16,6 @@ export const getProjects = query({
 
 export const addProject = mutation({
   args: {
-    userId: v.string(),
     title: v.string(),
     description: v.string(),
     githubUrl: v.optional(v.string()),
@@ -23,11 +24,12 @@ export const addProject = mutation({
     technologies: v.array(v.string()),
   },
   handler: async (ctx, args) => {
+    const userId = await requireUser(ctx);
     const MAX_TITLE = 200;
     const MAX_DESC = 2000;
     const MAX_URL = 2000;
     return await ctx.db.insert("projectShowcase", {
-      userId: args.userId,
+      userId,
       title: args.title.slice(0, MAX_TITLE),
       description: args.description.slice(0, MAX_DESC),
       githubUrl: args.githubUrl?.slice(0, MAX_URL),
@@ -50,6 +52,13 @@ export const updateProject = mutation({
     technologies: v.optional(v.array(v.string())),
   },
   handler: async (ctx, args) => {
+    const userId = await requireUser(ctx);
+    const project = await ctx.db.get(args.projectId);
+    if (!project) throw new Error(`Project not found: ${args.projectId}`);
+    if (project.userId !== userId) {
+      throw new Error("Not authorized to edit this project");
+    }
+
     const patch: Record<string, unknown> = {};
     if (args.title !== undefined) patch.title = args.title;
     if (args.description !== undefined) patch.description = args.description;
@@ -64,6 +73,12 @@ export const updateProject = mutation({
 export const deleteProject = mutation({
   args: { projectId: v.id("projectShowcase") },
   handler: async (ctx, args) => {
+    const userId = await requireUser(ctx);
+    const project = await ctx.db.get(args.projectId);
+    if (!project) throw new Error(`Project not found: ${args.projectId}`);
+    if (project.userId !== userId) {
+      throw new Error("Not authorized to delete this project");
+    }
     await ctx.db.delete(args.projectId);
   },
 });

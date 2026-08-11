@@ -8,16 +8,48 @@
 
 ---
 
-## ⚠️ Before You Deploy: Single-User, No Authentication
+## 🔐 Before You Deploy: Clerk Auth + Single-User Allowlist
 
-FlutterPath has **no authentication** — every visitor is treated as the same
-hardcoded user (`"test-user-123"`, see `src/hooks/use-user-id.ts`), and every
-Convex function trusts the client-supplied `userId` with no server-side check.
-Anyone who can reach a deployed instance can read and write all data.
+FlutterPath is a **single-user app**: every Convex handler operates on the one
+fixed dataset key (`test-user-123`, enforced in `convex/lib/auth.ts`).
+[Clerk](https://clerk.com) authentication gates the public API, and an
+**allowlist** decides which Clerk users may use the app at all.
 
-This is fine for a **private or personal deployment**. Do **not** deploy this
-publicly with real user data until authentication is implemented. See the
-"Security Model" section in the [README](./README.md) for the migration path.
+**Setup steps:**
+
+1. Create a Clerk application and copy its keys:
+   - `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` and `CLERK_SECRET_KEY` into `.env.local`
+   - Your Clerk JWT issuer (e.g. `https://<your-app>.clerk.accounts.dev`) as
+     `CLERK_JWT_ISSUER` in the **Convex deployment** environment:
+     `npx convex env set CLERK_JWT_ISSUER https://<your-app>.clerk.accounts.dev`
+2. Set the allowlist of Clerk user IDs that may use the app (comma-separated)
+   in the **Convex deployment** environment. Handlers fail closed if it's
+   unset:
+   `npx convex env set ALLOWED_USER_IDS user_abc123,user_def456`
+3. Deploy the Convex functions (`npx convex deploy`) — this pushes
+   `convex/auth.config.ts` and the guarded handlers.
+4. Deploy the Next.js app with the Clerk keys configured.
+
+> Find your Clerk user ID in the Clerk dashboard (Users) or via
+> `useUser().user.id` in the app — that's the value the allowlist matches.
+
+**5. (If upgrading from the pre-auth app) Re-assign the legacy data once:**
+
+Everything written before authentication was introduced lives under the fixed
+key `test-user-123`. One-time, after the allowlist is set, run the migration
+so that data belongs to the first allowlisted user (the app's owner) instead
+of being orphaned:
+
+```bash
+npx convex run migrations/reassignLegacyUser:reassignLegacyUser
+```
+
+It reports a per-table count of re-keyed rows (`userProgress`, `skillsChecklist`,
+`studySessions`, `userStreaks`, `userGoals`, `userBookmarks`, `userBadges`,
+`projectShowcase`). It is **idempotent** — re-running it when no
+`test-user-123` rows remain is a no-op (`alreadyMigrated: true`), and it fails
+closed if `ALLOWED_USER_IDS` is unset. Run it **before** the first real user
+starts writing new rows, so there's nothing to merge later.
 
 ---
 

@@ -9,7 +9,7 @@ export function useWeeklyGoal(weekNumber: number) {
   const year = new Date().getFullYear();
   const goal = useQuery(
     api.goals.getGoal,
-    userId ? { userId, weekNumber, year } : "skip"
+    userId ? { weekNumber, year } : "skip"
   );
   const setGoal = useMutation(api.goals.setGoal);
 
@@ -17,7 +17,7 @@ export function useWeeklyGoal(weekNumber: number) {
     goal,
     setGoal: userId
       ? (targetHours: number, targetTopics: number) =>
-          setGoal({ userId, weekNumber, targetHours, targetTopics, year })
+          setGoal({ weekNumber, targetHours, targetTopics, year })
       : undefined,
   };
 }

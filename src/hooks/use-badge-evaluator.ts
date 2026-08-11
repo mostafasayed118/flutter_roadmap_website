@@ -26,7 +26,7 @@ export function useBadgeEvaluator() {
   const { badges, unlockBadge } = useBadges();
   const badgeProgress = useQuery(
     api.progress.getBadgeProgressData,
-    userId ? { userId } : "skip"
+    userId ? undefined : "skip"
   );
 
   const evaluatedRef = useRef(false);

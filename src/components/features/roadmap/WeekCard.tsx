@@ -43,7 +43,7 @@ export function WeekCard({
   completedTopics,
   completedProjects,
 }: WeekCardProps) {
-  const { userId, toggleItem } = useWeekProgress();
+  const { toggleItem } = useWeekProgress();
   const { weekTime } = useWeekTime(weekId);
 
   const completedTopicsSet = useMemo(

@@ -8,7 +8,7 @@ export function useBadges() {
   const userId = useUserId();
   const badges = useQuery(
     api.badges.getBadges,
-    userId ? { userId } : "skip"
+    userId ? undefined : "skip"
   );
   const unlockBadge = useMutation(api.badges.unlockBadge);
 
@@ -20,7 +20,7 @@ export function useBadges() {
     unlockedCount,
     totalCount,
     unlockBadge: userId
-      ? (badgeId: string) => unlockBadge({ userId, badgeId })
+      ? (badgeId: string) => unlockBadge({ badgeId })
       : undefined,
   };
 }

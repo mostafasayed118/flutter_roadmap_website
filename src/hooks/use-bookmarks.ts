@@ -9,7 +9,7 @@ export function useBookmarks() {
   const userId = useUserId();
   const bookmarks = useQuery(
     api.bookmarks.getBookmarks,
-    userId ? { userId } : "skip"
+    userId ? undefined : "skip"
   );
   const toggleBookmark = useMutation(api.bookmarks.toggleBookmark);
   const updateNote = useMutation(api.bookmarks.updateBookmarkNote);
@@ -26,7 +26,7 @@ export function useBookmarks() {
     isBookmarked,
     toggleBookmark: userId
       ? (weekId: Id<"roadmapWeeks">, topicIndex: number, topicTitle: string) =>
-          toggleBookmark({ userId, weekId, topicIndex, topicTitle })
+          toggleBookmark({ weekId, topicIndex, topicTitle })
       : undefined,
     updateNote,
   };

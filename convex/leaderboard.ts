@@ -1,9 +1,13 @@
-import { v } from "convex/values";
 import { query } from "./_generated/server";
+import { requireUser } from "./lib/auth";
 
 export const getLeaderboard = query({
   args: {},
   handler: async (ctx) => {
+    // A leaderboard is inherently cross-user; requiring auth keeps it from
+    // being scraped anonymously, while the aggregation itself stays global.
+    await requireUser(ctx);
+
     // Get all progress records
     const allProgress = await ctx.db.query("userProgress").collect();
     const allSessions = await ctx.db.query("studySessions").collect();
@@ -68,8 +72,9 @@ export const getLeaderboard = query({
 });
 
 export const getUserRank = query({
-  args: { userId: v.string() },
-  handler: async (ctx, args) => {
+  args: {},
+  handler: async (ctx) => {
+    const userId = await requireUser(ctx);
     const allProgress = await ctx.db.query("userProgress").collect();
     const allSessions = await ctx.db.query("studySessions").collect();
     const allWeeks = await ctx.db.query("roadmapWeeks").collect();
@@ -104,8 +109,8 @@ export const getUserRank = query({
       })
       .sort((a, b) => b.progress - a.progress || b.totalMinutes - a.totalMinutes);
 
-    const rank = entries.findIndex((e) => e.userId === args.userId) + 1;
-    const userEntry = entries.find((e) => e.userId === args.userId);
+    const rank = entries.findIndex((e) => e.userId === userId) + 1;
+    const userEntry = entries.find((e) => e.userId === userId);
 
     return {
       rank: rank || null,

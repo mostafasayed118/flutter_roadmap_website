@@ -10,7 +10,7 @@ import { EmptyState } from "@/components/ui/empty-state";
 import { Trophy } from "lucide-react";
 
 export default function SkillsPage() {
-  const { skills, isLoading, toggleSkill, userId } = useSkills();
+  const { skills, isLoading, toggleSkill } = useSkills();
 
   if (isLoading || !skills) {
     return (
@@ -114,7 +114,6 @@ export default function SkillsPage() {
               items={category.items}
               onToggle={(itemIndex) =>
                 toggleSkill({
-                  userId,
                   category: category.category,
                   itemIndex,
                 })

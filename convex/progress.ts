@@ -1,10 +1,12 @@
 import { v } from "convex/values";
 import { query, mutation } from "./_generated/server";
 import { Doc } from "./_generated/dataModel";
+import { requireUser } from "./lib/auth";
 
 export const getRoadmapWithProgress = query({
-  args: { userId: v.string() },
-  handler: async (ctx, args) => {
+  args: {},
+  handler: async (ctx) => {
+    const userId = await requireUser(ctx);
     const phases = await ctx.db
       .query("roadmapPhases")
       .withIndex("by_order")
@@ -12,7 +14,7 @@ export const getRoadmapWithProgress = query({
 
     const progressRecords = await ctx.db
       .query("userProgress")
-      .withIndex("by_user", (q) => q.eq("userId", args.userId))
+      .withIndex("by_user", (q) => q.eq("userId", userId))
       .collect();
 
     const progressMap = new Map<string, Doc<"userProgress">>();
@@ -74,12 +76,13 @@ export const getRoadmapWithProgress = query({
 });
 
 export const getOverallStats = query({
-  args: { userId: v.string() },
-  handler: async (ctx, args) => {
+  args: {},
+  handler: async (ctx) => {
+    const userId = await requireUser(ctx);
     const weeks = await ctx.db.query("roadmapWeeks").collect();
     const progressRecords = await ctx.db
       .query("userProgress")
-      .withIndex("by_user", (q) => q.eq("userId", args.userId))
+      .withIndex("by_user", (q) => q.eq("userId", userId))
       .collect();
 
     const progressMap = new Map<string, Doc<"userProgress">>();
@@ -190,12 +193,12 @@ export const getOverallStats = query({
 
 export const toggleItem = mutation({
   args: {
-    userId: v.string(),
     weekId: v.id("roadmapWeeks"),
     type: v.union(v.literal("topic"), v.literal("project")),
     index: v.number(),
   },
   handler: async (ctx, args) => {
+    const userId = await requireUser(ctx);
     const week = await ctx.db.get(args.weekId);
     if (!week) {
       throw new Error(`Week not found: ${args.weekId}`);
@@ -215,7 +218,7 @@ export const toggleItem = mutation({
     const existing = await ctx.db
       .query("userProgress")
       .withIndex("by_user_week", (q) =>
-        q.eq("userId", args.userId).eq("weekId", args.weekId)
+        q.eq("userId", userId).eq("weekId", args.weekId)
       )
       .first();
 
@@ -239,7 +242,7 @@ export const toggleItem = mutation({
       });
     } else {
       await ctx.db.insert("userProgress", {
-        userId: args.userId,
+        userId,
         weekId: args.weekId,
         completedTopics: args.type === "topic" ? [args.index] : [],
         completedProjects: args.type === "project" ? [args.index] : [],
@@ -250,11 +253,11 @@ export const toggleItem = mutation({
 
 export const updateWeekNotes = mutation({
   args: {
-    userId: v.string(),
     weekId: v.id("roadmapWeeks"),
     notes: v.string(),
   },
   handler: async (ctx, args) => {
+    const userId = await requireUser(ctx);
     // Cap notes to 5000 characters to prevent oversized payloads
     const MAX_NOTES = 5000;
     const notes = args.notes.length > MAX_NOTES ? args.notes.slice(0, MAX_NOTES) : args.notes;
@@ -262,7 +265,7 @@ export const updateWeekNotes = mutation({
     const existing = await ctx.db
       .query("userProgress")
       .withIndex("by_user_week", (q) =>
-        q.eq("userId", args.userId).eq("weekId", args.weekId)
+        q.eq("userId", userId).eq("weekId", args.weekId)
       )
       .first();
 
@@ -270,7 +273,7 @@ export const updateWeekNotes = mutation({
       await ctx.db.patch(existing._id, { notes });
     } else {
       await ctx.db.insert("userProgress", {
-        userId: args.userId,
+        userId,
         weekId: args.weekId,
         completedTopics: [],
         completedProjects: [],
@@ -282,14 +285,14 @@ export const updateWeekNotes = mutation({
 
 export const getWeekNotes = query({
   args: {
-    userId: v.string(),
     weekId: v.id("roadmapWeeks"),
   },
   handler: async (ctx, args) => {
+    const userId = await requireUser(ctx);
     const existing = await ctx.db
       .query("userProgress")
       .withIndex("by_user_week", (q) =>
-        q.eq("userId", args.userId).eq("weekId", args.weekId)
+        q.eq("userId", userId).eq("weekId", args.weekId)
       )
       .first();
 
@@ -309,8 +312,9 @@ export interface BadgeProgressData {
 }
 
 export const getBadgeProgressData = query({
-  args: { userId: v.string() },
-  handler: async (ctx, args): Promise<BadgeProgressData> => {
+  args: {},
+  handler: async (ctx): Promise<BadgeProgressData> => {
+    const userId = await requireUser(ctx);
     // 1. Fetch all phases (10 records) and all weeks (34 records) — lightweight
     const phases = await ctx.db
       .query("roadmapPhases")
@@ -328,7 +332,7 @@ export const getBadgeProgressData = query({
     // 3. Fetch all user progress for this user (uses by_user index)
     const progressRecords = await ctx.db
       .query("userProgress")
-      .withIndex("by_user", (q) => q.eq("userId", args.userId))
+      .withIndex("by_user", (q) => q.eq("userId", userId))
       .collect();
 
     const progressMap = new Map<string, Doc<"userProgress">>();
@@ -409,11 +413,11 @@ export const getBadgeProgressData = query({
 /** @deprecated Use `toggleItem` instead. Kept for backward compatibility. */
 export const toggleTopic = mutation({
   args: {
-    userId: v.string(),
     weekId: v.id("roadmapWeeks"),
     topicIndex: v.number(),
   },
   handler: async (ctx, args) => {
+    const userId = await requireUser(ctx);
     const week = await ctx.db.get(args.weekId);
     if (!week) throw new Error(`Week not found: ${args.weekId}`);
 
@@ -426,7 +430,7 @@ export const toggleTopic = mutation({
     const existing = await ctx.db
       .query("userProgress")
       .withIndex("by_user_week", (q) =>
-        q.eq("userId", args.userId).eq("weekId", args.weekId)
+        q.eq("userId", userId).eq("weekId", args.weekId)
       )
       .first();
 
@@ -442,7 +446,7 @@ export const toggleTopic = mutation({
       });
     } else {
       await ctx.db.insert("userProgress", {
-        userId: args.userId,
+        userId,
         weekId: args.weekId,
         completedTopics: [args.topicIndex],
         completedProjects: [],
@@ -454,11 +458,11 @@ export const toggleTopic = mutation({
 /** @deprecated Use `toggleItem` instead. Kept for backward compatibility. */
 export const toggleProject = mutation({
   args: {
-    userId: v.string(),
     weekId: v.id("roadmapWeeks"),
     projectIndex: v.number(),
   },
   handler: async (ctx, args) => {
+    const userId = await requireUser(ctx);
     const week = await ctx.db.get(args.weekId);
     if (!week) throw new Error(`Week not found: ${args.weekId}`);
 
@@ -471,7 +475,7 @@ export const toggleProject = mutation({
     const existing = await ctx.db
       .query("userProgress")
       .withIndex("by_user_week", (q) =>
-        q.eq("userId", args.userId).eq("weekId", args.weekId)
+        q.eq("userId", userId).eq("weekId", args.weekId)
       )
       .first();
 
@@ -487,7 +491,7 @@ export const toggleProject = mutation({
       });
     } else {
       await ctx.db.insert("userProgress", {
-        userId: args.userId,
+        userId,
         weekId: args.weekId,
         completedTopics: [],
         completedProjects: [args.projectIndex],

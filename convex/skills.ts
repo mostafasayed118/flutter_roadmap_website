@@ -1,12 +1,14 @@
 import { v } from "convex/values";
 import { query, mutation } from "./_generated/server";
+import { requireUser } from "./lib/auth";
 
 export const getSkills = query({
-  args: { userId: v.string() },
-  handler: async (ctx, args) => {
+  args: {},
+  handler: async (ctx) => {
+    const userId = await requireUser(ctx);
     const records = await ctx.db
       .query("skillsChecklist")
-      .withIndex("by_user", (q) => q.eq("userId", args.userId))
+      .withIndex("by_user", (q) => q.eq("userId", userId))
       .collect();
 
     return records.map((s) => ({
@@ -18,11 +20,12 @@ export const getSkills = query({
 });
 
 export const initSkills = mutation({
-  args: { userId: v.string() },
-  handler: async (ctx, args) => {
+  args: {},
+  handler: async (ctx) => {
+    const userId = await requireUser(ctx);
     const existing = await ctx.db
       .query("skillsChecklist")
-      .withIndex("by_user", (q) => q.eq("userId", args.userId))
+      .withIndex("by_user", (q) => q.eq("userId", userId))
       .collect();
 
     if (existing.length > 0) return { message: "Already initialized" };
@@ -128,13 +131,13 @@ export const initSkills = mutation({
       const alreadyExists = await ctx.db
         .query("skillsChecklist")
         .withIndex("by_user_category", (q) =>
-          q.eq("userId", args.userId).eq("category", cat.category)
+          q.eq("userId", userId).eq("category", cat.category)
         )
         .first();
 
       if (!alreadyExists) {
         await ctx.db.insert("skillsChecklist", {
-          userId: args.userId,
+          userId,
           category: cat.category,
           items: cat.items,
         });
@@ -148,21 +151,21 @@ export const initSkills = mutation({
 
 export const toggleSkill = mutation({
   args: {
-    userId: v.string(),
     category: v.string(),
     itemIndex: v.number(),
   },
   handler: async (ctx, args) => {
+    const userId = await requireUser(ctx);
     const target = await ctx.db
       .query("skillsChecklist")
       .withIndex("by_user_category", (q) =>
-        q.eq("userId", args.userId).eq("category", args.category)
+        q.eq("userId", userId).eq("category", args.category)
       )
       .first();
 
     if (!target) {
       throw new Error(
-        `Category "${args.category}" not found for user ${args.userId}`
+        `Category "${args.category}" not found for user ${userId}`
       );
     }
 

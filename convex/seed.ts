@@ -1,10 +1,13 @@
-import { v } from "convex/values";
 import { mutation } from "./_generated/server";
 import { Id } from "./_generated/dataModel";
+import { requireUser } from "./lib/auth";
 
 export const seedRoadmap = mutation({
   args: {},
   handler: async (ctx) => {
+    // Only signed-in users may seed the (global) roadmap data.
+    await requireUser(ctx);
+
     const existingPhases = await ctx.db.query("roadmapPhases").collect();
     const existingWeeks = await ctx.db.query("roadmapWeeks").collect();
     if (existingPhases.length > 0 && existingWeeks.length > 0) {
