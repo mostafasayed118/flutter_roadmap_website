@@ -12,7 +12,7 @@ export function useBadges() {
   );
   const unlockBadge = useMutation(api.badges.unlockBadge);
 
-  const unlockedCount = badges?.filter((b: any) => b.unlocked).length ?? 0;
+  const unlockedCount = badges?.filter((b) => b.unlocked).length ?? 0;
   const totalCount = badges?.length ?? 0;
 
   return {

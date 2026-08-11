@@ -1,7 +1,5 @@
 // ── Timer Sound Effects ──────────────────────────────────────────
 
-type SoundType = "start" | "pause" | "resume" | "complete" | "break-complete" | "tick";
-
 let audioContext: AudioContext | null = null;
 
 function getAudioContext(): AudioContext {

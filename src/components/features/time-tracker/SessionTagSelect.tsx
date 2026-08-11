@@ -1,7 +1,7 @@
 "use client";
 
 import { X } from "lucide-react";
-import { SESSION_TAGS, type SessionTag } from "@/hooks/use-tags";
+import { SESSION_TAGS } from "@/hooks/use-tags";
 import { cn } from "@/lib/utils";
 
 const tagColors: Record<string, string> = {

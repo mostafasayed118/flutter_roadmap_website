@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useCallback, useRef } from "react";
+import { useEffect, useRef } from "react";
 
 interface KeyboardShortcutHandlers {
   onToggleTimer: () => void;
@@ -38,12 +38,14 @@ export function useKeyboardShortcuts({
   });
 
   // Keep handlers ref current without re-registering listeners
-  handlersRef.current = {
-    onToggleTimer,
-    onSaveSession,
-    onFocusSearch,
-    onToggleHelp,
-  };
+  useEffect(() => {
+    handlersRef.current = {
+      onToggleTimer,
+      onSaveSession,
+      onFocusSearch,
+      onToggleHelp,
+    };
+  }, [onToggleTimer, onSaveSession, onFocusSearch, onToggleHelp]);
 
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {

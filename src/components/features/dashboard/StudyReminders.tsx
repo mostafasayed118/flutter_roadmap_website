@@ -26,8 +26,11 @@ export function StudyReminders() {
   const [permission, setPermission] = useState<NotificationPermission>("default");
   const [isLoading, setIsLoading] = useState(false);
 
+  // Client-only init: reads browser permission + reminder settings. Lazy
+  // state init would diverge from the server-rendered default.
   useEffect(() => {
     if (typeof window !== "undefined" && "Notification" in window) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setPermission(Notification.permission);
       const stored = localStorage.getItem("flutter-roadmap-reminders");
       if (stored) {

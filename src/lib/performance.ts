@@ -136,23 +136,6 @@ export function useLazyLoad(
 }
 
 /**
- * Memoize expensive calculations
- */
-export function useMemoize<T>(factory: () => T, deps: unknown[]): T {
-  const ref = useRef<{ value: T; deps: unknown[] } | null>(null);
-
-  if (
-    !ref.current ||
-    ref.current.deps.length !== deps.length ||
-    ref.current.deps.some((dep, i) => dep !== deps[i])
-  ) {
-    ref.current = { value: factory(), deps };
-  }
-
-  return ref.current.value;
-}
-
-/**
  * Request idle callback polyfill
  */
 export const requestIdleCallback =

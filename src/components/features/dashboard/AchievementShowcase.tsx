@@ -10,7 +10,10 @@ export function AchievementShowcase() {
   const [achievements, setAchievements] = useState<Achievement[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
 
+  // Client-only init: reads achievements from localStorage. Lazy state init
+  // would diverge from the server-rendered default (SSR hydration mismatch).
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setAchievements(loadAchievements());
   }, []);
 

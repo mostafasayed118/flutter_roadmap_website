@@ -5,7 +5,7 @@ import { useProgress } from "@/hooks/use-progress";
 import { useSessions } from "@/hooks/use-sessions";
 import { useStreak } from "@/hooks/use-streak";
 import { Button } from "@/components/ui/button";
-import { Download, Loader2, FileText } from "lucide-react";
+import { Loader2, FileText } from "lucide-react";
 import { toast } from "sonner";
 import { formatMinutes } from "@/lib/format-time";
 

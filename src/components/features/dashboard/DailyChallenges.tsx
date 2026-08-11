@@ -23,12 +23,15 @@ export function DailyChallenges() {
   const { sessions } = useSessions();
   const [completedChallenges, setCompletedChallenges] = useState<Set<string>>(new Set());
 
+  // Client-only init: restores today's challenge state from localStorage.
+  // Lazy state init would diverge from the server-rendered default.
   useEffect(() => {
     const stored = localStorage.getItem("flutter-roadmap-daily-challenges");
     const today = new Date().toDateString();
     if (stored) {
       const data = JSON.parse(stored);
       if (data.date === today) {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setCompletedChallenges(new Set(data.completed));
       }
     }

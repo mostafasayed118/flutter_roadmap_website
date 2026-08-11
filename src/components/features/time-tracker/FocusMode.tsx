@@ -2,16 +2,19 @@
 
 import { useEffect, useState } from "react";
 import { useStudyTimerContext } from "./StudyTimerProvider";
-import { Maximize2, Minimize2 } from "lucide-react";
+import { Minimize2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 
 export function FocusMode() {
-  const { isRunning, time } = useStudyTimerContext();
+  const { isRunning } = useStudyTimerContext();
   const [isFocusMode, setIsFocusMode] = useState(false);
 
+  // Exits focus mode when the study timer stops. This is a UI state
+  // reaction to the timer's running state, not initializable data.
   useEffect(() => {
     if (!isRunning && isFocusMode) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setIsFocusMode(false);
     }
   }, [isRunning, isFocusMode]);

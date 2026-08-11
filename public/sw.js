@@ -1,5 +1,4 @@
 // Service Worker for offline support
-const CACHE_NAME = "flutter-roadmap-v1";
 const STATIC_CACHE = "flutter-roadmap-static-v1";
 const DYNAMIC_CACHE = "flutter-roadmap-dynamic-v1";
 

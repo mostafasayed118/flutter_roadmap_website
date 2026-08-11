@@ -2,7 +2,7 @@
 
 import { useServiceWorker, updateServiceWorker } from "@/hooks/use-service-worker";
 import { Button } from "@/components/ui/button";
-import { Wifi, WifiOff, Download } from "lucide-react";
+import { WifiOff, Download } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 export function OfflineIndicator() {
@@ -20,7 +20,7 @@ export function OfflineIndicator() {
             className="fixed top-0 left-0 right-0 z-50 flex items-center justify-center gap-2 bg-amber-500/90 px-4 py-2 text-sm text-white backdrop-blur-sm"
           >
             <WifiOff className="size-4" />
-            <span>You're offline. Some features may be limited.</span>
+            <span>You&apos;re offline. Some features may be limited.</span>
           </motion.div>
         )}
       </AnimatePresence>

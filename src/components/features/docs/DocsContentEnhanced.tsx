@@ -65,7 +65,7 @@ export function DocsContentEnhanced() {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<DocEntry[]>([]);
   const [selectedEntry, setSelectedEntry] = useState<DocEntry | null>(null);
-  const [readDocs, setReadDocs] = useState<Set<string>>(() => new Set());
+  const [, setReadDocs] = useState<Set<string>>(() => new Set());
 
   // Load categories lazily on mount
   useEffect(() => {
@@ -82,8 +82,10 @@ export function DocsContentEnhanced() {
       });
   }, []);
 
-  // Load read docs from localStorage
+  // Client-only init: reads read-doc state from localStorage. Lazy state
+  // init would diverge from the server-rendered default.
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setReadDocs(getReadDocs());
   }, []);
 

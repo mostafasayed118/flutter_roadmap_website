@@ -4,7 +4,6 @@ import { AnimatedCheckbox } from "@/components/ui/animated-checkbox";
 import { GlassCard } from "@/components/ui/glass-card";
 import { GradientProgress } from "@/components/ui/gradient-progress";
 import { cn } from "@/lib/utils";
-import { motion } from "framer-motion";
 import { CheckCircle2 } from "lucide-react";
 
 interface SkillItem {

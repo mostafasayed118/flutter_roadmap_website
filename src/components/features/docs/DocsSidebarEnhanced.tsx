@@ -29,8 +29,10 @@ export function DocsSidebarEnhanced({
   const [readDocs, setReadDocs] = useState<Set<string>>(() => new Set());
   const observerRef = useRef<IntersectionObserver | null>(null);
 
-  // Load read docs from localStorage
+  // Client-only init: reads read-doc state from localStorage. Lazy state
+  // init would diverge from the server-rendered default.
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setReadDocs(getReadDocs());
   }, []);
 

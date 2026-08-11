@@ -13,13 +13,12 @@ import {
   Clock,
   Flame,
   TrendingUp,
-  CheckCircle2,
 } from "lucide-react";
 import { motion } from "framer-motion";
 
 export function WeeklyReview() {
   const { stats } = useProgress();
-  const { sessions, totalTime } = useSessions();
+  const { sessions } = useSessions();
   const { currentStreak, longestStreak } = useStreak();
 
   const weeklyStats = useMemo(() => {

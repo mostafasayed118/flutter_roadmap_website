@@ -150,6 +150,7 @@ export function SearchBar({
           className="h-10 w-full rounded-lg border border-border bg-background/50 pl-10 pr-10 text-sm text-foreground placeholder:text-muted-foreground focus:border-violet-500/40 focus:outline-none focus:ring-1 focus:ring-violet-500/30"
           aria-label="Search documentation"
           aria-expanded={isOpen && results.length > 0}
+          aria-controls="search-results"
           aria-autocomplete="list"
           aria-activedescendant={
             highlightIndex >= 0 ? `search-result-${highlightIndex}` : undefined
@@ -168,7 +169,11 @@ export function SearchBar({
       </div>
 
       {query && results.length > 0 && (
-        <div className="absolute left-0 right-0 top-full z-50 mt-1 max-h-80 overflow-y-auto rounded-lg border border-border bg-popover shadow-2xl backdrop-blur-xl">
+        <div
+          id="search-results"
+          role="listbox"
+          className="absolute left-0 right-0 top-full z-50 mt-1 max-h-80 overflow-y-auto rounded-lg border border-border bg-popover shadow-2xl backdrop-blur-xl"
+        >
           <div className="p-1">
             {results.slice(0, 10).map((entry, i) => (
               <button

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useSessionMutations } from "@/hooks/use-sessions";
 import { Id } from "@convex/_generated/dataModel";
 import {
@@ -46,7 +46,23 @@ export function EditSessionDialog({
 
   const { updateSession } = useSessionMutations();
 
-  useEffect(() => {
+  // Reset the form whenever the dialog opens or the session's data changes
+  // (render-time state adjustment — runs when inputs change, not in an effect)
+  const [lastSync, setLastSync] = useState<{
+    open: boolean;
+    initialDuration: number;
+    initialDate: number;
+    initialNotes?: string;
+  } | null>(null);
+  const nextSync = { open, initialDuration, initialDate, initialNotes };
+  if (
+    !lastSync ||
+    lastSync.open !== nextSync.open ||
+    lastSync.initialDuration !== nextSync.initialDuration ||
+    lastSync.initialDate !== nextSync.initialDate ||
+    lastSync.initialNotes !== nextSync.initialNotes
+  ) {
+    setLastSync(nextSync);
     if (open) {
       setHours(String(Math.floor(initialDuration / 60)));
       setMinutes(String(initialDuration % 60));
@@ -56,7 +72,7 @@ export function EditSessionDialog({
       );
       setNotes(initialNotes ?? "");
     }
-  }, [open, initialDuration, initialDate, initialNotes]);
+  }
 
   const parsedHours = parseInt(hours) || 0;
   const parsedMinutes = parseInt(minutes) || 0;

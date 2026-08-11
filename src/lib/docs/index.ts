@@ -11,8 +11,6 @@ import type {
   DocCategoryType,
   DocCategoryGroup,
   DocEntry,
-  CodeSnippet,
-  Difficulty,
 } from "./types";
 
 export type { DocEntry, DocCategoryType, DocCategoryGroup, CodeSnippet, Difficulty } from "./types";

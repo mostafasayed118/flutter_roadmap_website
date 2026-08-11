@@ -9,7 +9,6 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
-  Legend,
 } from "recharts";
 import { GlassCard } from "@/components/ui/glass-card";
 import { TrendingUp } from "lucide-react";
@@ -20,18 +19,17 @@ interface ProgressChartProps {
 
 export function ProgressChart({ weeklyData }: ProgressChartProps) {
   const chartData = useMemo(() => {
-    let cumTopics = 0;
-    let cumProjects = 0;
-    return weeklyData.map((d) => {
-      cumTopics += d.topics;
-      cumProjects += d.projects;
-      return {
-        week: `W${d.week}`,
-        topics: cumTopics,
-        projects: cumProjects,
-        total: cumTopics + cumProjects,
-      };
-    });
+    return weeklyData.reduce<
+      Array<{ week: string; topics: number; projects: number; total: number }>
+    >((acc, d) => {
+      const prev = acc.length > 0 ? acc[acc.length - 1]! : undefined;
+      const topics = (prev?.topics ?? 0) + d.topics;
+      const projects = (prev?.projects ?? 0) + d.projects;
+      return [
+        ...acc,
+        { week: `W${d.week}`, topics, projects, total: topics + projects },
+      ];
+    }, []);
   }, [weeklyData]);
 
   if (chartData.length === 0) return null;

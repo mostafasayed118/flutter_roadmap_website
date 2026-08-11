@@ -22,6 +22,9 @@ export function useServiceWorker(): ServiceWorkerState {
       return;
     }
 
+    // Client-only init (navigator.serviceWorker); the other state updates
+    // below happen in async callbacks and event handlers.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setState((prev) => ({ ...prev, isSupported: true }));
 
     // Register service worker

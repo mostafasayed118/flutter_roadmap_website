@@ -4,7 +4,7 @@ import { useState, useMemo } from "react";
 import { useSessionMutations } from "@/hooks/use-sessions";
 import { useRoadmap } from "@/hooks/use-progress";
 import { Id } from "@convex/_generated/dataModel";
-import { formatMinutes, todayInputValue } from "@/lib/format-time";
+import { formatMinutes } from "@/lib/format-time";
 import {
   Dialog,
   DialogContent,

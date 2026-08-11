@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Target, Pencil } from "lucide-react";
 import { GlassCard } from "@/components/ui/glass-card";
 import { Button } from "@/components/ui/button";
@@ -31,12 +31,23 @@ export function GoalSettingDialog({
   const [targetTopics, setTargetTopics] = useState(goal?.targetTopics ?? 3);
 
   // Sync form state when dialog opens OR when goal data finishes loading
-  useEffect(() => {
+  // (render-time state adjustment — runs when inputs change, not in an effect)
+  const [lastSync, setLastSync] = useState<{
+    open: boolean;
+    goal: typeof goal;
+  } | null>(null);
+  const nextSync = { open, goal };
+  if (
+    !lastSync ||
+    lastSync.open !== nextSync.open ||
+    lastSync.goal !== nextSync.goal
+  ) {
+    setLastSync(nextSync);
     if (open && goal) {
       setTargetHours(goal.targetHours);
       setTargetTopics(goal.targetTopics);
     }
-  }, [open, goal]);
+  }
 
   const handleSave = () => {
     setGoal?.(targetHours, targetTopics);

@@ -346,10 +346,6 @@ export function DocContentRenderer({
     return () => container.removeEventListener("scroll", handleScroll);
   }, [entry.id, onMarkRead]);
 
-  // Map code snippets to their positions
-  const snippetIndexRef = useRef(0);
-  snippetIndexRef.current = 0;
-
   const renderBlock = useCallback(
     (block: ParsedBlock, index: number): React.ReactNode => {
       switch (block.type) {

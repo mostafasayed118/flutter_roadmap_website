@@ -6,7 +6,6 @@ import { useSessions } from "@/hooks/use-sessions";
 import { useStreak } from "@/hooks/use-streak";
 import { useBadges } from "@/hooks/use-badges";
 import { Button } from "@/components/ui/button";
-import { GlassCard } from "@/components/ui/glass-card";
 import {
   Dialog,
   DialogContent,

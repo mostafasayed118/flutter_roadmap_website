@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import { GlassCard } from "@/components/ui/glass-card";
-import { Button } from "@/components/ui/button";
 import { Palette, Check } from "lucide-react";
 
 interface ThemePreset {
@@ -70,7 +69,10 @@ function saveTheme(themeId: string): void {
 export function ThemeCustomizer() {
   const [selectedTheme, setSelectedTheme] = useState<string>("default");
 
+  // Client-only init: reads the saved theme from localStorage. Lazy state
+  // init would diverge from the server-rendered default.
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setSelectedTheme(loadTheme());
   }, []);
 

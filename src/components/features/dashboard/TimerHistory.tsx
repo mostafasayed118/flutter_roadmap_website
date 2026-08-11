@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { GlassCard } from "@/components/ui/glass-card";
 import { formatTimerDisplay } from "@/lib/format-time";
-import { Clock, Trash2, RotateCcw } from "lucide-react";
+import { Clock, Trash2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 interface TimerSession {
@@ -34,7 +34,10 @@ function saveHistory(history: TimerSession[]): void {
 export function TimerHistory() {
   const [history, setHistory] = useState<TimerSession[]>([]);
 
+  // Client-only init: reads the session history from localStorage. Lazy
+  // state init would diverge from the server-rendered default.
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setHistory(loadHistory());
   }, []);
 
@@ -50,7 +53,6 @@ export function TimerHistory() {
   };
 
   const totalDuration = history.reduce((sum, s) => sum + s.durationMs, 0);
-  const completedCount = history.filter((s) => s.completed).length;
 
   if (history.length === 0) {
     return (

@@ -5,7 +5,6 @@ import Link from "next/link";
 import { BookOpen, ArrowRight, Sparkles } from "lucide-react";
 import { GlassCard } from "@/components/ui/glass-card";
 import { getEntriesForWeek } from "@/lib/docs";
-import { cn } from "@/lib/utils";
 
 const categoryIcons: Record<string, string> = {
   dart: "📘",

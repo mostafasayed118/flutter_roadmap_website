@@ -83,7 +83,12 @@ export function useStudyTimer(): StudyTimerApi {
 
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const stateRef = useRef(state);
-  stateRef.current = state;
+
+  // Keep the latest state visible to interval callbacks and event handlers
+  useEffect(() => {
+    stateRef.current = state;
+  });
+
   const permissionRequestedRef = useRef(false);
 
   const persist = useCallback((s: TimerState) => {
@@ -186,7 +191,10 @@ export function useStudyTimer(): StudyTimerApi {
     saveTimer(null);
   }, [clearTick]);
 
-  // Restore from localStorage on mount
+  // Restore from localStorage on mount. Client-only init with real side
+  // effects (persist, startTick); lazy initialization would diverge from the
+  // server-rendered default, so the synchronous restore in the effect is
+  // deliberate.
   useEffect(() => {
     const saved = loadTimer();
     if (!saved) return;
@@ -204,6 +212,7 @@ export function useStudyTimer(): StudyTimerApi {
           startTimestamp: null,
           displayMs: saved.accumulatedMs,
         };
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setState(next);
       } else {
         const next: TimerState = {

@@ -34,13 +34,26 @@ export function DocsSidebar({
   const [readDocs, setReadDocs] = useState<Set<string>>(() => new Set());
   const observerRef = useRef<IntersectionObserver | null>(null);
 
-  // Load read docs from localStorage
+  // Client-only init: reads read-doc state from localStorage. Lazy state
+  // init would diverge from the server-rendered default.
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setReadDocs(getReadDocs());
   }, []);
 
-  // Expand category containing selected entry
-  useEffect(() => {
+  // Expand category containing selected entry — render-time adjustment that
+  // runs when navigation or the category list changes, not in an effect.
+  const [lastNav, setLastNav] = useState<{
+    selectedEntryId?: string;
+    categories: typeof categories;
+  } | null>(null);
+  const nextNav = { selectedEntryId, categories };
+  if (
+    !lastNav ||
+    lastNav.selectedEntryId !== nextNav.selectedEntryId ||
+    lastNav.categories !== nextNav.categories
+  ) {
+    setLastNav(nextNav);
     if (selectedEntryId) {
       const matchedCat = categories.find((cat) =>
         cat.entries.some((entry) => entry.id === selectedEntryId)
@@ -55,7 +68,7 @@ export function DocsSidebar({
         setActive({ categoryId: matchedCat.id, entryId: selectedEntryId });
       }
     }
-  }, [selectedEntryId, categories]);
+  }
 
   const toggleCategory = useCallback((categoryId: string) => {
     setExpandedCategories((prev) => {
