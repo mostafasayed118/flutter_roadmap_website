@@ -26,6 +26,32 @@ The Flutter ecosystem is vast — Dart, widgets, state management, architecture,
 
 ---
 
+## ⚠️ Security Model: Single-User, No Authentication
+
+**FlutterPath currently has no authentication or authorization. It is a single-user application by design — not a multi-tenant product.**
+
+Before deploying, understand what this means:
+
+| Claim | Reality |
+|---|---|
+| **Authentication** | ❌ None. There is no login, no session, no auth provider (no Clerk, no Convex auth config). |
+| **User identity** | The app identifies every visitor as the same hardcoded user. See `src/hooks/use-user-id.ts` — it returns the constant `"test-user-123"`. |
+| **Authorization** | ❌ None. Every Convex query/mutation accepts a `userId` supplied by the *client* and trusts it. There is no server-side check that the caller is who they claim to be. |
+| **Data isolation** | There is exactly one dataset. Any visitor to a deployed instance can read and write all progress, sessions, goals, badges, bookmarks, and showcase entries. |
+| **`useUserId()` is the identity** | Whatever string `useUserId()` returns is treated as "the current user" — anyone who can reach the Convex API can pass any `userId` and access or mutate that user's data. |
+
+**Why this is intentional:** FlutterPath is a personal learning companion (a local study tracker). Adding full auth would require an auth provider, login flows, and rewriting every Convex handler to derive identity from `ctx.auth.getUserIdentity()` instead of client arguments — significant complexity for a single-user tool.
+
+**When to add auth (migration path):** If you ever deploy this for multiple real users or put personal data in production, you must:
+
+1. Configure Convex auth (e.g., [Clerk](https://clerk.com) or Convex's built-in auth) and add `convex/auth.config.ts`.
+2. Replace `useUserId()` with the real authenticated identity from the client.
+3. Add `ctx.auth.getUserIdentity()` checks to **every** Convex handler and stop trusting the `userId` argument.
+
+> **Recommendation:** Run this locally or on a private/unlisted deployment only. Do **not** deploy it publicly with real user data until auth is implemented.
+
+---
+
 ## Features
 
 - **Interactive 34-Week Roadmap** — Collapsible phase accordions with per-week topic/project checkboxes, time badges, and auto-scroll to your current week

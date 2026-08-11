@@ -1,6 +1,15 @@
 import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
 
+/**
+ * ⚠️ SECURITY NOTE — SINGLE-USER BY DESIGN:
+ *
+ * Every table is keyed by a client-supplied `userId` string with NO
+ * server-side auth check. Any caller of the public Convex API can pass
+ * any `userId` and read or mutate that user's rows. This is intentional
+ * for a personal learning tracker — see the "Security Model" section in
+ * the project README before deploying publicly or storing real user data.
+ */
 export default defineSchema({
   roadmapPhases: defineTable({
     order: v.number(),

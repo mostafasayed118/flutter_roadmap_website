@@ -8,6 +8,19 @@
 
 ---
 
+## ⚠️ Before You Deploy: Single-User, No Authentication
+
+FlutterPath has **no authentication** — every visitor is treated as the same
+hardcoded user (`"test-user-123"`, see `src/hooks/use-user-id.ts`), and every
+Convex function trusts the client-supplied `userId` with no server-side check.
+Anyone who can reach a deployed instance can read and write all data.
+
+This is fine for a **private or personal deployment**. Do **not** deploy this
+publicly with real user data until authentication is implemented. See the
+"Security Model" section in the [README](./README.md) for the migration path.
+
+---
+
 ## Overview
 
 FlutterPath is deployed as two independent services:
