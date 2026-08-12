@@ -13,7 +13,7 @@ permissions:
 
 jobs:
   check:
-    name: Typecheck, Lint & Test
+    name: Typecheck, Lint, Test & Build
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -35,3 +35,6 @@ jobs:
 
       - name: Unit tests (Vitest)
         run: npm run test:run
+
+      - name: Production build
+        run: npm run build
