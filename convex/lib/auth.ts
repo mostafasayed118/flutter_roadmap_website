@@ -1,10 +1,9 @@
 import type { QueryCtx, MutationCtx } from "../_generated/server";
 
 /**
- * The fixed single-user dataset key. Every handler scopes all reads and
- * writes to this constant — no visitor, even a signed-in and allowlisted one,
- * ever touches any other rows. This is the documented single-user design,
- * now enforced server-side.
+ * The legacy fixed dataset key, kept for the one-time migrations
+ * (`reassignLegacyUser` / `mergePerUserRows`) and the seed script.
+ * Runtime handlers no longer use it — see `requireUser`.
  */
 export const SINGLE_USER_KEY = "test-user-123";
 
@@ -16,9 +15,10 @@ export const SINGLE_USER_KEY = "test-user-123";
  * 2. Requires the caller's Clerk `subject` to be in the allowlist
  *    (`ALLOWED_USER_IDS`, comma-separated, set on the Convex deployment).
  *    Fails closed — if the allowlist isn't configured, no one gets in.
- * 3. Returns the fixed `test-user-123` dataset key, so only that user's rows
- *    are ever read or written regardless of which allowlisted identity is
- *    signed in.
+ * 3. Returns the caller's real Clerk `subject`, so each allowlisted identity
+ *    reads and writes only its own rows. Rows written under the legacy
+ *    `test-user-123` key must be re-keyed first via the reassign/merge
+ *    migrations, or they become invisible.
  */
 export async function requireUser(
   ctx: QueryCtx | MutationCtx,
@@ -41,5 +41,5 @@ export async function requireUser(
     throw new Error("Not authorized: user is not in the allowlist");
   }
 
-  return SINGLE_USER_KEY;
+  return identity.subject;
 }
